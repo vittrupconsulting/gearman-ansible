@@ -4,7 +4,7 @@ After=network.target
 
 [Service]
 Type=simple
-ExecStart=python3 /opt/gearman.py
+ExecStart=python3 /opt/gearman.py 172.16.1.10
 Restart=always
 
 [Install]

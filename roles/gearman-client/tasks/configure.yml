@@ -1,0 +1,5 @@
+---
+
+- ansible.builtin.copy:
+    src: "client.py"
+    dest: "/opt/client.py"

@@ -1,10 +1,6 @@
 ---
 
 - ansible.builtin.copy:
-    src: "worker.py"
+    src: "gearman.py"
     dest: "/opt/gearman.py"
   notify: "Restart gearman-worker"
-
-- ansible.builtin.copy:
-    src: "client.py"
-    dest: "/opt/client.py"

@@ -1,10 +1,13 @@
+import sys
 import gear
 import subprocess
 import logging
 from systemd import journal
 
 worker = gear.Worker('ansible')
-worker.addServer('172.16.1.10')
+for server in sys.argv[1:]:
+    journal.send(f"Registering {server}")
+    worker.addServer(f"{server}")
 worker.registerFunction("ansible")
 
 # logger = logging.getLogger('custom_logger_name')
@@ -16,8 +19,6 @@ worker.registerFunction("ansible")
 
 while True:
     job = worker.getJob()
-#    print(f'>>{job.arguments}<<')
     journal.send(f"Server {job.arguments.decode()}")
-    #print(f"ansible --inventory '{job.arguments.decode()},'")
-    #print(subprocess.run(f"a{job.arguments}", shell=True))
+    subprocess.run(f"sudo ansible-playbook /etc/ansible/roles/gearman-worker/tests/test.yml", shell=True)
     job.sendWorkComplete()

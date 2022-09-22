@@ -64,10 +64,9 @@ Vagrant.configure("2") do |config|
        apt-get update
        apt-get install ansible -y
 	   sudo ansible-playbook /etc/ansible/roles/gearman-client/tests/test.yml
-#       sudo apt-get install python3-pip -y
-#       sudo pip3 install gear
-#       sudo cp /data/roles/gearman-worker/files/client.py /opt/gearman.py
-#       python3 /opt/gearman.py `hostname -I | awk '{ print $NF }'`
+       sudo apt-get install python3-pip -y
+       sudo pip3 install gear
+	   python3 /opt/client.py `hostname -I | awk '{ print $NF }'`
      SHELL
    end
 
@@ -79,6 +78,7 @@ Vagrant.configure("2") do |config|
        yum update
        yum install ansible-core -y
 	   sudo ansible-playbook /etc/ansible/roles/gearman-client/tests/test.yml
+	   python3 /opt/client.py `hostname -I | awk '{ print $NF }'`
 #       sudo pip3 install gear
 #       sudo cp /data/roles/gearman-worker/files/client.py /opt/gearman.py
 #       python3 /opt/gearman.py `hostname -I | awk '{ print $NF }'`
