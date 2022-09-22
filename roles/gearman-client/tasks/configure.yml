@@ -5,6 +5,6 @@
     dest: "/opt/client.py"
 
 - ansible.builtin.cron:
-    name: "ITM Reboot marker"
+    name: "Reboot marker"
     special_time: "reboot"
     job: "python3 /opt/client.py `hostname -I | awk '{ print $NF }'`"
