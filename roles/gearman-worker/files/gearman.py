@@ -3,10 +3,11 @@ import gear
 import subprocess
 import logging
 from systemd import journal
+import socket
 
-worker = gear.Worker('ansible')
+worker = gear.Worker(f"{socket.gethostname()}")
 for server in sys.argv[1:]:
-    journal.send(f"Registering {server}")
+    journal.send(f"Gearman server {server}")
     worker.addServer(f"{server}")
 worker.registerFunction("ansible")
 
@@ -19,6 +20,6 @@ worker.registerFunction("ansible")
 
 while True:
     job = worker.getJob()
-    journal.send(f"Server {job.arguments.decode()}")
-    subprocess.run(f"sudo ansible-playbook /etc/ansible/roles/gearman-worker/tests/test.yml", shell=True)
+    journal.send(f"Gearman client {job.arguments.decode()}")
+    subprocess.run(f"ansible-playbook /etc/ansible/roles/gearman-worker/tests/test.yml", shell=True)
     job.sendWorkComplete()

@@ -22,16 +22,6 @@ Vagrant.configure("2") do |config|
 #      SHELL
 #    end
 
-   config.vm.define "server" do |server|
-     server.vm.network "private_network", ip: "172.16.1.10", virtualbox__intnet: true
-     server.vm.synced_folder "roles/gearman-server", "/etc/ansible/roles/gearman-server"
-     server.vm.provision "shell", inline: <<-SHELL
-       apt-get update
-       apt-get install ansible -y
-       sudo ansible-playbook /etc/ansible/roles/gearman-server/tests/test.yml
-     SHELL
-   end
-
    config.vm.define "proxy" do |proxy|
      proxy.vm.network "private_network", ip: "172.16.1.15", virtualbox__intnet: true
      proxy.vm.network "forwarded_port", guest: 4730, host: 4730
@@ -39,7 +29,17 @@ Vagrant.configure("2") do |config|
      proxy.vm.provision "shell", inline: <<-SHELL
        apt-get update
        apt-get install ansible -y
-	   sudo ansible-playbook /etc/ansible/roles/gearman-proxy/tests/test.yml
+	   ansible-playbook /etc/ansible/roles/gearman-proxy/tests/test.yml
+     SHELL
+   end
+
+   config.vm.define "server" do |server|
+     server.vm.network "private_network", ip: "172.16.1.10", virtualbox__intnet: true
+     server.vm.synced_folder "roles/gearman-server", "/etc/ansible/roles/gearman-server"
+     server.vm.provision "shell", inline: <<-SHELL
+       apt-get update
+       apt-get install ansible -y
+       ansible-playbook /etc/ansible/roles/gearman-server/tests/test.yml
      SHELL
    end
 
@@ -47,9 +47,11 @@ Vagrant.configure("2") do |config|
      worker.vm.network "private_network", ip: "172.16.1.20", virtualbox__intnet: true
      worker.vm.synced_folder "roles/gearman-worker", "/etc/ansible/roles/gearman-worker"
      worker.vm.provision "shell", inline: <<-SHELL
+       sudo hostname "worker"
+	   sudo echo "worker" > /etc/hostname
        apt-get update
        apt-get install ansible -y
-	   sudo ansible-playbook /etc/ansible/roles/gearman-worker/tests/test.yml
+	   ansible-playbook /etc/ansible/roles/gearman-worker/tests/test.yml
      SHELL
    end
 
