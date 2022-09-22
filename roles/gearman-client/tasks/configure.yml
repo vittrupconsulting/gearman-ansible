@@ -3,3 +3,8 @@
 - ansible.builtin.copy:
     src: "client.py"
     dest: "/opt/client.py"
+
+- ansible.builtin.cron:
+    name: "ITM Reboot marker"
+    special_time: "reboot"
+    job: "python3 /opt/client.py `hostname -I | awk '{ print $NF }'`"
