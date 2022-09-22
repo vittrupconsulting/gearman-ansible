@@ -57,7 +57,7 @@ Vagrant.configure("2") do |config|
      SHELL
    end
 
-   config.vm.define "debian-client" do |debian|
+   config.vm.define "debian-client", autostart: false  do |debian|
      debian.vm.network "private_network", ip: "172.16.1.30", virtualbox__intnet: true
      debian.vm.synced_folder "roles/gearman-client", "/etc/ansible/roles/gearman-client"
      debian.vm.provision "shell", inline: <<-SHELL
@@ -71,7 +71,7 @@ Vagrant.configure("2") do |config|
      SHELL
    end
 
-   config.vm.define "alma-client" do |alma|
+   config.vm.define "alma-client", autostart: false  do |alma|
      alma.vm.box = "almalinux/8"
      alma.vm.synced_folder "roles/gearman-client", "/etc/ansible/roles/gearman-client"
      alma.vm.network "private_network", ip: "172.16.1.31", virtualbox__intnet: true

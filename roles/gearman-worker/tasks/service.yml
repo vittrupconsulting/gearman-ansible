@@ -1,0 +1,12 @@
+---
+
+- ansible.builtin.copy:
+    src: "worker.service"
+    dest: "/etc/systemd/system/gearman-worker.service"
+  notify: "Restart gearman-worker"
+
+- ansible.builtin.systemd:
+    name: "gearman-worker"
+    enabled: "yes"
+    state: "started"
+    daemon_reload: "yes"

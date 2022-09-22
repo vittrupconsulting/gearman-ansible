@@ -1,2 +1,6 @@
 ---
-# handlers file for gearman-worker
+
+  - name: "Restart gearman-worker"
+    systemd:
+      name: "gearman-worker"
+      state: "restarted"
