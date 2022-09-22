@@ -1,0 +1,6 @@
+---
+
+- ansible.builtin.copy:
+    src: "gearman-job-server"
+    dest: "/etc/default/gearman-job-server"
+  notify: "Restart gearman-server"

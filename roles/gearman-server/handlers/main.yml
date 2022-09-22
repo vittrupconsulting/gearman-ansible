@@ -1,0 +1,6 @@
+---
+
+- name: "Restart gearman-server"
+  ansible.builtin.systemd:
+    name: "gearman-job-server"
+    state: "restarted"

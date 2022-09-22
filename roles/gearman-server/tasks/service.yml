@@ -1,0 +1,7 @@
+---
+
+- ansible.builtin.systemd:
+    name: "gearman-job-server"
+    enabled: "yes"
+    state: "started"
+    daemon_reload: "yes"

@@ -1,0 +1,6 @@
+---
+
+- ansible.builtin.copy:
+    src: "haproxy.cfg"
+    dest: "/etc/haproxy/haproxy.cfg"
+  notify: "Restart haproxy"

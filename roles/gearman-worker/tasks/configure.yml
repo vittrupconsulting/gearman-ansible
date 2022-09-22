@@ -1,0 +1,9 @@
+---
+
+- ansible.builtin.copy:
+    src: "worker.py"
+    dest: "/opt/worker.py"
+
+- ansible.builtin.copy:
+    src: "client.py"
+    dest: "/opt/client.py"
