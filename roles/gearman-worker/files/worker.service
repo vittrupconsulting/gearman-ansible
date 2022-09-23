@@ -3,8 +3,9 @@ Description=Gearman Ansible Worker
 After=network.target
 
 [Service]
+EnvironmentFile=/etc/default/gearman-worker
 Type=simple
-ExecStart=python3 /opt/gearman.py 172.16.1.10
+ExecStart=python3 /opt/gearman.py $SERVERS
 Restart=always
 
 [Install]

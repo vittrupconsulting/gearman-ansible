@@ -1,5 +1,10 @@
 ---
 
+- ansible.builtin.template:
+    src: "gearman-worker.default.j2"
+    dest: "/etc/default/gearman-worker"
+  notify: "Restart gearman-worker"
+
 - ansible.builtin.copy:
     src: "worker.service"
     dest: "/etc/systemd/system/gearman-worker.service"
