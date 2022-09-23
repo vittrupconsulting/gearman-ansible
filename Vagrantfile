@@ -29,7 +29,7 @@ Vagrant.configure("2") do |config|
      proxy.vm.provision "shell", inline: <<-SHELL
        apt-get update
        apt-get install ansible -y
-	   ansible-playbook /etc/ansible/roles/gearman-proxy/tests/test.yml
+	   ansible-playbook /etc/ansible/roles/gearman-proxy/tests/test.yml --extra-vars "{ servers: ["172.16.1.10"] }"
      SHELL
    end
 
