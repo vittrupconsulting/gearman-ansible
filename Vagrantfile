@@ -8,8 +8,6 @@ Vagrant.configure("2") do |config|
      vb.memory = "1024"
    end
 
-   config.vm.synced_folder ".", "/vagrant"
-
 #    config.vm.define "init", autostart: false do |init|
 #      init.vm.synced_folder ".", "/vagrant"
 #      init.vm.provision "shell", inline: <<-SHELL
@@ -27,6 +25,7 @@ Vagrant.configure("2") do |config|
 
    config.vm.define "proxy" do |proxy|
      proxy.vm.network "private_network", ip: "172.16.1.10", virtualbox__intnet: true
+     proxy.vm.synced_folder ".", "/vagrant"
      proxy.vm.synced_folder "roles/gearman-proxy", "/etc/ansible/roles/gearman-proxy"
      proxy.vm.provision "ansible_local" do |ansible|
        ansible.playbook = "/etc/ansible/roles/gearman-proxy/tests/test.yml"
@@ -36,6 +35,7 @@ Vagrant.configure("2") do |config|
 
    config.vm.define "server" do |server|
      server.vm.network "private_network", ip: "172.16.1.15", virtualbox__intnet: true
+     server.vm.synced_folder ".", "/vagrant"
      server.vm.synced_folder "roles/gearman-server", "/etc/ansible/roles/gearman-server"
      server.vm.provision "ansible_local" do |ansible|
        ansible.playbook = "/etc/ansible/roles/gearman-server/tests/test.yml"
@@ -44,19 +44,22 @@ Vagrant.configure("2") do |config|
 
    config.vm.define "worker" do |worker|
      worker.vm.network "private_network", ip: "172.16.1.20", virtualbox__intnet: true
+     worker.vm.synced_folder ".", "/vagrant"
      worker.vm.synced_folder "roles/gearman-worker", "/etc/ansible/roles/gearman-worker"
      worker.vm.synced_folder "roles/gearman-ansible", "/etc/ansible/roles/gearman-ansible"
      worker.vm.provision "shell", inline: <<-SHELL
        apt-get update
        apt-get install ansible -y
        apt-get install python3-pip -y
+       #ansible-playbook /etc/ansible/roles/gearman-ansible/tests/test.yml
+       #ansible-playbook /etc/ansible/roles/gearman-worker/tests/test.yml -e "{ servers: ["172.16.1.15"] }"
      SHELL
+     worker.vm.provision "ansible_local" do |ansible|
+       ansible.playbook = "/etc/ansible/roles/gearman-ansible/tests/test.yml"
+     end
      worker.vm.provision "ansible_local" do |ansible|
        ansible.playbook = "/etc/ansible/roles/gearman-worker/tests/test.yml"
        ansible.extra_vars = { servers: ["172.16.1.15"] }
-     end
-     worker.vm.provision "ansible_local" do |ansible|
-       ansible.playbook = "/etc/ansible/roles/gearman-ansible/tests/test.yml"
      end
    end
 
@@ -97,7 +100,7 @@ Vagrant.configure("2") do |config|
 
    config.vm.define "centos-client", autostart: false do |centos|
      centos.vm.box = "centos/8"
-     centos.vm.network "private_network", ip: "172.16.1.35", virtualbox__intnet: true
+     centos.vm.network "private_network", ip: "172.16.1.33", virtualbox__intnet: true
      centos.vm.provision "shell", inline: <<-SHELL
        sudo dnf update -y
        sudo dnf install epel-release -y
@@ -110,7 +113,7 @@ Vagrant.configure("2") do |config|
 
    config.vm.define "rocky-client", autostart: false do |rocky|
      rocky.vm.box = "rockylinux/8"
-     rocky.vm.network "private_network", ip: "172.16.1.36", virtualbox__intnet: true
+     rocky.vm.network "private_network", ip: "172.16.1.34", virtualbox__intnet: true
      rocky.vm.provision "shell", inline: <<-SHELL
        sudo dnf update -y
        sudo dnf install epel-release -y
