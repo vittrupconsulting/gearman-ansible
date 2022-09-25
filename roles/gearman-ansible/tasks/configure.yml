@@ -10,3 +10,7 @@
     mode: "0700"
     owner: "vagrant"
     group: "vagrant"
+
+- ansible.builtin.copy:
+    src: "common.yml"
+    dest: "/etc/ansible/common.yml"
