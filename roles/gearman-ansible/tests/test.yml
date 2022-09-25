@@ -1,0 +1,6 @@
+---
+- hosts: localhost
+  remote_user: vagrant
+  become: true
+  roles:
+    - gearman-ansible
