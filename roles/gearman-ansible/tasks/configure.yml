@@ -3,3 +3,10 @@
 - ansible.builtin.copy:
     src: "ansible.cfg"
     dest: "/etc/ansible/ansible.cfg"
+
+- ansible.builtin.copy:
+    src: "ansible_rsa"
+    dest: "/etc/ansible/ansible_rsa"
+    mode: "0700"
+    owner: "vagrant"
+    group: "vagrant"

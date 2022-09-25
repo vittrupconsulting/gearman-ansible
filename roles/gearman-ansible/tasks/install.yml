@@ -1,1 +1,7 @@
 ---
+
+- ansible.builtin.pip:
+    name: "redis"
+
+- ansible.builtin.apt:
+    name: "redis"

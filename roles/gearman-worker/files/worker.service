@@ -5,6 +5,8 @@ After=network.target
 [Service]
 EnvironmentFile=/etc/default/gearman-worker
 Type=simple
+User=vagrant
+Group=vagrant
 ExecStart=python3 /opt/gearman.py $SERVERS
 Restart=always
 

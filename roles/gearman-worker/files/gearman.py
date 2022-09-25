@@ -21,5 +21,6 @@ worker.registerFunction("ansible")
 while True:
     job = worker.getJob()
     journal.send(f"Gearman client {job.arguments.decode()}")
+#    subprocess.run(f"whoami", shell=True)
     subprocess.run(f"ansible all --inventory '{job.arguments.decode()},' -m ansible.builtin.setup", shell=True)
     job.sendWorkComplete()
