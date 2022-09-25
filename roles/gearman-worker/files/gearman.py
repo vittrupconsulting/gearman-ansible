@@ -21,5 +21,5 @@ worker.registerFunction("ansible")
 while True:
     job = worker.getJob()
     journal.send(f"Gearman client {job.arguments.decode()}")
-    subprocess.run(f"ansible-playbook /etc/ansible/roles/gearman-worker/tests/test.yml", shell=True)
+    subprocess.run(f"ansible all --inventory '{job.arguments.decode()},' -m ansible.builtin.setup", shell=True)
     job.sendWorkComplete()
