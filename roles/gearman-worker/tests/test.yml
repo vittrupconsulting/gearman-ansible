@@ -2,5 +2,8 @@
 - hosts: localhost
   remote_user: vagrant
   become: true
+  vars:
+    servers:
+      - "172.16.1.15"
   roles:
     - gearman-worker

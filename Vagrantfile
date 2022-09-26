@@ -23,50 +23,57 @@ Vagrant.configure("2") do |config|
 #     SHELL
 #   end
 
+   config.vm.provision "shell", inline: <<-SHELL
+     echo "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDO/b4LqHoJPSWLovBmo8jaj9RWNmtdSyoUJVd/0lnGQpTOgKhM6GA4K+sNIKSjZSRqVmp0qvYxNhMSGnnDzagsZY9ydfF0R5/2SAFI7ezn+z75LbyAx0vpk7e4KIxPatx7/YAABQMOa9dT/qPhSXJ9/YO4QYPFUA3AyMQLJwb5Am6jlqxYBpRe+zt8HUlat2HD628YBNKWyqSsL13kKt2QzaAHT75ZqPEHlQMA3Q/kjmAW4McqtQ6BhVwhGaneslbsj8A/fQGzxRQtW81MC7K83x7RSwV40NXcJeUEYcJyhD029dg74wA875Vv9S7Y4MF+OKO2w4bRm+1uyTIXSAhIsVWbB3uyoFz2EjfMEsSK6uqMGbbGyC7pTXz1qkX0tPWkkLvUTbjIs2FDCE+eWOI/neQ32jdMBsZujzJ8i4VdQeGUUfJATuRB6hjm1XEVx0wzRfNAGba2OxCjj9dx5URgVje55+POxDPPfpCaAL98/xCZmuP/SgYk44YIEqFXtXc=" >> /home/vagrant/.ssh/authorized_keys
+   SHELL
+
    config.vm.define "proxy" do |proxy|
      proxy.vm.network "private_network", ip: "172.16.1.10", virtualbox__intnet: true
-     proxy.vm.synced_folder "roles/gearman-proxy", "/etc/ansible/roles/gearman-proxy"
-     proxy.vm.provision "shell", inline: <<-SHELL
-       apt-get update
-       sudo apt-get install ansible -y
-       ansible-playbook /etc/ansible/roles/gearman-proxy/tests/test.yml -e "{ servers: ["172.16.1.15"] }"
-       echo "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDO/b4LqHoJPSWLovBmo8jaj9RWNmtdSyoUJVd/0lnGQpTOgKhM6GA4K+sNIKSjZSRqVmp0qvYxNhMSGnnDzagsZY9ydfF0R5/2SAFI7ezn+z75LbyAx0vpk7e4KIxPatx7/YAABQMOa9dT/qPhSXJ9/YO4QYPFUA3AyMQLJwb5Am6jlqxYBpRe+zt8HUlat2HD628YBNKWyqSsL13kKt2QzaAHT75ZqPEHlQMA3Q/kjmAW4McqtQ6BhVwhGaneslbsj8A/fQGzxRQtW81MC7K83x7RSwV40NXcJeUEYcJyhD029dg74wA875Vv9S7Y4MF+OKO2w4bRm+1uyTIXSAhIsVWbB3uyoFz2EjfMEsSK6uqMGbbGyC7pTXz1qkX0tPWkkLvUTbjIs2FDCE+eWOI/neQ32jdMBsZujzJ8i4VdQeGUUfJATuRB6hjm1XEVx0wzRfNAGba2OxCjj9dx5URgVje55+POxDPPfpCaAL98/xCZmuP/SgYk44YIEqFXtXc=" >> /home/vagrant/.ssh/authorized_keys
-     SHELL
+#     proxy.vm.synced_folder ".", "/vagrant"
+#     proxy.vm.synced_folder "roles/gearman-proxy", "/etc/ansible/roles/gearman-proxy"
+#     proxy.vm.provision "ansible_local" do |ansible|
+#       ansible.playbook = "/etc/ansible/roles/gearman-proxy/tests/test.yml"
+#     end
    end
 
    config.vm.define "server" do |server|
      server.vm.network "private_network", ip: "172.16.1.15", virtualbox__intnet: true
-     server.vm.synced_folder "roles/gearman-server", "/etc/ansible/roles/gearman-server"
-     server.vm.provision "shell", inline: <<-SHELL
-       apt-get update
-       sudo apt-get install ansible -y
-       ansible-playbook /etc/ansible/roles/gearman-server/tests/test.yml
-       echo "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDO/b4LqHoJPSWLovBmo8jaj9RWNmtdSyoUJVd/0lnGQpTOgKhM6GA4K+sNIKSjZSRqVmp0qvYxNhMSGnnDzagsZY9ydfF0R5/2SAFI7ezn+z75LbyAx0vpk7e4KIxPatx7/YAABQMOa9dT/qPhSXJ9/YO4QYPFUA3AyMQLJwb5Am6jlqxYBpRe+zt8HUlat2HD628YBNKWyqSsL13kKt2QzaAHT75ZqPEHlQMA3Q/kjmAW4McqtQ6BhVwhGaneslbsj8A/fQGzxRQtW81MC7K83x7RSwV40NXcJeUEYcJyhD029dg74wA875Vv9S7Y4MF+OKO2w4bRm+1uyTIXSAhIsVWbB3uyoFz2EjfMEsSK6uqMGbbGyC7pTXz1qkX0tPWkkLvUTbjIs2FDCE+eWOI/neQ32jdMBsZujzJ8i4VdQeGUUfJATuRB6hjm1XEVx0wzRfNAGba2OxCjj9dx5URgVje55+POxDPPfpCaAL98/xCZmuP/SgYk44YIEqFXtXc=" >> /home/vagrant/.ssh/authorized_keys
-     SHELL
+#     server.vm.synced_folder ".", "/vagrant"
+#     server.vm.synced_folder "roles/gearman-server", "/etc/ansible/roles/gearman-server"
+#     server.vm.provision "ansible_local" do |ansible|
+#       ansible.playbook = "/etc/ansible/roles/gearman-server/tests/test.yml"
+#     end
    end
 
    config.vm.define "worker" do |worker|
      worker.vm.network "private_network", ip: "172.16.1.20", virtualbox__intnet: true
-     worker.vm.synced_folder "roles/gearman-worker", "/etc/ansible/roles/gearman-worker"
-     worker.vm.synced_folder "roles/gearman-ansible", "/etc/ansible/roles/gearman-ansible"
-     worker.vm.synced_folder "roles/gearman-client", "/etc/ansible/roles/gearman-client"
-     worker.vm.provision "shell", inline: <<-SHELL
-       apt-get update
-       sudo apt-get install ansible -y
-       ansible-playbook /etc/ansible/roles/gearman-ansible/tests/test.yml
-       ansible-playbook /etc/ansible/roles/gearman-worker/tests/test.yml -e "{ servers: ["172.16.1.15"] }"
-       echo "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDO/b4LqHoJPSWLovBmo8jaj9RWNmtdSyoUJVd/0lnGQpTOgKhM6GA4K+sNIKSjZSRqVmp0qvYxNhMSGnnDzagsZY9ydfF0R5/2SAFI7ezn+z75LbyAx0vpk7e4KIxPatx7/YAABQMOa9dT/qPhSXJ9/YO4QYPFUA3AyMQLJwb5Am6jlqxYBpRe+zt8HUlat2HD628YBNKWyqSsL13kKt2QzaAHT75ZqPEHlQMA3Q/kjmAW4McqtQ6BhVwhGaneslbsj8A/fQGzxRQtW81MC7K83x7RSwV40NXcJeUEYcJyhD029dg74wA875Vv9S7Y4MF+OKO2w4bRm+1uyTIXSAhIsVWbB3uyoFz2EjfMEsSK6uqMGbbGyC7pTXz1qkX0tPWkkLvUTbjIs2FDCE+eWOI/neQ32jdMBsZujzJ8i4VdQeGUUfJATuRB6hjm1XEVx0wzRfNAGba2OxCjj9dx5URgVje55+POxDPPfpCaAL98/xCZmuP/SgYk44YIEqFXtXc=" >> /home/vagrant/.ssh/authorized_keys
-     SHELL
+     worker.vm.synced_folder ".", "/vagrant"
+#     worker.vm.provision "shell", inline: <<-SHELL
+#       apt-get update
+#       sudo apt-get install ansible -y
+#       mkdir -p /etc/ansible
+#       cp -r /vagrant/roles /etc/ansible/roles
+#       ansible-playbook /etc/ansible/roles/gearman-ansible/tests/test.yml
+#       ansible-playbook /etc/ansible/roles/gearman-worker/tests/test.yml
+#     SHELL
    end
 
    config.vm.define "utils" do |utils|
      utils.vm.network "private_network", ip: "172.16.1.25", virtualbox__intnet: true
+     utils.vm.synced_folder ".", "/vagrant"
      utils.vm.provision "shell", inline: <<-SHELL
        apt-get update
-       sudo apt-get install gearman-tools -y
-       gearman -h 172.16.1.15 -p 4730 -f ansible 172.16.1.10
-       gearman -h 172.16.1.15 -p 4730 -f ansible 172.16.1.15
-       gearman -h 172.16.1.15 -p 4730 -f ansible 172.16.1.20
+       sudo apt-get install ansible -y
+       mkdir -p /etc/ansible
+
+       cp -r /vagrant/roles /etc/ansible/roles
+       cp /etc/ansible/roles/gearman-ansible/files/ansible.cfg /etc/ansible/ansible.cfg
+       cp /etc/ansible/roles/gearman-ansible/files/ansible_rsa /etc/ansible/ansible_rsa
+       chmod 700 /etc/ansible/ansible_rsa
+
+       ansible-playbook --inventory "172.16.1.10," /etc/ansible/roles/gearman-client/tests/test_all.yml
+       ansible-playbook --inventory "172.16.1.15," /etc/ansible/roles/gearman-client/tests/test_all.yml
+       ansible-playbook --inventory "172.16.1.20," /etc/ansible/roles/gearman-client/tests/test_all.yml
      SHELL
    end
 
