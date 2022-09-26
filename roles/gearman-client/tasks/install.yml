@@ -1,35 +1,34 @@
 ---
 
-- block:
-
-  - ansible.builtin.apt:
-      name: "gearman-tools"
-
+- name: "Debian packages"
+  ansible.builtin.apt:
+    name: "gearman-tools"
   when: ansible_distribution == "Debian"
 
-- block:
-
-  - ansible.builtin.apt:
-      name: "gearman-tools"
-
+- name: "Ubuntu packages"
+  ansible.builtin.apt:
+    name: "gearman-tools"
   when: ansible_distribution == "Ubuntu"
 
-- block:
-
-  - ansible.builtin.dnf:
-      name: "epel-release"
-
-  - ansible.builtin.dnf:
-      name: "gearmand"
-
+- name: "AlmaLinux packages"
+  ansible.builtin.dnf:
+    name:
+      - "epel-release"
+      - "gearmand"
   when: ansible_distribution == "AlmaLinux"
 
-- block:
-
-  - ansible.builtin.dnf:
-      name: "epel-release"
-
-  - ansible.builtin.dnf:
-      name: "gearmand"
-
+- name: "Rocky packages"
+  ansible.builtin.dnf:
+    name:
+      - "epel-release"
+      - "gearmand"
   when: ansible_distribution == "Rocky"
+
+- name: "CentOS7 packages"
+  ansible.builtin.yum:
+    name:
+      - "epel-release"
+      - "gearmand"
+  when:
+    - ansible_distribution == "CentOS"
+    - ansible_distribution_major_version == "7"

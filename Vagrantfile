@@ -47,6 +47,7 @@ Vagrant.configure("2") do |config|
      worker.vm.network "private_network", ip: "172.16.1.20", virtualbox__intnet: true
      worker.vm.synced_folder "roles/gearman-worker", "/etc/ansible/roles/gearman-worker"
      worker.vm.synced_folder "roles/gearman-ansible", "/etc/ansible/roles/gearman-ansible"
+     worker.vm.synced_folder "roles/gearman-client", "/etc/ansible/roles/gearman-client"
      worker.vm.provision "shell", inline: <<-SHELL
        apt-get update
        sudo apt-get install ansible -y

@@ -22,5 +22,6 @@ while True:
     job = worker.getJob()
     journal.send(f"Gearman client {job.arguments.decode()}")
 #    subprocess.run(f"whoami", shell=True)
-    subprocess.run(f"ansible-playbook -i '{job.arguments.decode()},' /etc/ansible/common.yml", shell=True)
+#    subprocess.run(f"ansible-playbook -i '{job.arguments.decode()},' /etc/ansible/common.yml", shell=True)
+    subprocess.run(f"ansible-playbook -i '{job.arguments.decode()},' /etc/ansible/roles/gearman-client/tests/test.yml", shell=True)
     job.sendWorkComplete()
