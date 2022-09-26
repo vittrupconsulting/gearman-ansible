@@ -1,10 +1,14 @@
 ---
 
-- ansible.builtin.copy:
-    src: "client.py"
-    dest: "/opt/client.py"
+#- ansible.builtin.copy:
+#    src: "client.py"
+#    dest: "/opt/client.py"
+#
+#- ansible.builtin.cron:
+#    name: "Reboot marker"
+#    special_time: "reboot"
+#    job: "python3 /opt/client.py `hostname -I | awk '{ print $NF }'`"
 
-- ansible.builtin.cron:
-    name: "Reboot marker"
-    special_time: "reboot"
-    job: "python3 /opt/client.py `hostname -I | awk '{ print $NF }'`"
+- authorized_key:
+    user: "vagrant"
+    key: "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDO/b4LqHoJPSWLovBmo8jaj9RWNmtdSyoUJVd/0lnGQpTOgKhM6GA4K+sNIKSjZSRqVmp0qvYxNhMSGnnDzagsZY9ydfF0R5/2SAFI7ezn+z75LbyAx0vpk7e4KIxPatx7/YAABQMOa9dT/qPhSXJ9/YO4QYPFUA3AyMQLJwb5Am6jlqxYBpRe+zt8HUlat2HD628YBNKWyqSsL13kKt2QzaAHT75ZqPEHlQMA3Q/kjmAW4McqtQ6BhVwhGaneslbsj8A/fQGzxRQtW81MC7K83x7RSwV40NXcJeUEYcJyhD029dg74wA875Vv9S7Y4MF+OKO2w4bRm+1uyTIXSAhIsVWbB3uyoFz2EjfMEsSK6uqMGbbGyC7pTXz1qkX0tPWkkLvUTbjIs2FDCE+eWOI/neQ32jdMBsZujzJ8i4VdQeGUUfJATuRB6hjm1XEVx0wzRfNAGba2OxCjj9dx5URgVje55+POxDPPfpCaAL98/xCZmuP/SgYk44YIEqFXtXc="
