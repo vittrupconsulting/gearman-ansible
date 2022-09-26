@@ -1,5 +1,8 @@
 ---
 
+- debug:
+    msg: "{{ ansible_distribution }} {{ ansible_distribution_major_version }}"
+
 - ansible.builtin.include_tasks:
     file: install.yml
 
