@@ -25,42 +25,34 @@ Vagrant.configure("2") do |config|
 
    config.vm.define "proxy" do |proxy|
      proxy.vm.network "private_network", ip: "172.16.1.10", virtualbox__intnet: true
-     proxy.vm.synced_folder ".", "/vagrant"
      proxy.vm.synced_folder "roles/gearman-proxy", "/etc/ansible/roles/gearman-proxy"
-     proxy.vm.provision "ansible_local" do |ansible|
-       ansible.playbook = "/etc/ansible/roles/gearman-proxy/tests/test.yml"
-       ansible.extra_vars = { servers: ["172.16.1.15"] }
-     end
+     proxy.vm.provision "shell", inline: <<-SHELL
+       apt-get update
+       sudo apt-get install ansible -y
+       ansible-playbook /etc/ansible/roles/gearman-proxy/tests/test.yml -e "{ servers: ["172.16.1.15"] }"
+     SHELL
    end
 
    config.vm.define "server" do |server|
      server.vm.network "private_network", ip: "172.16.1.15", virtualbox__intnet: true
-     server.vm.synced_folder ".", "/vagrant"
      server.vm.synced_folder "roles/gearman-server", "/etc/ansible/roles/gearman-server"
-     server.vm.provision "ansible_local" do |ansible|
-       ansible.playbook = "/etc/ansible/roles/gearman-server/tests/test.yml"
-     end
+     server.vm.provision "shell", inline: <<-SHELL
+       apt-get update
+       sudo apt-get install ansible -y
+       ansible-playbook /etc/ansible/roles/gearman-server/tests/test.yml
+     SHELL
    end
 
    config.vm.define "worker" do |worker|
      worker.vm.network "private_network", ip: "172.16.1.20", virtualbox__intnet: true
-     worker.vm.synced_folder ".", "/vagrant"
      worker.vm.synced_folder "roles/gearman-worker", "/etc/ansible/roles/gearman-worker"
      worker.vm.synced_folder "roles/gearman-ansible", "/etc/ansible/roles/gearman-ansible"
      worker.vm.provision "shell", inline: <<-SHELL
        apt-get update
-       apt-get install ansible -y
-       apt-get install python3-pip -y
-       #ansible-playbook /etc/ansible/roles/gearman-ansible/tests/test.yml
-       #ansible-playbook /etc/ansible/roles/gearman-worker/tests/test.yml -e "{ servers: ["172.16.1.15"] }"
+       sudo apt-get install ansible -y
+       ansible-playbook /etc/ansible/roles/gearman-ansible/tests/test.yml
+       ansible-playbook /etc/ansible/roles/gearman-worker/tests/test.yml -e "{ servers: ["172.16.1.15"] }"
      SHELL
-     worker.vm.provision "ansible_local" do |ansible|
-       ansible.playbook = "/etc/ansible/roles/gearman-ansible/tests/test.yml"
-     end
-     worker.vm.provision "ansible_local" do |ansible|
-       ansible.playbook = "/etc/ansible/roles/gearman-worker/tests/test.yml"
-       ansible.extra_vars = { servers: ["172.16.1.15"] }
-     end
    end
 
    config.vm.define "debian-client", autostart: false do |debian|
