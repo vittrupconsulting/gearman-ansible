@@ -9,6 +9,13 @@
 
 - block:
 
+  - ansible.builtin.apt:
+      name: "gearman-tools"
+
+  when: ansible_distribution == "Ubuntu"
+
+- block:
+
   - ansible.builtin.dnf:
       name: "epel-release"
 
@@ -16,3 +23,13 @@
       name: "gearmand"
 
   when: ansible_distribution == "AlmaLinux"
+
+- block:
+
+  - ansible.builtin.dnf:
+      name: "epel-release"
+
+  - ansible.builtin.dnf:
+      name: "gearmand"
+
+  when: ansible_distribution == "Rocky"
