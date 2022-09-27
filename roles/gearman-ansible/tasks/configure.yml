@@ -5,7 +5,7 @@
     dest: "/etc/.ansible"
 
 -  ansible.posix.synchronize:
-     src: "/etc/.ansible"
+     src: "/etc/.ansible/"
      dest: "/etc/ansible"
      rsync_opts:
          - "--exclude=.git"
@@ -14,4 +14,5 @@
 - ansible.builtin.file:
     path: "/etc/ansible/ansible_rsa"
     mode: "0700"
-
+    owner: "vagrant"
+    group: "vagrant"

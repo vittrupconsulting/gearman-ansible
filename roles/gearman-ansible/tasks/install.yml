@@ -12,6 +12,9 @@
 - ansible.builtin.apt:
     name: "rsync"
 
+- ansible.builtin.apt:
+    name: "ansible"
+
 - ansible.builtin.pip:
     name: "redis"
 
