@@ -66,6 +66,7 @@ Vagrant.configure("2") do |config|
         echo '["gearman-client", "gearman-ansible", "gearman-worker"]' | sudo tee /etc/ansible/facts.d/roles.fact
      SHELL
    end
+
    config.vm.define "utils" do |utils|
      utils.vm.network "private_network", ip: "172.16.1.25", virtualbox__intnet: true
      utils.vm.synced_folder ".", "/vagrant"
