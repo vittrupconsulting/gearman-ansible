@@ -3,3 +3,7 @@ Rename gearman-worker to gearman-job-worker
 Enable vault
 Rename gearman-client to gearman-common
 Rename gearman-server to gearman-job-server
+
+Vars:
+ gearman.servers
+ gearman.proxy
