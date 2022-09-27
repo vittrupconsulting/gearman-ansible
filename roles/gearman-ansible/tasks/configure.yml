@@ -1,5 +1,5 @@
 ---
-#changed_when: False
+
 - ansible.builtin.file:
     path: "/etc/ansible"
     state: "absent"
@@ -16,17 +16,7 @@
     content: "{{ ansible_local['roles'] | default(['gearman-client']) | to_nice_json }}"
     dest: "/etc/ansible/facts.d/roles.fact"
 
-#- ansible.builtin.copy:
-#    src: "ansible.cfg"
-#    dest: "/etc/ansible/ansible.cfg"
-#
-#- ansible.builtin.copy:
-#    src: "ansible_rsa"
-#    dest: "/etc/ansible/ansible_rsa"
-#    mode: "0700"
-#    owner: "vagrant"
-#    group: "vagrant"
-#
-#- ansible.builtin.copy:
-#    src: "common.yml"
-#    dest: "/etc/ansible/common.yml"
+- ansible.builtin.file:
+    path: "/etc/ansible/ansible_rsa"
+    mode: "0700"
+
