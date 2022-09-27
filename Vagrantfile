@@ -43,15 +43,29 @@ Vagrant.configure("2") do |config|
      SHELL
    end
 
+   config.vm.define "server2" do |server2|
+     server2.vm.network "private_network", ip: "172.16.1.16", virtualbox__intnet: true
+     server2.vm.provision "shell", inline: <<-SHELL
+        sudo mkdir -p /etc/ansible/facts.d/
+        echo '["gearman-client", "gearman-server"]' | sudo tee /etc/ansible/facts.d/roles.fact
+     SHELL
+   end
+
    config.vm.define "worker" do |worker|
      worker.vm.network "private_network", ip: "172.16.1.20", virtualbox__intnet: true
-     worker.vm.synced_folder ".", "/vagrant"
      worker.vm.provision "shell", inline: <<-SHELL
         sudo mkdir -p /etc/ansible/facts.d/
         echo '["gearman-client", "gearman-ansible", "gearman-worker"]' | sudo tee /etc/ansible/facts.d/roles.fact
      SHELL
    end
 
+   config.vm.define "worker2" do |worker2|
+     worker2.vm.network "private_network", ip: "172.16.1.21", virtualbox__intnet: true
+     worker2.vm.provision "shell", inline: <<-SHELL
+        sudo mkdir -p /etc/ansible/facts.d/
+        echo '["gearman-client", "gearman-ansible", "gearman-worker"]' | sudo tee /etc/ansible/facts.d/roles.fact
+     SHELL
+   end
    config.vm.define "utils" do |utils|
      utils.vm.network "private_network", ip: "172.16.1.25", virtualbox__intnet: true
      utils.vm.synced_folder ".", "/vagrant"
@@ -67,7 +81,9 @@ Vagrant.configure("2") do |config|
 
        ansible-playbook --inventory "172.16.1.10," /etc/ansible/common.yml
        ansible-playbook --inventory "172.16.1.15," /etc/ansible/common.yml
+       ansible-playbook --inventory "172.16.1.16," /etc/ansible/common.yml
        ansible-playbook --inventory "172.16.1.20," /etc/ansible/common.yml
+       ansible-playbook --inventory "172.16.1.21," /etc/ansible/common.yml
      SHELL
    end
 
