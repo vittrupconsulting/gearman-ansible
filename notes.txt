@@ -1,0 +1,3 @@
+Replace vagrant user with ansible user
+Rename gearman-worker to gearman-job-worker
+Enable vault
