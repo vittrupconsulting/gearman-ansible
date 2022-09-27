@@ -18,7 +18,7 @@ Vagrant.configure("2") do |config|
 #        ansible-galaxy init gearman-server
 #        ansible-galaxy init gearman-worker
 #        ansible-galaxy init gearman-proxy
-#        ansible-galaxy init gearman-client
+#        ansible-galaxy init gearman-common
 #        ansible-galaxy init gearman-ansible
 #     SHELL
 #   end
@@ -32,7 +32,7 @@ Vagrant.configure("2") do |config|
      proxy.vm.network "forwarded_port", guest: 80, host: 80
      proxy.vm.provision "shell", inline: <<-SHELL
         sudo mkdir -p /etc/ansible/facts.d/
-        echo '["gearman-client", "gearman-proxy"]' | sudo tee /etc/ansible/facts.d/roles.fact
+        echo '["gearman-common", "gearman-proxy"]' | sudo tee /etc/ansible/facts.d/roles.fact
      SHELL
    end
 
@@ -40,7 +40,7 @@ Vagrant.configure("2") do |config|
      server1.vm.network "private_network", ip: "172.16.1.15", virtualbox__intnet: true
      server1.vm.provision "shell", inline: <<-SHELL
         sudo mkdir -p /etc/ansible/facts.d/
-        echo '["gearman-client", "gearman-server"]' | sudo tee /etc/ansible/facts.d/roles.fact
+        echo '["gearman-common", "gearman-server"]' | sudo tee /etc/ansible/facts.d/roles.fact
      SHELL
    end
 
@@ -48,7 +48,7 @@ Vagrant.configure("2") do |config|
      server2.vm.network "private_network", ip: "172.16.1.16", virtualbox__intnet: true
      server2.vm.provision "shell", inline: <<-SHELL
         sudo mkdir -p /etc/ansible/facts.d/
-        echo '["gearman-client", "gearman-server"]' | sudo tee /etc/ansible/facts.d/roles.fact
+        echo '["gearman-common", "gearman-server"]' | sudo tee /etc/ansible/facts.d/roles.fact
      SHELL
    end
 
@@ -56,7 +56,7 @@ Vagrant.configure("2") do |config|
      worker1.vm.network "private_network", ip: "172.16.1.20", virtualbox__intnet: true
      worker1.vm.provision "shell", inline: <<-SHELL
         sudo mkdir -p /etc/ansible/facts.d/
-        echo '["gearman-client", "gearman-ansible", "gearman-worker"]' | sudo tee /etc/ansible/facts.d/roles.fact
+        echo '["gearman-common", "gearman-ansible", "gearman-worker"]' | sudo tee /etc/ansible/facts.d/roles.fact
      SHELL
    end
 
@@ -64,7 +64,7 @@ Vagrant.configure("2") do |config|
      worker2.vm.network "private_network", ip: "172.16.1.21", virtualbox__intnet: true
      worker2.vm.provision "shell", inline: <<-SHELL
         sudo mkdir -p /etc/ansible/facts.d/
-        echo '["gearman-client", "gearman-ansible", "gearman-worker"]' | sudo tee /etc/ansible/facts.d/roles.fact
+        echo '["gearman-common", "gearman-ansible", "gearman-worker"]' | sudo tee /etc/ansible/facts.d/roles.fact
      SHELL
    end
 
@@ -113,7 +113,7 @@ Vagrant.configure("2") do |config|
 
    config.vm.define "alma-client", autostart: false do |alma|
      alma.vm.box = "almalinux/8"
-     alma.vm.synced_folder "roles/gearman-client", "/etc/ansible/roles/gearman-client"
+     alma.vm.synced_folder "roles/gearman-common", "/etc/ansible/roles/gearman-common"
      alma.vm.network "private_network", ip: "172.16.1.32", virtualbox__intnet: true
      alma.vm.provision "shell", inline: <<-SHELL
        sudo dnf update -y
@@ -150,13 +150,13 @@ Vagrant.configure("2") do |config|
 
 #    config.vm.define "python-client", autostart: false do |python|
 #      python.vm.box = "debian/bullseye64"
-#      python.vm.synced_folder "roles/gearman-client", "/etc/ansible/roles/gearman-client"
+#      python.vm.synced_folder "roles/gearman-common", "/etc/ansible/roles/gearman-common"
 #      python.vm.network "private_network", ip: "172.16.1.35", virtualbox__intnet: true
 #      python.vm.provision "shell", inline: <<-SHELL
 #        sudo apt-get update
 #        sudo apt-get install python3 python3-pip -y
 #        sudo pip3 install gear
-#        sudo cp /etc/ansible/roles/gearman-client/files/client.py /usr/bin/gearman
+#        sudo cp /etc/ansible/roles/gearman-common/files/client.py /usr/bin/gearman
 #        echo "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDO/b4LqHoJPSWLovBmo8jaj9RWNmtdSyoUJVd/0lnGQpTOgKhM6GA4K+sNIKSjZSRqVmp0qvYxNhMSGnnDzagsZY9ydfF0R5/2SAFI7ezn+z75LbyAx0vpk7e4KIxPatx7/YAABQMOa9dT/qPhSXJ9/YO4QYPFUA3AyMQLJwb5Am6jlqxYBpRe+zt8HUlat2HD628YBNKWyqSsL13kKt2QzaAHT75ZqPEHlQMA3Q/kjmAW4McqtQ6BhVwhGaneslbsj8A/fQGzxRQtW81MC7K83x7RSwV40NXcJeUEYcJyhD029dg74wA875Vv9S7Y4MF+OKO2w4bRm+1uyTIXSAhIsVWbB3uyoFz2EjfMEsSK6uqMGbbGyC7pTXz1qkX0tPWkkLvUTbjIs2FDCE+eWOI/neQ32jdMBsZujzJ8i4VdQeGUUfJATuRB6hjm1XEVx0wzRfNAGba2OxCjj9dx5URgVje55+POxDPPfpCaAL98/xCZmuP/SgYk44YIEqFXtXc=" >> /home/vagrant/.ssh/authorized_keys
 #        gearman -h 172.16.1.10 -p 4730 -f ansible `hostname -I | awk '{ print $NF }'`(python)
 #      SHELL

@@ -3,4 +3,4 @@
   remote_user: vagrant
   become: true
   roles:
-    - gearman-client
+    - gearman-common
