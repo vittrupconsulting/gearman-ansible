@@ -65,8 +65,8 @@ Vagrant.configure("2") do |config|
        sudo chmod 700 /etc/ansible/ansible_rsa
        sudo chown -R vagrant:vagrant /etc/ansible
 
-       #ansible-playbook --inventory "172.16.1.10," /etc/ansible/common.yml
-       #ansible-playbook --inventory "172.16.1.15," /etc/ansible/common.yml
+       ansible-playbook --inventory "172.16.1.10," /etc/ansible/common.yml
+       ansible-playbook --inventory "172.16.1.15," /etc/ansible/common.yml
        ansible-playbook --inventory "172.16.1.20," /etc/ansible/common.yml
      SHELL
    end
