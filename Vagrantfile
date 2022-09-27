@@ -29,15 +29,16 @@ Vagrant.configure("2") do |config|
 
    config.vm.define "proxy" do |proxy|
      proxy.vm.network "private_network", ip: "172.16.1.10", virtualbox__intnet: true
+     proxy.vm.network "forwarded_port", guest: 80, host: 80
      proxy.vm.provision "shell", inline: <<-SHELL
         sudo mkdir -p /etc/ansible/facts.d/
         echo '["gearman-client", "gearman-proxy"]' | sudo tee /etc/ansible/facts.d/roles.fact
      SHELL
    end
 
-   config.vm.define "server" do |server|
-     server.vm.network "private_network", ip: "172.16.1.15", virtualbox__intnet: true
-     server.vm.provision "shell", inline: <<-SHELL
+   config.vm.define "server1" do |server1|
+     server1.vm.network "private_network", ip: "172.16.1.15", virtualbox__intnet: true
+     server1.vm.provision "shell", inline: <<-SHELL
         sudo mkdir -p /etc/ansible/facts.d/
         echo '["gearman-client", "gearman-server"]' | sudo tee /etc/ansible/facts.d/roles.fact
      SHELL
@@ -51,9 +52,9 @@ Vagrant.configure("2") do |config|
      SHELL
    end
 
-   config.vm.define "worker" do |worker|
-     worker.vm.network "private_network", ip: "172.16.1.20", virtualbox__intnet: true
-     worker.vm.provision "shell", inline: <<-SHELL
+   config.vm.define "worker1" do |worker1|
+     worker1.vm.network "private_network", ip: "172.16.1.20", virtualbox__intnet: true
+     worker1.vm.provision "shell", inline: <<-SHELL
         sudo mkdir -p /etc/ansible/facts.d/
         echo '["gearman-client", "gearman-ansible", "gearman-worker"]' | sudo tee /etc/ansible/facts.d/roles.fact
      SHELL
