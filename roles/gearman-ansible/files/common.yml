@@ -1,9 +1,0 @@
----
-- hosts: all
-  remote_user: vagrant
-  become: true
-  tasks:
-
-    - debug:
-        msg: "{{ ansible_distribution }}"
-

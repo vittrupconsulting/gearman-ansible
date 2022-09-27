@@ -29,33 +29,27 @@ Vagrant.configure("2") do |config|
 
    config.vm.define "proxy" do |proxy|
      proxy.vm.network "private_network", ip: "172.16.1.10", virtualbox__intnet: true
-#     proxy.vm.synced_folder ".", "/vagrant"
-#     proxy.vm.synced_folder "roles/gearman-proxy", "/etc/ansible/roles/gearman-proxy"
-#     proxy.vm.provision "ansible_local" do |ansible|
-#       ansible.playbook = "/etc/ansible/roles/gearman-proxy/tests/test.yml"
-#     end
+     proxy.vm.provision "shell", inline: <<-SHELL
+        sudo mkdir -p /etc/ansible/facts.d/
+        echo '["gearman-client", "gearman-proxy"]' | sudo tee /etc/ansible/facts.d/roles.fact
+     SHELL
    end
 
    config.vm.define "server" do |server|
      server.vm.network "private_network", ip: "172.16.1.15", virtualbox__intnet: true
-#     server.vm.synced_folder ".", "/vagrant"
-#     server.vm.synced_folder "roles/gearman-server", "/etc/ansible/roles/gearman-server"
-#     server.vm.provision "ansible_local" do |ansible|
-#       ansible.playbook = "/etc/ansible/roles/gearman-server/tests/test.yml"
-#     end
+     server.vm.provision "shell", inline: <<-SHELL
+        sudo mkdir -p /etc/ansible/facts.d/
+        echo '["gearman-client", "gearman-server"]' | sudo tee /etc/ansible/facts.d/roles.fact
+     SHELL
    end
 
    config.vm.define "worker" do |worker|
      worker.vm.network "private_network", ip: "172.16.1.20", virtualbox__intnet: true
      worker.vm.synced_folder ".", "/vagrant"
-#     worker.vm.provision "shell", inline: <<-SHELL
-#       apt-get update
-#       sudo apt-get install ansible -y
-#       mkdir -p /etc/ansible
-#       cp -r /vagrant/roles /etc/ansible/roles
-#       ansible-playbook /etc/ansible/roles/gearman-ansible/tests/test.yml
-#       ansible-playbook /etc/ansible/roles/gearman-worker/tests/test.yml
-#     SHELL
+     worker.vm.provision "shell", inline: <<-SHELL
+        sudo mkdir -p /etc/ansible/facts.d/
+        echo '["gearman-client", "gearman-ansible", "gearman-worker"]' | sudo tee /etc/ansible/facts.d/roles.fact
+     SHELL
    end
 
    config.vm.define "utils" do |utils|
@@ -66,14 +60,14 @@ Vagrant.configure("2") do |config|
        sudo apt-get install ansible -y
        mkdir -p /etc/ansible
 
-       cp -r /vagrant/roles /etc/ansible/roles
-       cp /etc/ansible/roles/gearman-ansible/files/ansible.cfg /etc/ansible/ansible.cfg
-       cp /etc/ansible/roles/gearman-ansible/files/ansible_rsa /etc/ansible/ansible_rsa
-       chmod 700 /etc/ansible/ansible_rsa
+       cp -r /vagrant/* /etc/ansible
+       sudo rm -f /etc/ansible/Vagrantfile
+       sudo chmod 700 /etc/ansible/ansible_rsa
+       sudo chown -R vagrant:vagrant /etc/ansible
 
-       ansible-playbook --inventory "172.16.1.10," /etc/ansible/roles/gearman-client/tests/test_all.yml
-       ansible-playbook --inventory "172.16.1.15," /etc/ansible/roles/gearman-client/tests/test_all.yml
-       ansible-playbook --inventory "172.16.1.20," /etc/ansible/roles/gearman-client/tests/test_all.yml
+       #ansible-playbook --inventory "172.16.1.10," /etc/ansible/common.yml
+       #ansible-playbook --inventory "172.16.1.15," /etc/ansible/common.yml
+       ansible-playbook --inventory "172.16.1.20," /etc/ansible/common.yml
      SHELL
    end
 
