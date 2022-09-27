@@ -1,0 +1,13 @@
+#!/usr/bin/python3
+
+import gear
+import sys
+
+client = gear.Client()
+{% for server in gearman.servers %}
+client.addServer("{{ server }}", "4730")
+{% endfor %}
+client.waitForServer()
+
+job = gear.Job("ansible", sys.argv[1].encode("UTF-8"))
+client.submitJob(job)
