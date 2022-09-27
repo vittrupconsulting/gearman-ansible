@@ -1,20 +1,15 @@
 ---
 
-- ansible.builtin.file:
-    path: "/etc/ansible"
-    state: "absent"
-
 - ansible.builtin.git:
     repo: 'https://github.com/vittrupconsulting/gearman-ansible.git'
-    dest: "/etc/ansible"
+    dest: "/etc/.ansible"
 
-- ansible.builtin.file:
-    path: "/etc/ansible/facts.d/"
-    state: "directory"
-
-- ansible.builtin.copy:
-    content: "{{ ansible_local['roles'] | default(['gearman-client']) | to_nice_json }}"
-    dest: "/etc/ansible/facts.d/roles.fact"
+-  ansible.posix.synchronize:
+     src: "/etc/.ansible"
+     dest: "/etc/ansible"
+     rsync_opts:
+         - "--exclude=.git"
+   delegate_to: "{{ inventory_hostname }}"
 
 - ansible.builtin.file:
     path: "/etc/ansible/ansible_rsa"

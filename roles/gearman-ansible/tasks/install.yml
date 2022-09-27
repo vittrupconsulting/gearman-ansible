@@ -9,6 +9,9 @@
 - ansible.builtin.apt:
     name: "git"
 
+- ansible.builtin.apt:
+    name: "rsync"
+
 - ansible.builtin.pip:
     name: "redis"
 
