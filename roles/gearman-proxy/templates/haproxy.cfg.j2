@@ -41,6 +41,6 @@ frontend gearman-frontend
 backend gearman-backend
 	mode tcp
 {% for server in gearman.servers %}
-	server server {{ server }}:4730 check
+	server {{ server }} {{ server }}:4730 check
 {% endfor %}
 
