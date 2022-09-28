@@ -2,165 +2,107 @@
 # vi: set ft=ruby :
 
 Vagrant.configure("2") do |config|
-  config.vm.box = "debian/bullseye64"
-
-   config.vm.provider "virtualbox" do |vb|
-     vb.memory = "1024"
-   end
-
-#    config.vm.define "init", autostart: false do |init|
-#      init.vm.synced_folder ".", "/vagrant"
-#      init.vm.provision "shell", inline: <<-SHELL
-#        apt-get update
-#        apt-get install ansible -y
-#        mkdir -p /vagrant/roles
-#        cd /vagrant/roles
-#        ansible-galaxy init gearman-server
-#        ansible-galaxy init gearman-worker
-#        ansible-galaxy init gearman-proxy
-#        ansible-galaxy init gearman-common
-#        ansible-galaxy init gearman-ansible
-#     SHELL
-#   end
+   config.vm.box = "ansible.box"
 
    config.vm.provision "shell", inline: <<-SHELL
      sudo useradd ansible --system --create-home --shell /bin/bash
      echo 'ansible ALL=(ALL) NOPASSWD:ALL' | sudo tee /etc/sudoers.d/ansible
-     su ansible --login --command "/usr/bin/mkdir --parents /home/ansible/.ssh"
-     su ansible --login --command "/usr/bin/touch /home/ansible/.ssh/authorized_keys"
-     echo "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDO/b4LqHoJPSWLovBmo8jaj9RWNmtdSyoUJVd/0lnGQpTOgKhM6GA4K+sNIKSjZSRqVmp0qvYxNhMSGnnDzagsZY9ydfF0R5/2SAFI7ezn+z75LbyAx0vpk7e4KIxPatx7/YAABQMOa9dT/qPhSXJ9/YO4QYPFUA3AyMQLJwb5Am6jlqxYBpRe+zt8HUlat2HD628YBNKWyqSsL13kKt2QzaAHT75ZqPEHlQMA3Q/kjmAW4McqtQ6BhVwhGaneslbsj8A/fQGzxRQtW81MC7K83x7RSwV40NXcJeUEYcJyhD029dg74wA875Vv9S7Y4MF+OKO2w4bRm+1uyTIXSAhIsVWbB3uyoFz2EjfMEsSK6uqMGbbGyC7pTXz1qkX0tPWkkLvUTbjIs2FDCE+eWOI/neQ32jdMBsZujzJ8i4VdQeGUUfJATuRB6hjm1XEVx0wzRfNAGba2OxCjj9dx5URgVje55+POxDPPfpCaAL98/xCZmuP/SgYk44YIEqFXtXc=" >> /home/ansible/.ssh/authorized_keys
-     echo "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDO/b4LqHoJPSWLovBmo8jaj9RWNmtdSyoUJVd/0lnGQpTOgKhM6GA4K+sNIKSjZSRqVmp0qvYxNhMSGnnDzagsZY9ydfF0R5/2SAFI7ezn+z75LbyAx0vpk7e4KIxPatx7/YAABQMOa9dT/qPhSXJ9/YO4QYPFUA3AyMQLJwb5Am6jlqxYBpRe+zt8HUlat2HD628YBNKWyqSsL13kKt2QzaAHT75ZqPEHlQMA3Q/kjmAW4McqtQ6BhVwhGaneslbsj8A/fQGzxRQtW81MC7K83x7RSwV40NXcJeUEYcJyhD029dg74wA875Vv9S7Y4MF+OKO2w4bRm+1uyTIXSAhIsVWbB3uyoFz2EjfMEsSK6uqMGbbGyC7pTXz1qkX0tPWkkLvUTbjIs2FDCE+eWOI/neQ32jdMBsZujzJ8i4VdQeGUUfJATuRB6hjm1XEVx0wzRfNAGba2OxCjj9dx5URgVje55+POxDPPfpCaAL98/xCZmuP/SgYk44YIEqFXtXc=" >> /home/vagrant/.ssh/authorized_keys
+     sudo su root --login --command "/usr/bin/mkdir /etc/ansible"
+     sudo su root --login --command "/usr/bin/mkdir /etc/ansible/facts.d"
+     sudo su root --login --command "/usr/bin/chown -R vagrant:vagrant /etc/ansible"
    SHELL
 
-   config.vm.define "proxy" do |proxy|
-     proxy.vm.network "private_network", ip: "172.16.1.10", virtualbox__intnet: true
-     proxy.vm.network "forwarded_port", guest: 80, host: 80
-     proxy.vm.provision "shell", inline: <<-SHELL
-        sudo mkdir -p /etc/ansible/facts.d/
-        echo '["gearman-common", "gearman-proxy"]' | sudo tee /etc/ansible/facts.d/roles.fact
+   config.vm.provision "file", source: "roles", destination: "/etc/ansible/roles"
+   config.vm.provision "file", source: "ansible_rsa", destination: "/etc/ansible/ansible_rsa"
+   config.vm.provision "file", source: "ansible_rsa.pub", destination: "/etc/ansible/ansible_rsa.pub"
+   config.vm.provision "file", source: "ansible.cfg", destination: "/etc/ansible/ansible.cfg"
+   config.vm.provision "file", source: "common.yml", destination: "/etc/ansible/gearman.yml"
+
+   config.vm.provision "shell", inline: <<-SHELL
+     sudo su ansible --login --command "/usr/bin/mkdir /home/ansible/.ssh"
+     sudo su ansible --login --command "/usr/bin/cp /etc/ansible/ansible_rsa.pub /home/ansible/.ssh/authorized_keys"
+   SHELL
+
+   config.vm.define "gearman-server" do |gearman_server|
+     gearman_server.vm.network "private_network", ip: "192.168.0.1", virtualbox__intnet: true
+     gearman_server.vm.provision "file", source: "roles/gearman-server/tests/test.yml", destination: "/etc/ansible/common.yml"
+     gearman_server.vm.provision "shell", inline: <<-SHELL
+       echo '["gearman-common", "gearman-server"]' | tee /etc/ansible/facts.d/roles.fact
+#       apt-get update
+#       sudo apt-get install ansible -y
+       ansible-playbook /etc/ansible/common.yml
      SHELL
    end
 
-   config.vm.define "server1" do |server1|
-     server1.vm.network "private_network", ip: "172.16.1.15", virtualbox__intnet: true
-     server1.vm.provision "shell", inline: <<-SHELL
-        sudo mkdir -p /etc/ansible/facts.d/
-        echo '["gearman-common", "gearman-server"]' | sudo tee /etc/ansible/facts.d/roles.fact
+   config.vm.define "gearman-proxy" do |gearman_proxy|
+     gearman_proxy.vm.network "private_network", ip: "192.168.0.2", virtualbox__intnet: true
+     gearman_proxy.vm.network "forwarded_port", guest: 80, host: 80
+     gearman_proxy.vm.provision "file", source: "roles/gearman-proxy/tests/test.yml", destination: "/etc/ansible/common.yml"
+     gearman_proxy.vm.provision "shell", inline: <<-SHELL
+       echo '["gearman-common", "gearman-proxy"]' | tee /etc/ansible/facts.d/roles.fact
+#       apt-get update
+#       sudo apt-get install ansible -y
+       ansible-playbook /etc/ansible/common.yml
      SHELL
    end
 
-#    config.vm.define "server2" do |server2|
-#      server2.vm.network "private_network", ip: "172.16.1.16", virtualbox__intnet: true
-#      server2.vm.provision "shell", inline: <<-SHELL
-#         sudo mkdir -p /etc/ansible/facts.d/
-#         echo '["gearman-common", "gearman-server"]' | sudo tee /etc/ansible/facts.d/roles.fact
-#      SHELL
-#    end
-
-   config.vm.define "worker1" do |worker1|
-     worker1.vm.network "private_network", ip: "172.16.1.20", virtualbox__intnet: true
-     worker1.vm.provision "shell", inline: <<-SHELL
-        sudo mkdir -p /etc/ansible/facts.d/
-        echo '["gearman-common", "gearman-ansible", "gearman-worker"]' | sudo tee /etc/ansible/facts.d/roles.fact
-     SHELL
-   end
-
-#    config.vm.define "worker2" do |worker2|
-#      worker2.vm.network "private_network", ip: "172.16.1.21", virtualbox__intnet: true
-#      worker2.vm.provision "shell", inline: <<-SHELL
-#         sudo mkdir -p /etc/ansible/facts.d/
-#         echo '["gearman-common", "gearman-ansible", "gearman-worker"]' | sudo tee /etc/ansible/facts.d/roles.fact
-#      SHELL
-#    end
-
-   config.vm.define "utils" do |utils|
-     utils.vm.network "private_network", ip: "172.16.1.25", virtualbox__intnet: true
-     utils.vm.synced_folder ".", "/vagrant"
-     utils.vm.provision "shell", inline: <<-SHELL
-       apt-get update
-       sudo apt-get install ansible -y
-       mkdir -p /etc/ansible
-
-       cp -r /vagrant/* /etc/ansible
-       sudo rm -f /etc/ansible/Vagrantfile
-       sudo chmod 700 /etc/ansible/ansible_rsa
-       sudo chown -R vagrant:vagrant /etc/ansible
-
-       ansible-playbook --inventory "172.16.1.10," /etc/ansible/common.yml
-        ansible-playbook --inventory "172.16.1.15," /etc/ansible/common.yml
-#        ansible-playbook --inventory "172.16.1.16," /etc/ansible/common.yml
-        ansible-playbook --inventory "172.16.1.20," /etc/ansible/common.yml
-#        ansible-playbook --inventory "172.16.1.21," /etc/ansible/common.yml
+   config.vm.define "gearman-worker" do |gearman_worker|
+     gearman_worker.vm.network "private_network", ip: "192.168.0.3", virtualbox__intnet: true
+     gearman_worker.vm.provision "file", source: "roles/gearman-worker/tests/test.yml", destination: "/etc/ansible/common.yml"
+     gearman_worker.vm.provision "shell", inline: <<-SHELL
+       echo '["gearman-common", "gearman-worker", "gearman-ansible"]' | tee /etc/ansible/facts.d/roles.fact
+#       apt-get update
+#       sudo apt-get install ansible -y
+       ansible-playbook /etc/ansible/common.yml
+#       ansible-playbook --inventory "192.168.0.1,192.168.0.2,192.168.0.3" /etc/ansible/gearman.yml
      SHELL
    end
 
    config.vm.define "debian-client", autostart: false do |debian|
      debian.vm.box = "debian/bullseye64"
-     debian.vm.network "private_network", ip: "172.16.1.30", virtualbox__intnet: true
+     debian.vm.network "private_network", ip: "192.168.0.10", virtualbox__intnet: true
      debian.vm.provision "shell", inline: <<-SHELL
        apt-get update
        sudo apt-get install gearman-tools -y
-       gearman -h 172.16.1.10 -p 4730 -f ansible `hostname -I | awk '{ print $NF }'`
+       echo '["gearman-common"]' | sudo tee /etc/ansible/facts.d/roles.fact
+       gearman -h 192.168.0.2 -p 4730 -f ansible `hostname -I | awk '{ print $NF }'`
      SHELL
    end
 
    config.vm.define "ubuntu-client", autostart: false do |ubuntu|
      ubuntu.vm.box = "ubuntu/jammy64"
-     ubuntu.vm.network "private_network", ip: "172.16.1.31", virtualbox__intnet: true
+     ubuntu.vm.network "private_network", ip: "192.168.0.11", virtualbox__intnet: true
      ubuntu.vm.provision "shell", inline: <<-SHELL
        apt-get update
        sudo apt-get install gearman-tools -y
-       gearman -h 172.16.1.10 -p 4730 -f ansible `hostname -I | awk '{ print $NF }'`
+       echo '["gearman-common"]' | sudo tee /etc/ansible/facts.d/roles.fact
+       gearman -h 192.168.0.2 -p 4730 -f ansible `hostname -I | awk '{ print $NF }'`
      SHELL
    end
 
    config.vm.define "alma-client", autostart: false do |alma|
      alma.vm.box = "almalinux/8"
      alma.vm.synced_folder "roles/gearman-common", "/etc/ansible/roles/gearman-common"
-     alma.vm.network "private_network", ip: "172.16.1.32", virtualbox__intnet: true
+     alma.vm.network "private_network", ip: "192.168.0.12", virtualbox__intnet: true
      alma.vm.provision "shell", inline: <<-SHELL
        sudo dnf update -y
        sudo dnf install epel-release -y
        sudo dnf install gearmand -y
-       gearman -h 172.16.1.10 -p 4730 -f ansible `hostname -I | awk '{ print $NF }'`
+       echo '["gearman-common"]' | sudo tee /etc/ansible/facts.d/roles.fact
+       gearman -h 192.168.0.2 -p 4730 -f ansible `hostname -I | awk '{ print $NF }'`
      SHELL
    end
 
    config.vm.define "centos-client", autostart: false do |centos|
      centos.vm.box = "centos/7"
-     centos.vm.network "private_network", ip: "172.16.1.33", virtualbox__intnet: true
+     centos.vm.network "private_network", ip: "192.168.0.13", virtualbox__intnet: true
      centos.vm.provision "shell", inline: <<-SHELL
        sudo yum update -y
        sudo yum install epel-release -y
        sudo yum install gearmand -y
-       gearman -h 172.16.1.10 -p 4730 -f ansible `hostname -I | awk '{ print $NF }'`
+       echo '["gearman-common"]' | sudo tee /etc/ansible/facts.d/roles.fact
+       gearman -h 192.168.0.2 -p 4730 -f ansible `hostname -I | awk '{ print $NF }'`
      SHELL
    end
-
-#    config.vm.define "rocky-client", autostart: false do |rocky|
-#      rocky.vm.box = "rockylinux/8"
-#      rocky.vm.network "private_network", ip: "172.16.1.34", virtualbox__intnet: true
-#      rocky.vm.provision "shell", inline: <<-SHELL
-#        sudo dnf update -y
-#        sudo dnf install epel-release -y
-#        sudo dnf install gearmand -y
-#        echo "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDO/b4LqHoJPSWLovBmo8jaj9RWNmtdSyoUJVd/0lnGQpTOgKhM6GA4K+sNIKSjZSRqVmp0qvYxNhMSGnnDzagsZY9ydfF0R5/2SAFI7ezn+z75LbyAx0vpk7e4KIxPatx7/YAABQMOa9dT/qPhSXJ9/YO4QYPFUA3AyMQLJwb5Am6jlqxYBpRe+zt8HUlat2HD628YBNKWyqSsL13kKt2QzaAHT75ZqPEHlQMA3Q/kjmAW4McqtQ6BhVwhGaneslbsj8A/fQGzxRQtW81MC7K83x7RSwV40NXcJeUEYcJyhD029dg74wA875Vv9S7Y4MF+OKO2w4bRm+1uyTIXSAhIsVWbB3uyoFz2EjfMEsSK6uqMGbbGyC7pTXz1qkX0tPWkkLvUTbjIs2FDCE+eWOI/neQ32jdMBsZujzJ8i4VdQeGUUfJATuRB6hjm1XEVx0wzRfNAGba2OxCjj9dx5URgVje55+POxDPPfpCaAL98/xCZmuP/SgYk44YIEqFXtXc=" >> /home/vagrant/.ssh/authorized_keys
-#        gearman -h 172.16.1.10 -p 4730 -f ansible `hostname -I | awk '{ print $NF }'`
-#      SHELL
-#    end
-
-#    config.vm.define "python-client", autostart: false do |python|
-#      python.vm.box = "debian/bullseye64"
-#      python.vm.synced_folder "roles/gearman-common", "/etc/ansible/roles/gearman-common"
-#      python.vm.network "private_network", ip: "172.16.1.35", virtualbox__intnet: true
-#      python.vm.provision "shell", inline: <<-SHELL
-#        sudo apt-get update
-#        sudo apt-get install python3 python3-pip -y
-#        sudo pip3 install gear
-#        sudo cp /etc/ansible/roles/gearman-common/files/client.py /usr/bin/gearman
-#        echo "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDO/b4LqHoJPSWLovBmo8jaj9RWNmtdSyoUJVd/0lnGQpTOgKhM6GA4K+sNIKSjZSRqVmp0qvYxNhMSGnnDzagsZY9ydfF0R5/2SAFI7ezn+z75LbyAx0vpk7e4KIxPatx7/YAABQMOa9dT/qPhSXJ9/YO4QYPFUA3AyMQLJwb5Am6jlqxYBpRe+zt8HUlat2HD628YBNKWyqSsL13kKt2QzaAHT75ZqPEHlQMA3Q/kjmAW4McqtQ6BhVwhGaneslbsj8A/fQGzxRQtW81MC7K83x7RSwV40NXcJeUEYcJyhD029dg74wA875Vv9S7Y4MF+OKO2w4bRm+1uyTIXSAhIsVWbB3uyoFz2EjfMEsSK6uqMGbbGyC7pTXz1qkX0tPWkkLvUTbjIs2FDCE+eWOI/neQ32jdMBsZujzJ8i4VdQeGUUfJATuRB6hjm1XEVx0wzRfNAGba2OxCjj9dx5URgVje55+POxDPPfpCaAL98/xCZmuP/SgYk44YIEqFXtXc=" >> /home/vagrant/.ssh/authorized_keys
-#        gearman -h 172.16.1.10 -p 4730 -f ansible `hostname -I | awk '{ print $NF }'`(python)
-#      SHELL
-#    end
 
 end
