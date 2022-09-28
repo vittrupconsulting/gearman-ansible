@@ -4,8 +4,10 @@
     name: "Reboot marker"
     special_time: "reboot"
     job: "/usr/bin/gearman -h {{ gearman.proxy }} -p 4730 -f ansible `hostname -I | awk '{ print $NF }'`"
+    user: "ansible"
 
 - ansible.builtin.cron:
     name: "Hourly marker"
     special_time: "hourly"
     job: "/usr/bin/gearman -h {{ gearman.proxy }} -p 4730 -f ansible `hostname -I | awk '{ print $NF }'`"
+    user: "ansible"
