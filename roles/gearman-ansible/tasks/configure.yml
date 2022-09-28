@@ -14,5 +14,5 @@
 - ansible.builtin.file:
     path: "/etc/ansible/ansible_rsa"
     mode: "0700"
-    owner: "vagrant"
-    group: "vagrant"
+    owner: "ansible"
+    group: "ansible"

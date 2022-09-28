@@ -1,13 +1,13 @@
 ---
 - hosts: all
-  remote_user: vagrant
+  remote_user: ansible
   become: true
   vars:
     gearman:
       proxy: "172.16.1.10"
       servers:
         - "172.16.1.15"
-        - "172.16.1.16"
+#        - "172.16.1.16"
   tasks:
 
     - debug:

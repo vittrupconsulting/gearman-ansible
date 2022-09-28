@@ -24,6 +24,11 @@ Vagrant.configure("2") do |config|
 #   end
 
    config.vm.provision "shell", inline: <<-SHELL
+     sudo useradd ansible --system --create-home --shell /bin/bash
+     echo 'ansible ALL=(ALL) NOPASSWD:ALL' | sudo tee /etc/sudoers.d/ansible
+     su ansible --login --command "/usr/bin/mkdir --parents /home/ansible/.ssh"
+     su ansible --login --command "/usr/bin/touch /home/ansible/.ssh/authorized_keys"
+     echo "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDO/b4LqHoJPSWLovBmo8jaj9RWNmtdSyoUJVd/0lnGQpTOgKhM6GA4K+sNIKSjZSRqVmp0qvYxNhMSGnnDzagsZY9ydfF0R5/2SAFI7ezn+z75LbyAx0vpk7e4KIxPatx7/YAABQMOa9dT/qPhSXJ9/YO4QYPFUA3AyMQLJwb5Am6jlqxYBpRe+zt8HUlat2HD628YBNKWyqSsL13kKt2QzaAHT75ZqPEHlQMA3Q/kjmAW4McqtQ6BhVwhGaneslbsj8A/fQGzxRQtW81MC7K83x7RSwV40NXcJeUEYcJyhD029dg74wA875Vv9S7Y4MF+OKO2w4bRm+1uyTIXSAhIsVWbB3uyoFz2EjfMEsSK6uqMGbbGyC7pTXz1qkX0tPWkkLvUTbjIs2FDCE+eWOI/neQ32jdMBsZujzJ8i4VdQeGUUfJATuRB6hjm1XEVx0wzRfNAGba2OxCjj9dx5URgVje55+POxDPPfpCaAL98/xCZmuP/SgYk44YIEqFXtXc=" >> /home/ansible/.ssh/authorized_keys
      echo "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDO/b4LqHoJPSWLovBmo8jaj9RWNmtdSyoUJVd/0lnGQpTOgKhM6GA4K+sNIKSjZSRqVmp0qvYxNhMSGnnDzagsZY9ydfF0R5/2SAFI7ezn+z75LbyAx0vpk7e4KIxPatx7/YAABQMOa9dT/qPhSXJ9/YO4QYPFUA3AyMQLJwb5Am6jlqxYBpRe+zt8HUlat2HD628YBNKWyqSsL13kKt2QzaAHT75ZqPEHlQMA3Q/kjmAW4McqtQ6BhVwhGaneslbsj8A/fQGzxRQtW81MC7K83x7RSwV40NXcJeUEYcJyhD029dg74wA875Vv9S7Y4MF+OKO2w4bRm+1uyTIXSAhIsVWbB3uyoFz2EjfMEsSK6uqMGbbGyC7pTXz1qkX0tPWkkLvUTbjIs2FDCE+eWOI/neQ32jdMBsZujzJ8i4VdQeGUUfJATuRB6hjm1XEVx0wzRfNAGba2OxCjj9dx5URgVje55+POxDPPfpCaAL98/xCZmuP/SgYk44YIEqFXtXc=" >> /home/vagrant/.ssh/authorized_keys
    SHELL
 
@@ -44,13 +49,13 @@ Vagrant.configure("2") do |config|
      SHELL
    end
 
-   config.vm.define "server2" do |server2|
-     server2.vm.network "private_network", ip: "172.16.1.16", virtualbox__intnet: true
-     server2.vm.provision "shell", inline: <<-SHELL
-        sudo mkdir -p /etc/ansible/facts.d/
-        echo '["gearman-common", "gearman-server"]' | sudo tee /etc/ansible/facts.d/roles.fact
-     SHELL
-   end
+#    config.vm.define "server2" do |server2|
+#      server2.vm.network "private_network", ip: "172.16.1.16", virtualbox__intnet: true
+#      server2.vm.provision "shell", inline: <<-SHELL
+#         sudo mkdir -p /etc/ansible/facts.d/
+#         echo '["gearman-common", "gearman-server"]' | sudo tee /etc/ansible/facts.d/roles.fact
+#      SHELL
+#    end
 
    config.vm.define "worker1" do |worker1|
      worker1.vm.network "private_network", ip: "172.16.1.20", virtualbox__intnet: true
@@ -60,13 +65,13 @@ Vagrant.configure("2") do |config|
      SHELL
    end
 
-   config.vm.define "worker2" do |worker2|
-     worker2.vm.network "private_network", ip: "172.16.1.21", virtualbox__intnet: true
-     worker2.vm.provision "shell", inline: <<-SHELL
-        sudo mkdir -p /etc/ansible/facts.d/
-        echo '["gearman-common", "gearman-ansible", "gearman-worker"]' | sudo tee /etc/ansible/facts.d/roles.fact
-     SHELL
-   end
+#    config.vm.define "worker2" do |worker2|
+#      worker2.vm.network "private_network", ip: "172.16.1.21", virtualbox__intnet: true
+#      worker2.vm.provision "shell", inline: <<-SHELL
+#         sudo mkdir -p /etc/ansible/facts.d/
+#         echo '["gearman-common", "gearman-ansible", "gearman-worker"]' | sudo tee /etc/ansible/facts.d/roles.fact
+#      SHELL
+#    end
 
    config.vm.define "utils" do |utils|
      utils.vm.network "private_network", ip: "172.16.1.25", virtualbox__intnet: true
@@ -82,10 +87,10 @@ Vagrant.configure("2") do |config|
        sudo chown -R vagrant:vagrant /etc/ansible
 
        ansible-playbook --inventory "172.16.1.10," /etc/ansible/common.yml
-       ansible-playbook --inventory "172.16.1.15," /etc/ansible/common.yml
-       ansible-playbook --inventory "172.16.1.16," /etc/ansible/common.yml
-       ansible-playbook --inventory "172.16.1.20," /etc/ansible/common.yml
-       ansible-playbook --inventory "172.16.1.21," /etc/ansible/common.yml
+        ansible-playbook --inventory "172.16.1.15," /etc/ansible/common.yml
+#        ansible-playbook --inventory "172.16.1.16," /etc/ansible/common.yml
+        ansible-playbook --inventory "172.16.1.20," /etc/ansible/common.yml
+#        ansible-playbook --inventory "172.16.1.21," /etc/ansible/common.yml
      SHELL
    end
 
