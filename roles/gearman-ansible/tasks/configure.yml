@@ -10,8 +10,14 @@
      rsync_opts:
          - "--exclude=.git"
          - "--exclude=ansible_rsa"
-         - "--chown=ansible:ansible"
    delegate_to: "{{ inventory_hostname }}"
+
+- ansible.builtin.file:
+    path: "/etc/ansible"
+    state: "directory"
+    recurse: "yes"
+    owner: "ansible"
+    group: "ansible"
 
 - ansible.builtin.file:
     path: "/etc/ansible/ansible_rsa"
