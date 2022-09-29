@@ -12,6 +12,9 @@
     - debug:
         msg: "{{ ansible_distribution }}/{{ ansible_distribution_major_version }}"
 
+    - debug:
+        var: ansible_local['roles']
+
     - include_role:
         name: "{{ item }}"
       with_items: "{{ ansible_local['roles'] | default('gearman-common') }}"
