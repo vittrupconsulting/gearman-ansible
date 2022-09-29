@@ -1,0 +1,41 @@
+#!/usr/bin/python3
+
+import json
+import subprocess
+
+roles={}
+roles["gearman-ansible"] = "Ansible"
+roles["gearman-common"] = "Common"
+roles["gearman-proxy"] = "Proxy"
+roles["gearman-server"] = "Job server"
+roles["gearman-worker"] = "Job worker"
+roles["grafana-server"] = "Grafana"
+
+f = open('/etc/ansible/facts.d/roles.fact')
+data = json.load(f)
+f.close()
+
+command = []
+command.append("whiptail")
+command.append("--title")
+command.append("Check assigned roles")
+command.append("--checklist")
+command.append("Choose roles")
+command.append("20")
+command.append("50")
+command.append("10")
+
+for role in roles.keys():
+  command.append(role)
+  command.append(roles[role])
+  if role in data:
+    command.append("ON")
+  else:
+    command.append("OFF")
+
+whiptail = subprocess.run(command, stderr=subprocess.PIPE, text=True)
+enabled = whiptail.stderr.replace("\"","").split()
+
+if not whiptail.returncode:
+  with open("/etc/ansible/facts.d/roles.fact", "w") as outfile:
+    json.dump(enabled, outfile)
