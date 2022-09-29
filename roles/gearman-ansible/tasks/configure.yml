@@ -13,6 +13,10 @@
       - "--chown=ansible:ansible"
   delegate_to: "{{ inventory_hostname }}"
 
-- ansible.builtin.file:
-    path: "/etc/ansible/ansible_rsa"
+- ansible.builtin.copy:
+    src: "/etc/.ansible/ansible_rsa"
+    dest: /etc/ansible/ansible_rsa
     mode: "0600"
+    owner: "ansible"
+    group: "ansible"
+    remote_src: yes
