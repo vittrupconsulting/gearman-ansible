@@ -3,14 +3,7 @@
 import json
 import subprocess
 
-#{{ roles }}
-roles={}
-roles["gearman-ansible"] = "Ansible"
-roles["gearman-common"] = "Common"
-roles["gearman-proxy"] = "Proxy"
-roles["gearman-server"] = "Job server"
-roles["gearman-worker"] = "Job worker"
-roles["grafana-server"] = "Grafana"
+roles={{ roles }}
 
 f = open('/etc/ansible/facts.d/roles.fact')
 data = json.load(f)
@@ -26,9 +19,9 @@ command.append("20")
 command.append("50")
 command.append("10")
 
-for role in roles.keys():
+for role in roles:
   command.append(role)
-  command.append(roles[role])
+  command.append(role)
   if role in data:
     command.append("ON")
   else:
