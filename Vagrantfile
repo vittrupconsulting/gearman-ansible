@@ -3,6 +3,12 @@
 
 Vagrant.configure("2") do |config|
    config.vm.box = "ansible.box"
+#   config.vm.box = "debian/bullseye64"
+#   config.vm.provision "shell", inline: <<-SHELL
+#      apt-get update
+#      sudo apt-get install ansible -y
+#      sudo apt-get clean
+#   SHELL
 
    config.vm.provision "shell", inline: <<-SHELL
      sudo useradd ansible --system --create-home --shell /bin/bash
@@ -54,16 +60,16 @@ Vagrant.configure("2") do |config|
 #       apt-get update
 #       sudo apt-get install ansible -y
        ansible-playbook /etc/ansible/common.yml
-#       ansible-playbook --inventory "192.168.0.1,192.168.0.2,192.168.0.3" /etc/ansible/gearman.yml
+       ansible-playbook --inventory "192.168.0.1,192.168.0.2,192.168.0.3" /etc/ansible/gearman.yml
      SHELL
    end
 
-   config.vm.define "debian-client", autostart: false do |debian|
-     debian.vm.box = "debian/bullseye64"
+   config.vm.define "debian-client", autostart: true do |debian|
+     debian.vm.box = "gearman-debian.box"
      debian.vm.network "private_network", ip: "192.168.0.10", virtualbox__intnet: true
      debian.vm.provision "shell", inline: <<-SHELL
-       apt-get update
-       sudo apt-get install gearman-tools -y
+#       apt-get update
+#       sudo apt-get install gearman-tools -y
        echo '["gearman-common"]' | sudo tee /etc/ansible/facts.d/roles.fact
        gearman -h 192.168.0.2 -p 4730 -f ansible `hostname -I | awk '{ print $NF }'`
      SHELL
