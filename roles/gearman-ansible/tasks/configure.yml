@@ -4,23 +4,15 @@
     repo: 'https://github.com/vittrupconsulting/gearman-ansible.git'
     dest: "/etc/.ansible"
 
--  ansible.posix.synchronize:
-     src: "/etc/.ansible/"
-     dest: "/etc/ansible"
-     rsync_opts:
-         - "--exclude=.git"
-         - "--exclude=ansible_rsa"
-   delegate_to: "{{ inventory_hostname }}"
-
-- ansible.builtin.file:
-    path: "/etc/ansible"
-    state: "directory"
-    recurse: "yes"
-    owner: "ansible"
-    group: "ansible"
+- ansible.posix.synchronize:
+    src: "/etc/.ansible/"
+    dest: "/etc/ansible"
+    rsync_opts:
+      - "--exclude=.git"
+      - "--exclude=ansible_rsa"
+      - "--chown=ansible:ansible"
+  delegate_to: "{{ inventory_hostname }}"
 
 - ansible.builtin.file:
     path: "/etc/ansible/ansible_rsa"
     mode: "0700"
-    owner: "ansible"
-    group: "ansible"
