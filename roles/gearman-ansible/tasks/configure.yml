@@ -15,4 +15,4 @@
 
 - ansible.builtin.file:
     path: "/etc/ansible/ansible_rsa"
-    mode: "0700"
+    mode: "0600"
