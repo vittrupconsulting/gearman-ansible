@@ -69,39 +69,48 @@ Vagrant.configure("2") do |config|
     SHELL
   end
 
-  config.vm.define "ubuntu-client", autostart: false do |ubuntu|
-    ubuntu.vm.box = "ubuntu/jammy64"
-    ubuntu.vm.network "private_network", ip: "192.168.0.11", virtualbox__intnet: true
-    ubuntu.vm.provision "shell", inline: <<-SHELL
-       apt-get update
-       sudo apt-get install gearman-tools -y
-       echo '["gearman-common"]' | sudo tee /etc/ansible/facts.d/roles.fact
-       gearman -h 192.168.0.152 -p 4730 -f ansible `hostname -I | awk '{ print $NF }'`
-    SHELL
-  end
+#   config.vm.define "ubuntu-client", autostart: false do |ubuntu|
+#     ubuntu.vm.box = "ubuntu/jammy64"
+#     ubuntu.vm.network "private_network", ip: "192.168.0.11", virtualbox__intnet: true
+#     ubuntu.vm.provision "shell", inline: <<-SHELL
+#        apt-get update
+#        sudo apt-get install gearman-tools -y
+#        echo '["gearman-common"]' | sudo tee /etc/ansible/facts.d/roles.fact
+#        gearman -h 192.168.0.152 -p 4730 -f ansible `hostname -I | awk '{ print $NF }'`
+#     SHELL
+#   end
+#
+#   config.vm.define "alma-client", autostart: false do |alma|
+#     alma.vm.box = "almalinux/8"
+#     alma.vm.synced_folder "roles/gearman-common", "/etc/ansible/roles/gearman-common"
+#     alma.vm.network "private_network", ip: "192.168.0.12", virtualbox__intnet: true
+#     alma.vm.provision "shell", inline: <<-SHELL
+#        sudo dnf update -y
+#        sudo dnf install epel-release -y
+#        sudo dnf install gearmand -y
+#        echo '["gearman-common"]' | sudo tee /etc/ansible/facts.d/roles.fact
+#        gearman -h 192.168.0.152 -p 4730 -f ansible `hostname -I | awk '{ print $NF }'`
+#     SHELL
+#   end
+#
+#   config.vm.define "centos-client", autostart: false do |centos|
+#     centos.vm.box = "centos/7"
+#     centos.vm.network "private_network", ip: "192.168.0.13", virtualbox__intnet: true
+#     centos.vm.provision "shell", inline: <<-SHELL
+#        sudo yum update -y
+#        sudo yum install epel-release -y
+#        sudo yum install gearmand -y
+#        echo '["gearman-common"]' | sudo tee /etc/ansible/facts.d/roles.fact
+#        gearman -h 192.168.0.152 -p 4730 -f ansible `hostname -I | awk '{ print $NF }'`
+#     SHELL
+#   end
 
-  config.vm.define "alma-client", autostart: false do |alma|
-    alma.vm.box = "almalinux/8"
-    alma.vm.synced_folder "roles/gearman-common", "/etc/ansible/roles/gearman-common"
-    alma.vm.network "private_network", ip: "192.168.0.12", virtualbox__intnet: true
-    alma.vm.provision "shell", inline: <<-SHELL
-       sudo dnf update -y
-       sudo dnf install epel-release -y
-       sudo dnf install gearmand -y
-       echo '["gearman-common"]' | sudo tee /etc/ansible/facts.d/roles.fact
-       gearman -h 192.168.0.152 -p 4730 -f ansible `hostname -I | awk '{ print $NF }'`
-    SHELL
-  end
-
-  config.vm.define "centos-client", autostart: false do |centos|
-    centos.vm.box = "centos/7"
-    centos.vm.network "private_network", ip: "192.168.0.13", virtualbox__intnet: true
-    centos.vm.provision "shell", inline: <<-SHELL
-       sudo yum update -y
-       sudo yum install epel-release -y
-       sudo yum install gearmand -y
-       echo '["gearman-common"]' | sudo tee /etc/ansible/facts.d/roles.fact
-       gearman -h 192.168.0.152 -p 4730 -f ansible `hostname -I | awk '{ print $NF }'`
+   config.vm.define "init", autostart: false do |init|
+     init.vm.synced_folder ".", "/vagrant"
+     init.vm.provision "shell", inline: <<-SHELL
+       mkdir -p /vagrant/roles
+       cd /vagrant/roles
+       ansible-galaxy init gearman-server
     SHELL
   end
 
