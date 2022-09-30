@@ -15,7 +15,8 @@
     - debug:
         var: ansible_local['roles']
 
-    - include_role:
+    - name: "Include assigned roles"
+      include_role:
         name: "{{ item }}"
       with_items: "{{ ansible_local['roles'] | default('gearman-common') }}"
 

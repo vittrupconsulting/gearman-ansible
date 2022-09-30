@@ -3,13 +3,12 @@
 - ansible.builtin.command: "echo https://linuxhint.com/install-nagios-ubuntu-22-04/"
 
 - ansible.builtin.apt:
-    name: ["wget", "unzip", "curl", "openssl", "build-essential", "libgd-dev", "libssl-dev", "libapache2-mod-php", "php-gd", "php", "apache2", "python3-passlib"]
+    name: ["wget", "unzip", "curl", "openssl", "build-essential", "libgd-dev", "libssl-dev", "libapache2-mod-php", "php-gd", "php", "apache2"]
     update_cache: yes
 
 - ansible.builtin.unarchive:
     src: "https://assets.nagios.com/downloads/nagioscore/releases/nagios-4.4.7.tar.gz"
     dest: "/home/ansible"
-    remote_src: "yes"
 
 - ansible.builtin.command: "./configure"
   become: true
@@ -65,12 +64,10 @@
     path: "/usr/local/nagios/etc/htpasswd.users"
     name: "admin"
     password: "admin"
-  become: true
 
 - ansible.builtin.unarchive:
     src: "https://nagios-plugins.org/download/nagios-plugins-2.3.3.tar.gz"
     dest: "/home/ansible"
-    remote_src: "yes"
 
 - ansible.builtin.command: "./configure --with-nagios-user=nagios --with-nagios-group=nagios"
   become: true
