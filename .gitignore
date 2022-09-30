@@ -1,1 +1,3 @@
 /.vagrant/
+/vagrant/ansible.box/.vagrant/
+/vagrant/gearman.box/.vagrant/
