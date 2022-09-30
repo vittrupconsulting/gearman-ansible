@@ -9,41 +9,49 @@ Vagrant.configure("2") do |config|
   config.vm.provision "file", source: "ansible.cfg", destination: "/etc/ansible/ansible.cfg"
   config.vm.provision "file", source: "common.yml", destination: "/etc/ansible/common.yml"
 
-  config.vm.define "proxy" do |proxy|
-    proxy.vm.network "private_network", ip: "192.168.0.152", virtualbox__intnet: true
-    proxy.vm.network "forwarded_port", guest: 22, host: 49152
-    proxy.vm.network "forwarded_port", guest: 80, host: 80
-    proxy.vm.provision "shell", inline: <<-SHELL
-       echo '["gearman-common", "gearman-proxy"]' | tee /etc/ansible/facts.d/roles.fact
-       ansible-playbook --inventory "192.168.0.152," /etc/ansible/common.yml
-    SHELL
-  end
+#   config.vm.define "proxy", autostart: false do |proxy|
+#     proxy.vm.network "private_network", ip: "192.168.0.152", virtualbox__intnet: true
+#     proxy.vm.network "forwarded_port", guest: 22, host: 49152
+#     proxy.vm.network "forwarded_port", guest: 80, host: 80
+#     proxy.vm.provision "shell", inline: <<-SHELL
+#        echo '["gearman-common", "gearman-proxy"]' | tee /etc/ansible/facts.d/roles.fact
+#        ansible-playbook --inventory "192.168.0.152," /etc/ansible/common.yml
+#     SHELL
+#   end
 
-  config.vm.define "server" do |server|
-    server.vm.network "private_network", ip: "192.168.0.153", virtualbox__intnet: true
-    server.vm.network "forwarded_port", guest: 22, host: 49153
+(152..153).each do |i|
+  config.vm.define "server-#{i}" do |server|
+    server.vm.hostname = "server-#{i}.localhost"
+    server.vm.network "private_network", ip: "192.168.0.#{i}", virtualbox__intnet: true
+    server.vm.network "forwarded_port", guest: "22", host: "49#{i}"
     server.vm.provision "shell", inline: <<-SHELL
        echo '["gearman-common", "gearman-server"]' | tee /etc/ansible/facts.d/roles.fact
-       ansible-playbook --inventory "192.168.0.153," /etc/ansible/common.yml
+       ansible-playbook --inventory "192.168.0.#{i}," /etc/ansible/common.yml
     SHELL
   end
+end
 
-  config.vm.define "worker" do |worker|
-    worker.vm.network "private_network", ip: "192.168.0.154", virtualbox__intnet: true
-    worker.vm.network "forwarded_port", guest: 22, host: 49154
+(154..155).each do |i|
+  config.vm.define "worker-#{i}" do |worker|
+    worker.vm.hostname = "worker-#{i}.localhost"
+    worker.vm.network "private_network", ip: "192.168.0.#{i}", virtualbox__intnet: true
+    worker.vm.network "forwarded_port", guest: "22", host: "49#{i}"
     worker.vm.provision "shell", inline: <<-SHELL
        echo '["gearman-common", "gearman-worker", "gearman-ansible"]' | tee /etc/ansible/facts.d/roles.fact
-       ansible-playbook --inventory "192.168.0.154," /etc/ansible/common.yml
+       echo '["192.168.0.152", "192.168.0.153"]' | tee /etc/ansible/facts.d/servers.fact
+       ansible-playbook --inventory "192.168.0.#{i}," /etc/ansible/common.yml
     SHELL
   end
+end
 
-  config.vm.define "client", autostart: false do |client|
+  config.vm.define "client-160" do |client|
     client.vm.box = "gearman.box"
-    client.vm.network "private_network", ip: "192.168.0.155", virtualbox__intnet: true
-    client.vm.network "forwarded_port", guest: 22, host: 49155
+    client.vm.hostname = "client-160.localhost"
+    client.vm.network "private_network", ip: "192.168.1.160", virtualbox__intnet: true
+    client.vm.network "forwarded_port", guest: "22", host: "49160"
     client.vm.provision "shell", inline: <<-SHELL
        echo '["gearman-common"]' | sudo tee /etc/ansible/facts.d/roles.fact
-       gearman -h 192.168.0.152 -p 4730 -f ansible `hostname -I | awk '{ print $NF }'`
+       echo '["192.168.0.152", "192.168.0.153"]' | tee /etc/ansible/facts.d/servers.fact
     SHELL
   end
 
