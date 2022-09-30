@@ -6,12 +6,8 @@
     name: ["wget", "unzip", "curl", "openssl", "build-essential", "libgd-dev", "libssl-dev", "libapache2-mod-php", "php-gd", "php", "apache2"]
     update_cache: yes
 
-- ansible.builtin.get_url:
-    url: "https://assets.nagios.com/downloads/nagioscore/releases/nagios-4.4.7.tar.gz"
-    dest: "/home/ansible/nagios-4.4.7.tar.gz"
-
 - ansible.builtin.unarchive:
-    src: "/home/ansible/nagios-4.4.7.tar.gz"
+    src: "https://assets.nagios.com/downloads/nagioscore/releases/nagios-4.4.7.tar.gz"
     dest: "/home/ansible"
 
 - ansible.builtin.command: "./configure"

@@ -2,17 +2,17 @@
 
 - ansible.builtin.command: "echo https://linuxhint.com/install-nagios-ubuntu-22-04/"
 
-- ansible.builtin.apt:
-    name: ["wget", "unzip", "curl", "openssl", "build-essential", "libgd-dev", "libssl-dev", "libapache2-mod-php", "php-gd", "php", "apache2"]
-    update_cache: yes
+- ansible.builtin.command: "apt update"
+  become: true
 
-- ansible.builtin.get_url:
-    url: "https://assets.nagios.com/downloads/nagioscore/releases/nagios-4.4.7.tar.gz"
-    dest: "/home/ansible/nagios-4.4.7.tar.gz"
+- ansible.builtin.command: "apt install -y wget unzip curl openssl build-essential libgd-dev libssl-dev libapache2-mod-php php-gd php apache2"
+  become: true
 
-- ansible.builtin.unarchive:
-    src: "/home/ansible/nagios-4.4.7.tar.gz"
-    dest: "/home/ansible"
+- ansible.builtin.command: "wget https://assets.nagios.com/downloads/nagioscore/releases/nagios-4.4.7.tar.gz"
+  become: true
+
+- ansible.builtin.command: "tar -zxvf nagios-4.4.7.tar.gz"
+  become: true
 
 - ansible.builtin.command: "./configure"
   become: true

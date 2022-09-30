@@ -10,9 +10,8 @@
     url: "https://assets.nagios.com/downloads/nagioscore/releases/nagios-4.4.7.tar.gz"
     dest: "/home/ansible/nagios-4.4.7.tar.gz"
 
-- ansible.builtin.unarchive:
-    src: "/home/ansible/nagios-4.4.7.tar.gz"
-    dest: "/home/ansible"
+- ansible.builtin.command: "tar -zxvf nagios-4.4.7.tar.gz"
+  become: true
 
 - ansible.builtin.command: "./configure"
   become: true

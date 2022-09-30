@@ -1,0 +1,75 @@
+---
+
+- ansible.builtin.command: "echo https://linuxhint.com/install-nagios-ubuntu-22-04/"
+
+- ansible.builtin.command: "sudo apt update"
+
+- ansible.builtin.command: "sudo apt install -y wget unzip curl openssl build-essential libgd-dev libssl-dev libapache2-mod-php php-gd php apache2"
+
+- ansible.builtin.command: "wget https://assets.nagios.com/downloads/nagioscore/releases/nagios-4.4.7.tar.gz"
+
+- ansible.builtin.command: "sudo tar -zxvf nagios-4.4.7.tar.gz"
+
+- ansible.builtin.command: "sudo ./configure"
+  args:
+    chdir: nagios-4.4.7
+
+- ansible.builtin.command: "sudo make all"
+  args:
+    chdir: nagios-4.4.7
+
+- ansible.builtin.command: "sudo make install-groups-users"
+  args:
+    chdir: nagios-4.4.7
+
+- ansible.builtin.command: "sudo usermod -a -G nagios www-data"
+  args:
+    chdir: nagios-4.4.7
+
+- ansible.builtin.command: "sudo make install"
+  args:
+    chdir: nagios-4.4.7
+
+- ansible.builtin.command: "sudo make install-commandmode"
+  args:
+    chdir: nagios-4.4.7
+
+- ansible.builtin.command: "sudo make install-config"
+  args:
+    chdir: nagios-4.4.7
+
+- ansible.builtin.command: "sudo make install-webconf"
+  args:
+    chdir: nagios-4.4.7
+
+- ansible.builtin.command: "sudo a2enmod rewrite"
+  args:
+    chdir: nagios-4.4.7
+
+- ansible.builtin.command: "sudo a2enmod cgi"
+  args:
+    chdir: nagios-4.4.7
+
+- ansible.builtin.command: "sudo htpasswd -b -c /usr/local/nagios/etc/htpasswd.users admin admin"
+  args:
+    chdir: nagios-4.4.7
+
+- ansible.builtin.command: "sudo wget https://nagios-plugins.org/download/nagios-plugins-2.3.3.tar.gz"
+
+- ansible.builtin.command: "sudo tar -zxvf nagios-plugins-2.3.3.tar.gz"
+
+- ansible.builtin.command: "sudo ./configure --with-nagios-user=nagios --with-nagios-group=nagios"
+  args:
+    chdir: nagios-plugins-2.3.3
+
+- ansible.builtin.command: "sudo make install"
+  args:
+    chdir: nagios-plugins-2.3.3
+
+- ansible.builtin.command: "sudo /usr/local/nagios/bin/nagios -v"
+  args:
+    chdir: nagios-plugins-2.3.3
+
+- ansible.builtin.command: "sudo systemctl restart apache2"
+  args:
+    chdir: nagios-plugins-2.3.3
