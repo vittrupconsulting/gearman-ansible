@@ -65,9 +65,11 @@
   args:
     chdir: nagios-4.4.7
 
-- ansible.builtin.unarchive:
-    src: "https://nagios-plugins.org/download/nagios-plugins-2.3.3.tar.gz"
-    dest: "/home/ansible"
+- ansible.builtin.command: "wget https://nagios-plugins.org/download/nagios-plugins-2.3.3.tar.gz"
+  become: true
+
+- ansible.builtin.command: "tar -zxvf nagios-plugins-2.3.3.tar.gz"
+  become: true
 
 - ansible.builtin.command: "./configure --with-nagios-user=nagios --with-nagios-group=nagios"
   become: true
