@@ -97,7 +97,7 @@ Vagrant.configure("2") do |config|
       sudo cp /etc/ansible/roles/gearman-common/files/gearman.py /usr/local/sbin/gearman.py
       sudo chmod 755 /usr/local/sbin/gearman.py
       echo '["gearman-common"]' | sudo tee /etc/ansible/facts.d/roles.fact
-      echo '["192.168.0.152", "192.168.0.153"]' | tee /etc/ansible/facts.d/servers.fact
+      echo '["192.168.0.160"]' | tee /etc/ansible/facts.d/servers.fact
       /usr/local/sbin/gearman.py `hostname -I | awk '{ print $NF }'`
     SHELL
   end
@@ -111,11 +111,25 @@ Vagrant.configure("2") do |config|
       sudo cp /etc/ansible/roles/gearman-common/files/gearman.py /usr/local/sbin/gearman.py
       sudo chmod 755 /usr/local/sbin/gearman.py
       echo '["gearman-common"]' | sudo tee /etc/ansible/facts.d/roles.fact
-      echo '["192.168.0.152", "192.168.0.153"]' | tee /etc/ansible/facts.d/servers.fact
+      echo '["192.168.0.160"]' | tee /etc/ansible/facts.d/servers.fact
       /usr/local/sbin/gearman.py `hostname -I | awk '{ print $NF }'`
     SHELL
   end
 
+  config.vm.define "client-172", autostart: false do |client|
+    client.vm.box = "centos.box"
+    client.vm.hostname = "client-172.localhost"
+    client.vm.network "private_network", ip: "192.168.0.172", virtualbox__intnet: true
+    client.vm.network "forwarded_port", guest: "22", host: "49172"
+    client.vm.provision "shell", inline: <<-SHELL
+      sudo cp /etc/ansible/roles/gearman-common/files/gearman.py /usr/local/sbin/gearman.py
+      sudo chmod 755 /usr/local/sbin/gearman.py
+      echo '["gearman-common"]' | sudo tee /etc/ansible/facts.d/roles.fact
+      echo '["192.168.0.160"]' | tee /etc/ansible/facts.d/servers.fact
+      /usr/local/sbin/gearman.py `hostname -I | awk '{ print $NF }'`
+    SHELL
+  end
+  
   config.vm.define "galaxy", autostart: false do |init|
     init.vm.provision "shell", inline: <<-SHELL
       mkdir -p /vagrant/roles
