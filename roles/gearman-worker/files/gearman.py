@@ -2,10 +2,14 @@ import sys
 import gear
 import subprocess
 from systemd import journal
-import socket
+import json
 
-worker = gear.Worker(f"{socket.gethostname()}")
-for server in sys.argv[1:]:
+f = open('/etc/ansible/facts.d/servers.fact')
+servers = json.load(f)
+f.close()
+
+worker = gear.Worker(f"sample")
+for server in servers:
     journal.send(f"Gearman server {server}")
     worker.addServer(f"{server}")
 worker.registerFunction("ansible")
