@@ -22,6 +22,6 @@ try:
     job = gear.Job("ansible", sys.argv[1].encode("UTF-8"))
     client.submitJob(job)
 except TimeoutError:
-    print("All gearman servers offline")
+    print("All gearman servers offline.")
 else:
-    print("Found gearman server online")
+    print("Found gearman server online.")
