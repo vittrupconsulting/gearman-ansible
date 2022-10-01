@@ -5,9 +5,14 @@
     update_cache: yes
   when: ansible_distribution == "Debian"
 
-- name: "Debian gearman package"
+- name: "Debian python installer"
   ansible.builtin.apt:
-    name: "gearman-tools"
+    name: "python3"
+  when: ansible_distribution == "Debian"
+
+- name: "Debian python package installer"
+  ansible.builtin.apt:
+    name: "python3-pip"
   when: ansible_distribution == "Debian"
 
 - name: "Ubuntu package update"
@@ -15,19 +20,19 @@
     update_cache: yes
   when: ansible_distribution == "Ubuntu"
 
-- name: "Ubuntu gearman package"
+- name: "Ubuntu python installer"
   ansible.builtin.apt:
-    name: "gearman-tools"
+    name: "python3"
   when: ansible_distribution == "Ubuntu"
 
-- name: "AlmaLinux epel package"
-  ansible.builtin.dnf:
-    name: "epel-release"
-  when: ansible_distribution == "AlmaLinux"
+- name: "Ubuntu python package installer"
+  ansible.builtin.apt:
+    name: "python3-pip"
+  when: ansible_distribution == "Ubuntu"
 
-- name: "AlmaLinux gearmand package"
+- name: "AlmaLinux python package installer"
   ansible.builtin.dnf:
-    name: "gearmand"
+    name: "python3-pip"
   when: ansible_distribution == "AlmaLinux"
 
 - name: "Rocky epel package"
@@ -40,23 +45,21 @@
     name: "gearmand"
   when: ansible_distribution == "Rocky"
 
-- name: "CentOS7 epel package"
+- name: "CentOS7 python package installer"
   ansible.builtin.yum:
-    name: "epel-release"
+    name: "python3-pip"
   when:
     - ansible_distribution == "CentOS"
     - ansible_distribution_major_version == "7"
 
-- name: "CentOS7 gearmand package"
-  ansible.builtin.yum:
-    name: "gearmand"
-  when:
-    - ansible_distribution == "CentOS"
-    - ansible_distribution_major_version == "7"
+- name: "Asynchronous Event-Driven Gearman Interface"
+  ansible.builtin.pip:
+    name: "gear"
 
-- ansible.builtin.template:
-    src: "gearman.py.j2"
+- ansible.builtin.copy:
+    src: "gearman.py"
     dest: "/usr/local/sbin/gearman.py"
+    mode: "0755"
 
 - ansible.builtin.find:
     paths: "/etc/ansible/roles"

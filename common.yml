@@ -2,11 +2,6 @@
 - hosts: all
   remote_user: ansible
   become: true
-  vars:
-    gearman:
-      proxy: "192.168.0.152"
-      servers:
-        - "192.168.0.153"
   tasks:
 
     - debug:
