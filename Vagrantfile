@@ -76,8 +76,8 @@ Vagrant.configure("2") do |config|
     SHELL
   end
   
-  config.vm.define "proxy-160", autostart: false do |proxy|
-    proxy.vm.network = "proxy-160.localhost"
+  config.vm.define "proxy-160", autostart: true do |proxy|
+    proxy.vm.hostname = "proxy-160.localhost"
     proxy.vm.network "private_network", ip: "192.168.0.160", virtualbox__intnet: true
     proxy.vm.network "forwarded_port", guest: 22, host: 49160
     proxy.vm.network "forwarded_port", guest: 80, host: 80
@@ -93,6 +93,20 @@ Vagrant.configure("2") do |config|
     client.vm.hostname = "client-170.localhost"
     client.vm.network "private_network", ip: "192.168.0.170", virtualbox__intnet: true
     client.vm.network "forwarded_port", guest: "22", host: "49170"
+    client.vm.provision "shell", inline: <<-SHELL
+      sudo cp /etc/ansible/roles/gearman-common/files/gearman.py /usr/local/sbin/gearman.py
+      sudo chmod 755 /usr/local/sbin/gearman.py
+      echo '["gearman-common"]' | sudo tee /etc/ansible/facts.d/roles.fact
+      echo '["192.168.0.152", "192.168.0.153"]' | tee /etc/ansible/facts.d/servers.fact
+      /usr/local/sbin/gearman.py `hostname -I | awk '{ print $NF }'`
+    SHELL
+  end
+
+  config.vm.define "client-171", autostart: false do |client|
+    client.vm.box = "almalinux.box"
+    client.vm.hostname = "client-171.localhost"
+    client.vm.network "private_network", ip: "192.168.0.171", virtualbox__intnet: true
+    client.vm.network "forwarded_port", guest: "22", host: "49171"
     client.vm.provision "shell", inline: <<-SHELL
       sudo cp /etc/ansible/roles/gearman-common/files/gearman.py /usr/local/sbin/gearman.py
       sudo chmod 755 /usr/local/sbin/gearman.py
