@@ -3,8 +3,8 @@
 - ansible.builtin.apt:
     name: "redis"
 
-- ansible.builtin.apt:
-    name: "python3-pip"
+- ansible.builtin.pip:
+    name: "redis"
 
 - ansible.builtin.apt:
     name: "git"
@@ -15,6 +15,5 @@
 - ansible.builtin.apt:
     name: "ansible"
 
-- ansible.builtin.pip:
-    name: "redis"
+
 
