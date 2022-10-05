@@ -1,9 +1,0 @@
-Replace vagrant user with ansible user
-Rename gearman-worker to gearman-job-worker
-Enable vault
-Rename gearman-common to gearman-common
-Rename gearman-server to gearman-job-server
-
-Vars:
- gearman.servers
- gearman.proxy
