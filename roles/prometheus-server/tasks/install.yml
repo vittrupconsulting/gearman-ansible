@@ -1,4 +1,0 @@
----
-
-- ansible.builtin.apt:
-    name: "prometheus"
