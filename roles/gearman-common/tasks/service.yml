@@ -11,3 +11,9 @@
     special_time: "hourly"
     job: "/usr/local/sbin/gearman.py `hostname -I | awk '{ print $NF }'`"
     user: "ansible"
+
+- ansible.builtin.systemd:
+    name: "prometheus"
+    enabled: "yes"
+    state: "started"
+    daemon_reload: "yes"

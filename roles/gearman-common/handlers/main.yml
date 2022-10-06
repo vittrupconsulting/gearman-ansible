@@ -1,2 +1,6 @@
 ---
-# handlers file for gearman-common
+
+- name: "Restart prometheus"
+  ansible.builtin.systemd:
+    name: "prometheus"
+    state: "restarted"
