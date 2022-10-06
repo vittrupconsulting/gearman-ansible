@@ -5,3 +5,8 @@
 
 - ansible.builtin.apt:
     name: "gearman-tools"
+
+- ansible.builtin.copy:
+    src: "gearman-exporter"
+    dest: "/usr/local/sbin/gearman-exporter"
+    mode: "0755"

@@ -1,0 +1,13 @@
+[Unit]
+Description=Gearman Prometheus Exporter
+After=network.target
+
+[Service]
+Type=simple
+User=ansible
+Group=ansible
+ExecStart=/usr/local/sbin/gearman-exporter
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

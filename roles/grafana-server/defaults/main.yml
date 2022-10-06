@@ -1,2 +1,4 @@
 ---
 # defaults file for grafana-server
+#https://github.com/bakins/gearman-exporter/releases/download/v0.6.1/gearman-exporter_0.6.1_Linux_x86_64.tar.gz
+#gearmand

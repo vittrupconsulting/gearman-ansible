@@ -4,3 +4,8 @@
   ansible.builtin.systemd:
     name: "gearman-job-server"
     state: "restarted"
+
+- name: "Restart gearman-exporter"
+  ansible.builtin.systemd:
+    name: "gearman-exporter"
+    state: "restarted"

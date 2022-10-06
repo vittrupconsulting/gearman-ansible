@@ -4,3 +4,11 @@
     src: "gearman-job-server"
     dest: "/etc/default/gearman-job-server"
   notify: "Restart gearman-server"
+
+- ansible.builtin.blockinfile:
+    path: "/etc/prometheus/prometheus.yml"
+    block: |2
+        - job_name: gearman
+          static_configs:
+            - targets: ['localhost:9418']
+  notify: "Restart prometheus"

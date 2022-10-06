@@ -5,3 +5,14 @@
     enabled: "yes"
     state: "started"
     daemon_reload: "yes"
+
+- ansible.builtin.copy:
+    src: "gearman-exporter.service"
+    dest: "/etc/systemd/system/gearman-exporter.service"
+  notify: "Restart gearman-exporter"
+
+- ansible.builtin.systemd:
+    name: "gearman-exporter"
+    enabled: "yes"
+    state: "started"
+    daemon_reload: "yes"
