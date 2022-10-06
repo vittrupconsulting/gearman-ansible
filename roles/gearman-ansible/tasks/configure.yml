@@ -4,14 +4,14 @@
     repo: 'https://github.com/vittrupconsulting/gearman-ansible.git'
     dest: "/etc/.ansible"
 
-- ansible.posix.synchronize:
-    src: "/etc/.ansible/"
-    dest: "/etc/ansible"
-    rsync_opts:
-      - "--exclude=.git"
-      - "--exclude=ansible_rsa"
-      - "--chown=ansible:ansible"
-  delegate_to: "{{ inventory_hostname }}"
+#- ansible.posix.synchronize:
+#    src: "/etc/.ansible/"
+#    dest: "/etc/ansible"
+#    rsync_opts:
+#      - "--exclude=.git"
+#      - "--exclude=ansible_rsa"
+#      - "--chown=ansible:ansible"
+#  delegate_to: "{{ inventory_hostname }}"
 
 - ansible.builtin.copy:
     src: "/etc/.ansible/ansible_rsa"

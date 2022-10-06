@@ -4,7 +4,8 @@
 Vagrant.configure("2") do |config|
   config.vm.box = "ansible.box"
 
-  config.vm.provision "file", source: "roles", destination: "/etc/ansible/roles"
+  #config.vm.provision "file", source: "roles", destination: "/etc/ansible/roles"
+  config.vm.synced_folder "roles", "/etc/ansible/roles"
   config.vm.provision "file", source: "ansible_rsa", destination: "/etc/ansible/ansible_rsa"
   config.vm.provision "file", source: "ansible.cfg", destination: "/etc/ansible/ansible.cfg"
   config.vm.provision "file", source: "common.yml", destination: "/etc/ansible/common.yml"
@@ -76,7 +77,7 @@ Vagrant.configure("2") do |config|
     SHELL
   end
   
-  config.vm.define "proxy-160", autostart: true do |proxy|
+  config.vm.define "proxy-160", autostart: false do |proxy|
     proxy.vm.hostname = "proxy-160.localhost"
     proxy.vm.network "private_network", ip: "192.168.0.160", virtualbox__intnet: true
     proxy.vm.network "forwarded_port", guest: 22, host: 49160
@@ -88,7 +89,7 @@ Vagrant.configure("2") do |config|
     SHELL
   end
 
-  config.vm.define "client-170", autostart: false do |client|
+  config.vm.define "client-170", autostart: true do |client|
     client.vm.box = "gearman.box"
     client.vm.hostname = "client-170.localhost"
     client.vm.network "private_network", ip: "192.168.0.170", virtualbox__intnet: true
@@ -96,8 +97,8 @@ Vagrant.configure("2") do |config|
     client.vm.provision "shell", inline: <<-SHELL
       sudo cp /etc/ansible/roles/gearman-common/files/gearman.py /usr/local/sbin/gearman.py
       sudo chmod 755 /usr/local/sbin/gearman.py
-      echo '["gearman-common"]' | sudo tee /etc/ansible/facts.d/roles.fact
-      echo '["192.168.0.160"]' | tee /etc/ansible/facts.d/servers.fact
+      echo '["gearman-common", "grafana-server", "grafana-config"]' | sudo tee /etc/ansible/facts.d/roles.fact
+      echo '["192.168.0.152"]' | tee /etc/ansible/facts.d/servers.fact
       /usr/local/sbin/gearman.py `hostname -I | awk '{ print $NF }'`
     SHELL
   end
@@ -134,7 +135,7 @@ Vagrant.configure("2") do |config|
     init.vm.provision "shell", inline: <<-SHELL
       mkdir -p /vagrant/roles
       cd /vagrant/roles
-      ansible-galaxy init gearman-server
+      ansible-galaxy init XXX
     SHELL
   end
 
