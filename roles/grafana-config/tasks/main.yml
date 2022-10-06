@@ -1,0 +1,5 @@
+---
+
+- ansible.builtin.include_tasks:
+    file: gearman.yml
+  when: grafana_config_gearman
