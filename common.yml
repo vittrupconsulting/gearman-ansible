@@ -8,9 +8,10 @@
         msg: "{{ ansible_distribution }}/{{ ansible_distribution_major_version }}"
 
     - debug:
-        var: ansible_local['roles']
+        var: ansible_local['roles'] | default('gearman-common')
 
-    - include_role:
+    - name: "Include applicable roles"
+      include_role:
         name: "{{ item }}"
       with_items: "{{ ansible_local['roles'] | default('gearman-common') }}"
 
@@ -19,5 +20,5 @@
         state: "directory"
 
     - ansible.builtin.copy:
-        content: "{{ ansible_local['roles'] | to_nice_json }}"
+        content: "{{ ansible_local['roles'] | default('gearman-common') | to_nice_json }}"
         dest: "/etc/ansible/facts.d/roles.fact"
