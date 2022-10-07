@@ -19,7 +19,7 @@ for server in servers:
 
 try:
     client.waitForServer(60)
-    job = gear.Job("ansible", sys.argv[1].encode("UTF-8"))
+    job = gear.Job("common", sys.argv[1].encode("UTF-8"))
     client.submitJob(job)
 except TimeoutError:
     print("All gearman servers offline.")
