@@ -1,0 +1,7 @@
+---
+
+- ansible.builtin.systemd:
+    name: "etcd"
+    enabled: "yes"
+    state: "started"
+    daemon_reload: "yes"

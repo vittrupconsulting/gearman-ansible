@@ -1,2 +1,6 @@
 ---
-# handlers file for gearman-etcd
+
+  - name: "Restart etcd"
+    systemd:
+      name: "etcd"
+      state: "restarted"
