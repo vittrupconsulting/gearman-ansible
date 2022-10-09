@@ -1,2 +1,6 @@
 ---
-# handlers file for gearman-metrics
+
+- name: "Restart prometheus"
+  ansible.builtin.systemd:
+    name: "prometheus"
+    state: "restarted"

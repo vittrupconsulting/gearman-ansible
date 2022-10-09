@@ -1,0 +1,24 @@
+---
+
+- ansible.builtin.blockinfile:
+    path: "/etc/prometheus/prometheus.yml"
+    marker: "# {mark} ANSIBLE MANAGED BLOCK (GEARMAN)"
+    block: |2
+        - job_name: gearman
+          static_configs:
+            - targets:
+              - '192.168.0.152:9418'
+              - '192.168.0.153:9418'
+  notify: "Restart prometheus"
+
+- ansible.builtin.blockinfile:
+    path: "/etc/prometheus/prometheus.yml"
+    marker: "# {mark} ANSIBLE MANAGED BLOCK (ETCD)"
+    block: |2
+        - job_name: etcd
+          static_configs:
+            - targets:
+              - '192.168.0.154:2379'
+              - '192.168.0.155:2379'
+              - '192.168.0.156:2379'
+  notify: "Restart prometheus"
