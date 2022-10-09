@@ -1,15 +1,8 @@
 ---
 
-address: 10.0.1.10
-
 etcd:
   name: infra0
-  initial_advertise_peer_urls: http://{{ address }}:2380
-  listen_peer_urls: http://{{ address }}:2380
-  listen_client_urls: http://{{ address }}:2379,http://127.0.0.1:2379
-  advertise_client_urls: http://{{ address }}:2379
-  initial_cluster_token: etcd_cluster_1
-  initial_cluster: infra0=http://10.0.1.10:2380,infra1=http://10.0.1.11:2380,infra2=http://10.0.1.12:2380
-  initial_cluster_state: new
-
-etcd_exec: --name {{ etcd.name }} --initial-advertise-peer-urls http://10.0.1.10:2380 --listen-peer-urls http://10.0.1.10:2380 --listen-client-urls http://10.0.1.10:2379,http://127.0.0.1:2379 --advertise-client-urls http://10.0.1.10:2379 --initial-cluster-token etcd-cluster-1 --initial-cluster {{ etcd.initial_cluster }} --initial-cluster-state {{ etcd.initial_cluster_state }}
+  address: 10.0.1.10
+  token: etcd_cluster_1
+  state: new
+  cluster: infra0=http://10.0.1.10:2380,infra1=http://10.0.1.11:2380,infra2=http://10.0.1.12:2380

@@ -9,10 +9,10 @@
     owner: "ansible"
     group: "ansible"
 
-- ansible.builtin.template:
-    src: "etcd.j2"
-    dest: "/etc/default/etcd"
-  notify: "Restart etcd"
+#- ansible.builtin.template:
+#    src: "etcd.j2"
+#    dest: "/etc/default/etcd"
+#  notify: "Restart etcd"
 
 - ansible.builtin.copy:
     src: "etcd"

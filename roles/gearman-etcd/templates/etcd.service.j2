@@ -7,7 +7,15 @@ Type=simple
 User=ansible
 Group=ansible
 WorkingDirectory=/home/ansible
-ExecStart=/usr/bin/etcd {{ etcd_exec }}
+ExecStart=/usr/bin/etcd \
+  --name {{ etcd.name }} \
+  --initial-advertise-peer-urls http://{{ etcd.address }}:2380 \
+  --listen-peer-urls http://{{ etcd.address }}:2380 \
+  --listen-client-urls http://{{ etcd.address }}:2379,http://127.0.0.1:2379 \
+  --advertise-client-urls http://{{ etcd.address }}:2379 \
+  --initial-cluster-token {{ etcd.token }} \
+  --initial-cluster {{ etcd.cluster }} \
+  --initial-cluster-state {{ etcd.state }}
 Restart=always
 
 [Install]
