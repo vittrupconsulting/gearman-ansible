@@ -6,7 +6,8 @@ After=network.target
 Type=simple
 User=ansible
 Group=ansible
-ExecStart=/usr/bin/etcd {{ etcd.exec }}
+WorkingDirectory=/home/ansible
+ExecStart=/usr/bin/etcd {{ etcd_exec }}
 Restart=always
 
 [Install]

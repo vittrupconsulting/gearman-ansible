@@ -3,6 +3,12 @@
 - ansible.builtin.include_vars:
     file: "{{ ansible_hostname }}.yml"
 
+- ansible.builtin.file:
+    path: "/tmp/etcd"
+    state: "directory"
+    owner: "ansible"
+    group: "ansible"
+
 - ansible.builtin.template:
     src: "etcd.j2"
     dest: "/etc/default/etcd"
