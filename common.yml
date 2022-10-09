@@ -2,23 +2,52 @@
 - hosts: all
   remote_user: ansible
   become: true
+  vars:
+    servers:
+      server152:
+        - gearman-server
+      server153:
+        - gearman-server
+      worker154:
+        - gearman-worker
+        - gearman-ansible
+        - gearman-etcd
+      worker155:
+        - gearman-worker
+        - gearman-ansible
+        - gearman-etcd
+      worker156:
+        - gearman-worker
+        - gearman-ansible
+        - gearman-etcd
+      proxy160:
+        - gearman-proxy
+      metrics161:
+        - gearman-metrics
+      client170:
+        - grafana-server
+        - grafana-config
   tasks:
 
     - debug:
         msg: "{{ ansible_distribution }}/{{ ansible_distribution_major_version }}"
 
+    - name: "Include common role"
+      include_role:
+        name: "gearman-common"
+
     - debug:
-        var: ansible_local['roles'] | default('gearman-common')
+        var: ansible_local['roles'] | default(servers[ansible_hostname])
 
     - name: "Include applicable roles"
       include_role:
         name: "{{ item }}"
-      with_items: "{{ ansible_local['roles'] | default('gearman-common') }}"
+      with_items: "{{ ansible_local['roles'] | default(servers[ansible_hostname]) }}"
 
     - ansible.builtin.file:
         path: "/etc/ansible/facts.d/"
         state: "directory"
 
     - ansible.builtin.copy:
-        content: "{{ ansible_local['roles'] | default('gearman-common') | to_nice_json }}"
+        content: "{{ servers[ansible_hostname] | to_nice_json }}"
         dest: "/etc/ansible/facts.d/roles.fact"
