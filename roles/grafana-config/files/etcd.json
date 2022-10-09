@@ -31,7 +31,7 @@
   "panels": [
     {
       "datasource": {
-        "uid": "$datasource"
+        "uid": "${DS_PROMETHEUS}"
       },
       "fieldConfig": {
         "defaults": {
@@ -93,7 +93,7 @@
       "targets": [
         {
           "datasource": {
-            "uid": "$datasource"
+            "uid": "${DS_PROMETHEUS}"
           },
           "expr": "sum(etcd_server_has_leader)",
           "intervalFactor": 2,
@@ -112,7 +112,7 @@
       "dashLength": 10,
       "dashes": false,
       "datasource": {
-        "uid": "$datasource"
+        "uid": "${DS_PROMETHEUS}"
       },
       "editable": true,
       "error": false,
@@ -155,7 +155,7 @@
       "targets": [
         {
           "datasource": {
-            "uid": "$datasource"
+            "uid": "${DS_PROMETHEUS}"
           },
           "expr": "sum(rate(grpc_server_started_total{grpc_type=\"unary\"}[5m]))",
           "format": "time_series",
@@ -167,7 +167,7 @@
         },
         {
           "datasource": {
-            "uid": "$datasource"
+            "uid": "${DS_PROMETHEUS}"
           },
           "expr": "sum(rate(grpc_server_handled_total{grpc_type=\"unary\",grpc_code!=\"OK\"}[5m]))",
           "format": "time_series",
@@ -215,7 +215,7 @@
       "dashLength": 10,
       "dashes": false,
       "datasource": {
-        "uid": "$datasource"
+        "uid": "${DS_PROMETHEUS}"
       },
       "editable": true,
       "error": false,
@@ -258,7 +258,7 @@
       "targets": [
         {
           "datasource": {
-            "uid": "$datasource"
+            "uid": "${DS_PROMETHEUS}"
           },
           "expr": "sum(grpc_server_started_total{grpc_service=\"etcdserverpb.Watch\",grpc_type=\"bidi_stream\"}) - sum(grpc_server_handled_total{grpc_service=\"etcdserverpb.Watch\",grpc_type=\"bidi_stream\"})",
           "intervalFactor": 2,
@@ -269,7 +269,7 @@
         },
         {
           "datasource": {
-            "uid": "$datasource"
+            "uid": "${DS_PROMETHEUS}"
           },
           "expr": "sum(grpc_server_started_total{grpc_service=\"etcdserverpb.Lease\",grpc_type=\"bidi_stream\"}) - sum(grpc_server_handled_total{grpc_service=\"etcdserverpb.Lease\",grpc_type=\"bidi_stream\"})",
           "intervalFactor": 2,
@@ -317,7 +317,7 @@
       "dashLength": 10,
       "dashes": false,
       "datasource": {
-        "uid": "$datasource"
+        "uid": "${DS_PROMETHEUS}"
       },
       "editable": true,
       "error": false,
@@ -360,7 +360,7 @@
       "targets": [
         {
           "datasource": {
-            "uid": "$datasource"
+            "uid": "${DS_PROMETHEUS}"
           },
           "expr": "etcd_mvcc_db_total_size_in_bytes",
           "hide": false,
@@ -409,7 +409,7 @@
       "dashLength": 10,
       "dashes": false,
       "datasource": {
-        "uid": "$datasource"
+        "uid": "${DS_PROMETHEUS}"
       },
       "editable": true,
       "error": false,
@@ -452,7 +452,7 @@
       "targets": [
         {
           "datasource": {
-            "uid": "$datasource"
+            "uid": "${DS_PROMETHEUS}"
           },
           "expr": "histogram_quantile(0.99, sum(rate(etcd_disk_wal_fsync_duration_seconds_bucket[5m])) by (instance, le))",
           "hide": false,
@@ -464,7 +464,7 @@
         },
         {
           "datasource": {
-            "uid": "$datasource"
+            "uid": "${DS_PROMETHEUS}"
           },
           "expr": "histogram_quantile(0.99, sum(rate(etcd_disk_backend_commit_duration_seconds_bucket[5m])) by (instance, le))",
           "intervalFactor": 2,
@@ -511,7 +511,7 @@
       "dashLength": 10,
       "dashes": false,
       "datasource": {
-        "uid": "$datasource"
+        "uid": "${DS_PROMETHEUS}"
       },
       "editable": true,
       "error": false,
@@ -554,7 +554,7 @@
       "targets": [
         {
           "datasource": {
-            "uid": "$datasource"
+            "uid": "${DS_PROMETHEUS}"
           },
           "expr": "process_resident_memory_bytes",
           "intervalFactor": 2,
@@ -599,7 +599,7 @@
       "aliasColors": {},
       "bars": false,
       "datasource": {
-        "uid": "$datasource"
+        "uid": "${DS_PROMETHEUS}"
       },
       "editable": true,
       "error": false,
@@ -635,7 +635,7 @@
       "targets": [
         {
           "datasource": {
-            "uid": "$datasource"
+            "uid": "${DS_PROMETHEUS}"
           },
           "expr": "rate(etcd_network_client_grpc_received_bytes_total[5m])",
           "intervalFactor": 2,
@@ -676,7 +676,7 @@
       "aliasColors": {},
       "bars": false,
       "datasource": {
-        "uid": "$datasource"
+        "uid": "${DS_PROMETHEUS}"
       },
       "editable": true,
       "error": false,
@@ -712,7 +712,7 @@
       "targets": [
         {
           "datasource": {
-            "uid": "$datasource"
+            "uid": "${DS_PROMETHEUS}"
           },
           "expr": "rate(etcd_network_client_grpc_sent_bytes_total[5m])",
           "intervalFactor": 2,
@@ -753,7 +753,7 @@
       "aliasColors": {},
       "bars": false,
       "datasource": {
-        "uid": "$datasource"
+        "uid": "${DS_PROMETHEUS}"
       },
       "editable": true,
       "error": false,
@@ -789,7 +789,7 @@
       "targets": [
         {
           "datasource": {
-            "uid": "$datasource"
+            "uid": "${DS_PROMETHEUS}"
           },
           "expr": "sum(rate(etcd_network_peer_received_bytes_total[5m])) by (instance)",
           "intervalFactor": 2,
@@ -830,7 +830,7 @@
       "aliasColors": {},
       "bars": false,
       "datasource": {
-        "uid": "$datasource"
+        "uid": "${DS_PROMETHEUS}"
       },
       "editable": true,
       "error": false,
@@ -866,7 +866,7 @@
       "targets": [
         {
           "datasource": {
-            "uid": "$datasource"
+            "uid": "${DS_PROMETHEUS}"
           },
           "expr": "sum(rate(etcd_network_peer_sent_bytes_total[5m])) by (instance)",
           "hide": false,
@@ -909,7 +909,7 @@
       "aliasColors": {},
       "bars": false,
       "datasource": {
-        "uid": "$datasource"
+        "uid": "${DS_PROMETHEUS}"
       },
       "editable": true,
       "error": false,
@@ -945,7 +945,7 @@
       "targets": [
         {
           "datasource": {
-            "uid": "$datasource"
+            "uid": "${DS_PROMETHEUS}"
           },
           "expr": "sum(rate(etcd_server_proposals_failed_total[5m]))",
           "intervalFactor": 2,
@@ -956,7 +956,7 @@
         },
         {
           "datasource": {
-            "uid": "$datasource"
+            "uid": "${DS_PROMETHEUS}"
           },
           "expr": "sum(etcd_server_proposals_pending)",
           "intervalFactor": 2,
@@ -967,7 +967,7 @@
         },
         {
           "datasource": {
-            "uid": "$datasource"
+            "uid": "${DS_PROMETHEUS}"
           },
           "expr": "sum(rate(etcd_server_proposals_committed_total[5m]))",
           "intervalFactor": 2,
@@ -978,7 +978,7 @@
         },
         {
           "datasource": {
-            "uid": "$datasource"
+            "uid": "${DS_PROMETHEUS}"
           },
           "expr": "sum(rate(etcd_server_proposals_applied_total[5m]))",
           "intervalFactor": 2,
@@ -1019,7 +1019,7 @@
       "aliasColors": {},
       "bars": false,
       "datasource": {
-        "uid": "$datasource"
+        "uid": "${DS_PROMETHEUS}"
       },
       "decimals": 0,
       "editable": true,
@@ -1058,7 +1058,7 @@
       "targets": [
         {
           "datasource": {
-            "uid": "$datasource"
+            "uid": "${DS_PROMETHEUS}"
           },
           "expr": "changes(etcd_server_leader_changes_seen_total[1d])",
           "intervalFactor": 2,
@@ -1110,8 +1110,9 @@
         },
         "hide": 0,
         "includeAll": false,
+        "label": "datasource",
         "multi": false,
-        "name": "datasource",
+        "name": "DS_PROMETHEUS",
         "options": [],
         "query": "prometheus",
         "refresh": 1,
