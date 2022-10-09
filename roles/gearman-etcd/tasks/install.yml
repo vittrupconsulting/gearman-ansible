@@ -3,5 +3,5 @@
 - ansible.builtin.apt:
     update_cache: yes
 
-- ansible.builtin.apt:
-    name: "etcd"
+#- ansible.builtin.apt:
+#    name: "etcd"

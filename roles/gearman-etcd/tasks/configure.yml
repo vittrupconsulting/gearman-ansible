@@ -7,3 +7,26 @@
     src: "etcd.j2"
     dest: "/etc/default/etcd"
   notify: "Restart etcd"
+
+- ansible.builtin.copy:
+    src: "etcd"
+    dest: "/usr/bin/etcd"
+    mode: "0755"
+  notify: "Restart etcd"
+
+- ansible.builtin.copy:
+    src: "etcdctl"
+    dest: "/usr/bin/etcdctl"
+    mode: "0755"
+  notify: "Restart etcd"
+
+- ansible.builtin.template:
+    src: "etcd.service.j2"
+    dest: "/etc/systemd/system/etcd.service"
+  notify: "Restart etcd"
+
+- ansible.builtin.systemd:
+    name: "etcd"
+    enabled: "yes"
+    state: "started"
+    daemon_reload: "yes"

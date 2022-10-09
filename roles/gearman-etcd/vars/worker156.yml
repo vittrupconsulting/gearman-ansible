@@ -10,4 +10,4 @@ etcd:
   advertise_client_urls: http://{{ address }}:2379
   initial_cluster_token: etcd_cluster_1
   initial_cluster: worker154=http://192.168.0.154:2380,worker155=http://192.168.0.155:2380,worker156=http://192.168.0.156:2380
-  initial_cluster_state: new
+  initial_cluster_state: existing
