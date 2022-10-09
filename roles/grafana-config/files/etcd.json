@@ -25,7 +25,7 @@
             "rgba(237, 129, 40, 0.89)",
             "rgba(50, 172, 45, 0.97)"
           ],
-          "datasource": "${DS_PROMETHEUS}",
+          "datasource": "$datasource",
           "editable": true,
           "error": false,
           "format": "none",
@@ -100,7 +100,7 @@
           "aliasColors": {
           },
           "bars": false,
-          "datasource": "${DS_PROMETHEUS}",
+          "datasource": "$datasource",
           "editable": true,
           "error": false,
           "fill": 0,
@@ -191,7 +191,7 @@
           "aliasColors": {
           },
           "bars": false,
-          "datasource": "${DS_PROMETHEUS}",
+          "datasource": "$datasource",
           "editable": true,
           "error": false,
           "fill": 0,
@@ -289,7 +289,7 @@
           "aliasColors": {
           },
           "bars": false,
-          "datasource": "${DS_PROMETHEUS}",
+          "datasource": "$datasource",
           "decimals": null,
           "editable": true,
           "error": false,
@@ -372,7 +372,7 @@
           "aliasColors": {
           },
           "bars": false,
-          "datasource": "${DS_PROMETHEUS}",
+          "datasource": "$datasource",
           "editable": true,
           "error": false,
           "fill": 0,
@@ -461,7 +461,7 @@
           "aliasColors": {
           },
           "bars": false,
-          "datasource": "${DS_PROMETHEUS}",
+          "datasource": "$datasource",
           "editable": true,
           "error": false,
           "fill": 0,
@@ -550,7 +550,7 @@
           "aliasColors": {
           },
           "bars": false,
-          "datasource": "${DS_PROMETHEUS}",
+          "datasource": "$datasource",
           "editable": true,
           "error": false,
           "fill": 5,
@@ -631,7 +631,7 @@
           "aliasColors": {
           },
           "bars": false,
-          "datasource": "${DS_PROMETHEUS}",
+          "datasource": "$datasource",
           "editable": true,
           "error": false,
           "fill": 5,
@@ -712,7 +712,7 @@
           "aliasColors": {
           },
           "bars": false,
-          "datasource": "${DS_PROMETHEUS}",
+          "datasource": "$datasource",
           "editable": true,
           "error": false,
           "fill": 0,
@@ -793,7 +793,7 @@
           "aliasColors": {
           },
           "bars": false,
-          "datasource": "${DS_PROMETHEUS}",
+          "datasource": "$datasource",
           "decimals": null,
           "editable": true,
           "error": false,
@@ -884,7 +884,7 @@
           "aliasColors": {
           },
           "bars": false,
-          "datasource": "${DS_PROMETHEUS}",
+          "datasource": "$datasource",
           "editable": true,
           "error": false,
           "fill": 0,
@@ -988,7 +988,7 @@
           "aliasColors": {
           },
           "bars": false,
-          "datasource": "${DS_PROMETHEUS}",
+          "datasource": "$datasource",
           "decimals": 0,
           "editable": true,
           "error": false,
@@ -1091,7 +1091,7 @@
         ],
         "query": "prometheus",
         "refresh": 1,
-        "regex": "",
+        "regex": "/etcd/",
         "type": "datasource"
       },
       {
@@ -1100,7 +1100,7 @@
           "text": "prod",
           "value": "prod"
         },
-        "datasource": "${DS_PROMETHEUS}",
+        "datasource": "$datasource",
         "hide": 0,
         "includeAll": false,
         "label": "cluster",
@@ -1110,7 +1110,7 @@
         ],
         "query": "label_values(etcd_server_has_leader, job)",
         "refresh": 1,
-        "regex": "",
+        "regex": "/etcd/",
         "sort": 2,
         "tagValuesQuery": "",
         "tags": [
@@ -1152,7 +1152,7 @@
     ]
   },
   "timezone": "browser",
-  "title": "etcd",
+  "title": "Etcd",
   "uid": "c2f4e12cdf69feb95caa41a5a1b423d9",
   "version": 215
 }

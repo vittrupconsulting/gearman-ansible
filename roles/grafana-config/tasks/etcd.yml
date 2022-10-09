@@ -1,5 +1,10 @@
 ---
 
+- ansible.builtin.wait_for:
+    host: "192.168.0.170"
+    port: 3000
+    delay: 5
+
 - community.grafana.grafana_datasource:
     name: "etcd"
     ds_type: "prometheus"

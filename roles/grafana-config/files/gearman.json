@@ -334,7 +334,7 @@
         "options": [],
         "query": "prometheus",
         "refresh": 1,
-        "regex": "",
+        "regex": "/gearman/",
         "type": "datasource"
       }
     ]
