@@ -1,13 +1,8 @@
 ---
 
-address: 192.168.0.156
-
 etcd:
   name: worker156
-  initial_advertise_peer_urls: http://{{ address }}:2380
-  listen_peer_urls: http://{{ address }}:2380
-  listen_client_urls: http://{{ address }}:2379,http://127.0.0.1:2379
-  advertise_client_urls: http://{{ address }}:2379
-  initial_cluster_token: etcd_cluster_1
-  initial_cluster: worker154=http://192.168.0.154:2380,worker155=http://192.168.0.155:2380,worker156=http://192.168.0.156:2380
-  initial_cluster_state: existing
+  address: 192.168.0.156
+  token: etcd_cluster_1
+  state: new
+  cluster: worker154=http://192.168.0.154:2380,worker155=http://192.168.0.155:2380,worker156=http://192.168.0.156:2380

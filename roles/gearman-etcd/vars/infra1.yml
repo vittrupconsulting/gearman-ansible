@@ -1,8 +1,0 @@
----
-
-etcd:
-  name: infra1
-  address: 10.0.1.11
-  token: etcd_cluster_1
-  state: new
-  cluster: infra0=http://10.0.1.10:2380,infra1=http://10.0.1.11:2380,infra2=http://10.0.1.12:2380
