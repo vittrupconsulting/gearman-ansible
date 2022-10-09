@@ -1,3 +1,4 @@
 ---
 
 grafana_config_gearman: true
+grafana_config_etcd: true

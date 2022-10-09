@@ -3,3 +3,7 @@
 - ansible.builtin.include_tasks:
     file: gearman.yml
   when: grafana_config_gearman
+
+- ansible.builtin.include_tasks:
+    file: etcd.yml
+  when: grafana_config_etcd
