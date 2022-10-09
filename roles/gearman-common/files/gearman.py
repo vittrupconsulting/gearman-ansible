@@ -24,4 +24,4 @@ try:
 except TimeoutError:
     print("All gearman servers offline.")
 else:
-    print("Found gearman server online.")
+    print("Found online gearman server.")
