@@ -1,1 +1,22 @@
 ---
+
+- ansible.builtin.copy:
+    src: "etcd"
+    dest: "/usr/bin/etcd"
+    mode: "0755"
+  notify: "Restart etcd"
+
+- ansible.builtin.copy:
+    src: "etcdctl"
+    dest: "/usr/bin/etcdctl"
+    mode: "0755"
+  notify: "Restart etcd"
+
+- ansible.builtin.copy:
+    src: "etcdutl"
+    dest: "/usr/bin/etcdutl"
+    mode: "0755"
+  notify: "Restart etcd"
+
+- ansible.builtin.pip:
+    name: "etcd3-py"
