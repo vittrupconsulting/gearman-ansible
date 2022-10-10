@@ -89,7 +89,7 @@
           "expr": "(gearman_jobs/gearman_workers)*100",
           "hide": false,
           "instant": false,
-          "legendFormat": "{{function}}",
+          "legendFormat": "{{instance}}",
           "refId": "A"
         }
       ],
@@ -180,7 +180,7 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "expr": "gearman_jobs_running",
-          "legendFormat": "{{function}}",
+          "legendFormat": "{{instance}}",
           "refId": "A"
         }
       ],
@@ -263,7 +263,7 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "expr": "gearman_jobs_waiting",
-          "legendFormat": "{{function}}",
+          "legendFormat": "{{instance}}",
           "refId": "A"
         }
       ],

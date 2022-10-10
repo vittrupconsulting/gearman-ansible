@@ -1,2 +1,26 @@
 ---
-# vars file for gearman-common
+
+servers:
+  server152:
+    - gearman-server
+  server153:
+    - gearman-server
+  worker154:
+    - gearman-worker
+    - gearman-ansible
+    - gearman-etcd
+  worker155:
+    - gearman-worker
+    - gearman-ansible
+    - gearman-etcd
+  worker156:
+    - gearman-worker
+    - gearman-ansible
+    - gearman-etcd
+  proxy160:
+    - gearman-proxy
+  metrics161:
+    - gearman-metrics
+  client170:
+    - grafana-server
+    - grafana-config

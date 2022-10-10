@@ -27,6 +27,20 @@
       client170:
         - grafana-server
         - grafana-config
+    server_group:
+      gearman-common:
+        - server152
+        - server153
+        - server154
+        - server155
+        - server156
+      gearman-server:
+        - server152
+        - server153
+      gearman-worker:
+        - server154
+        - server155
+        - server156
   tasks:
 
     - debug:
@@ -51,3 +65,7 @@
     - ansible.builtin.copy:
         content: "{{ servers[ansible_hostname] | to_nice_json }}"
         dest: "/etc/ansible/facts.d/roles.fact"
+
+    - debug:
+        msg: "{{ item.key }}==>{{ item.value }}"
+      with_dict: "{{ server_group }}"

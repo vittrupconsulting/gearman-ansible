@@ -8,16 +8,12 @@
 - community.grafana.grafana_datasource:
     name: "etcd"
     ds_type: "prometheus"
-    ds_url: "http://192.168.0.154:9090"
+    ds_url: "http://192.168.0.161:9090"
     tls_skip_verify: true
     grafana_url: "http://192.168.0.170:3000"
     url_username: "admin"
     url_password: "admin"
   ignore_errors: yes
-
-- ansible.builtin.file:
-    path: "/opt/dashboards/"
-    state: "directory"
 
 - ansible.builtin.copy:
     src: "etcd.json"
