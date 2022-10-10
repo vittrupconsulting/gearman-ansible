@@ -5,14 +5,19 @@
     update_cache: yes
   when: ansible_distribution == "Debian"
 
-- name: "Debian python installer"
+- name: "Debian python3 installer"
   ansible.builtin.apt:
     name: "python3"
   when: ansible_distribution == "Debian"
 
-- name: "Debian python package installer"
+- name: "Debian python3-pip installer"
   ansible.builtin.apt:
     name: "python3-pip"
+  when: ansible_distribution == "Debian"
+
+- name: "Debian prometheus-node-exporter installer"
+  ansible.builtin.apt:
+    name: "prometheus-node-exporter"
   when: ansible_distribution == "Debian"
 
 - name: "Ubuntu package update"
@@ -20,14 +25,19 @@
     update_cache: yes
   when: ansible_distribution == "Ubuntu"
 
-- name: "Ubuntu python installer"
+- name: "Ubuntu python3 installer"
   ansible.builtin.apt:
     name: "python3"
   when: ansible_distribution == "Ubuntu"
 
-- name: "Ubuntu python package installer"
+- name: "Ubuntu python3-pip installer"
   ansible.builtin.apt:
     name: "python3-pip"
+  when: ansible_distribution == "Ubuntu"
+
+- name: "Ubuntu prometheus-node-exporter installer"
+  ansible.builtin.apt:
+    name: "prometheus-node-exporter"
   when: ansible_distribution == "Ubuntu"
 
 - name: "AlmaLinux python package installer"
