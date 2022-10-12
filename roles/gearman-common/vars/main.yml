@@ -21,6 +21,6 @@ servers:
     - gearman-proxy
   metrics161:
     - gearman-metrics
-  client170:
+  grafana170:
     - grafana-server
     - grafana-config
