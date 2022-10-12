@@ -8,15 +8,15 @@
         - gearman-server
       server153:
         - gearman-server
-      worker154:
+      inventory154:
         - gearman-worker
         - gearman-ansible
         - gearman-etcd
-      worker155:
+      inventory155:
         - gearman-worker
         - gearman-ansible
         - gearman-etcd
-      worker156:
+      inventory156:
         - gearman-worker
         - gearman-ansible
         - gearman-etcd

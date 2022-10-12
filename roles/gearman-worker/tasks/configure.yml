@@ -1,6 +1,6 @@
 ---
 
-- ansible.builtin.copy:
-    src: "gearman.py"
-    dest: "/opt/gearman.py"
+- ansible.builtin.template:
+    src: "gearman-inventory.py.j2"
+    dest: "/opt/gearman-inventory.py"
   notify: "Restart gearman-worker"

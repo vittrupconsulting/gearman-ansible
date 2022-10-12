@@ -2,81 +2,57 @@
 # vi: set ft=ruby :
 
 Vagrant.configure("2") do |config|
-  config.vm.box = "ansible.box"
+  config.vm.box = "gearman.box"
 
-  config.vm.synced_folder "roles", "/etc/ansible/roles"
-  config.vm.provision "file", source: "ansible_rsa", destination: "/etc/ansible/ansible_rsa"
-  config.vm.provision "file", source: "ansible.cfg", destination: "/etc/ansible/ansible.cfg"
-  config.vm.provision "file", source: "common.yml", destination: "/etc/ansible/common.yml"
-  config.vm.provision "file", source: "generic.yml", destination: "/etc/ansible/generic.yml"
-  config.vm.provision "file", source: "inventory.json", destination: "/etc/ansible/inventory.json"
-  config.vm.provision "file", source: "environment.ini", destination: "/tmp/environment.ini"
+  config.vm.provision "shell", inline: <<-SHELL
+    echo "192.168.0.152 server152" | sudo tee -a /etc/hosts
+    echo "192.168.0.153 server153" | sudo tee -a /etc/hosts
+    echo "192.168.0.154 inventory154" | sudo tee -a /etc/hosts
+    echo "192.168.0.155 inventory155" | sudo tee -a /etc/hosts
+    echo "192.168.0.156 inventory156" | sudo tee -a /etc/hosts
+    echo "192.168.0.157 ansible156" | sudo tee -a /etc/hosts
+    echo "192.168.0.160 proxy160" | sudo tee -a /etc/hosts
+    echo "192.168.0.161 metrics161" | sudo tee -a /etc/hosts
+    echo "192.168.0.170 grafana170" | sudo tee -a /etc/hosts
+    echo "192.168.0.200 ansible200" | sudo tee -a /etc/hosts
+  SHELL
 
-  config.vm.define "server152", autostart: true do |server|
-    server.vm.hostname = "server152"
-    server.vm.network "private_network", ip: "192.168.0.152", virtualbox__intnet: true
-    server.vm.network "forwarded_port", guest: "22", host: "49152"
-    server.vm.provision "shell", inline: <<-SHELL
-      cat /tmp/environment.ini | sudo tee -a /etc/hosts
-      ansible-playbook --inventory "localhost," /etc/ansible/generic.yml -e "role=gearman-common"
-      ansible-playbook --inventory "localhost," /etc/ansible/generic.yml -e "role=gearman-server"
-    SHELL
-  end
+  (152..153).each do |i|
+    config.vm.define "server#{i}", autostart: true do |server|
+      server.vm.hostname = "server#{i}"
+      server.vm.network "private_network", ip: "192.168.0.#{i}", virtualbox__intnet: true
+   end
+ end
 
-  config.vm.define "server153", autostart: true do |server|
-    server.vm.hostname = "server153"
-    server.vm.network "private_network", ip: "192.168.0.153", virtualbox__intnet: true
-    server.vm.network "forwarded_port", guest: "22", host: "49153"
-    server.vm.provision "shell", inline: <<-SHELL
-      cat /tmp/environment.ini | sudo tee -a /etc/hosts
-      ansible-playbook --inventory "localhost," /etc/ansible/generic.yml -e "role=gearman-common"
-      ansible-playbook --inventory "localhost," /etc/ansible/generic.yml -e "role=gearman-server"
-    SHELL
-  end
+  (154..156).each do |i|
+    config.vm.define "inventory#{i}", autostart: true do |inventory|
+      inventory.vm.hostname = "inventory#{i}"
+      inventory.vm.network "private_network", ip: "192.168.0.#{i}", virtualbox__intnet: true
+   end
+ end
 
-  config.vm.define "worker154", autostart: true do |worker|
-    worker.vm.hostname = "worker154"
-    worker.vm.network "private_network", ip: "192.168.0.154", virtualbox__intnet: true
-    worker.vm.network "forwarded_port", guest: "22", host: "49154"
+  (157..158).each do |i|
+    config.vm.define "ansible#{i}", autostart: true do |ansible|
+      ansible.vm.hostname = "ansible#{i}"
+      ansible.vm.network "private_network", ip: "192.168.0.#{i}", virtualbox__intnet: true
+   end
+ end
+
+  config.vm.define "ansible157", autostart: false do |worker|
+    worker.vm.hostname = "ansible157"
+    worker.vm.network "private_network", ip: "192.168.0.157", virtualbox__intnet: true
+    worker.vm.network "forwarded_port", guest: "22", host: "49157"
     worker.vm.provision "shell", inline: <<-SHELL
       echo '["192.168.0.152", "192.168.0.153"]' | tee /etc/ansible/facts.d/servers.fact
       cat /tmp/environment.ini | sudo tee -a /etc/hosts
       ansible-playbook --inventory "localhost," /etc/ansible/generic.yml -e "role=gearman-common"
       ansible-playbook --inventory "localhost," /etc/ansible/generic.yml -e "role=gearman-worker"
       ansible-playbook --inventory "localhost," /etc/ansible/generic.yml -e "role=gearman-ansible"
-      ansible-playbook --inventory "localhost," /etc/ansible/generic.yml -e "role=gearman-etcd"
+#      ansible-playbook --inventory "localhost," /etc/ansible/generic.yml -e "role=gearman-etcd"
     SHELL
   end
 
-  config.vm.define "worker155", autostart: true do |worker|
-    worker.vm.hostname = "worker155"
-    worker.vm.network "private_network", ip: "192.168.0.155", virtualbox__intnet: true
-    worker.vm.network "forwarded_port", guest: "22", host: "49155"
-    worker.vm.provision "shell", inline: <<-SHELL
-      echo '["192.168.0.152", "192.168.0.153"]' | tee /etc/ansible/facts.d/servers.fact
-      cat /tmp/environment.ini | sudo tee -a /etc/hosts
-      ansible-playbook --inventory "localhost," /etc/ansible/generic.yml -e "role=gearman-common"
-      ansible-playbook --inventory "localhost," /etc/ansible/generic.yml -e "role=gearman-worker"
-      ansible-playbook --inventory "localhost," /etc/ansible/generic.yml -e "role=gearman-ansible"
-      ansible-playbook --inventory "localhost," /etc/ansible/generic.yml -e "role=gearman-etcd"
-    SHELL
-  end
-
-  config.vm.define "worker156", autostart: true do |worker|
-    worker.vm.hostname = "worker156"
-    worker.vm.network "private_network", ip: "192.168.0.156", virtualbox__intnet: true
-    worker.vm.network "forwarded_port", guest: "22", host: "49156"
-    worker.vm.provision "shell", inline: <<-SHELL
-      echo '["192.168.0.152", "192.168.0.153"]' | tee /etc/ansible/facts.d/servers.fact
-      cat /tmp/environment.ini | sudo tee -a /etc/hosts
-      ansible-playbook --inventory "localhost," /etc/ansible/generic.yml -e "role=gearman-common"
-      ansible-playbook --inventory "localhost," /etc/ansible/generic.yml -e "role=gearman-worker"
-      ansible-playbook --inventory "localhost," /etc/ansible/generic.yml -e "role=gearman-ansible"
-      ansible-playbook --inventory "localhost," /etc/ansible/generic.yml -e "role=gearman-etcd"
-    SHELL
-  end
-
-  config.vm.define "proxy160", autostart: true do |proxy|
+  config.vm.define "proxy160", autostart: false do |proxy|
     proxy.vm.hostname = "proxy160"
     proxy.vm.network "private_network", ip: "192.168.0.160", virtualbox__intnet: true
     proxy.vm.network "forwarded_port", guest: "22", host: "49160"
@@ -89,7 +65,7 @@ Vagrant.configure("2") do |config|
     SHELL
   end
 
-  config.vm.define "metrics161", autostart: true do |proxy|
+  config.vm.define "metrics161", autostart: false do |proxy|
     proxy.vm.hostname = "metrics161"
     proxy.vm.network "private_network", ip: "192.168.0.161", virtualbox__intnet: true
     proxy.vm.network "forwarded_port", guest: "22", host: "49161"
@@ -141,12 +117,33 @@ Vagrant.configure("2") do |config|
       /usr/local/sbin/gearman.py `hostname -I | awk '{ print $NF }'`
     SHELL
   end
-  
-  config.vm.define "galaxy", autostart: false do |init|
-    init.vm.provision "shell", inline: <<-SHELL
-      mkdir -p /vagrant/roles
-      cd /vagrant/roles
-      ansible-galaxy init gearman-metrics
+
+#   config.vm.define "galaxy", autostart: false do |init|
+#     init.vm.provision "shell", inline: <<-SHELL
+#       mkdir -p /vagrant/roles
+#       cd /vagrant/roles
+#       ansible-galaxy init gearman-metrics
+#     SHELL
+#   end
+
+  config.vm.define "ansible200", autostart: true do |server|
+    server.vm.box = "ansible.box"
+    server.vm.hostname = "ansible200"
+    server.vm.network "private_network", ip: "192.168.0.200", virtualbox__intnet: true
+    server.vm.network "forwarded_port", guest: "22", host: "49200"
+    server.vm.synced_folder "roles", "/etc/ansible/roles"
+    server.vm.synced_folder "inventory", "/etc/ansible/inventory"
+    server.vm.provision "file", source: "ansible_rsa", destination: "/etc/ansible/ansible_rsa"
+    server.vm.provision "file", source: "ansible.cfg", destination: "/etc/ansible/ansible.cfg"
+    server.vm.provision "file", source: "generic.yml", destination: "/etc/ansible/generic.yml"
+    server.vm.provision "shell", inline: <<-SHELL
+      ansible-playbook --inventory "localhost," /etc/ansible/generic.yml -e "role=gearman-common"
+      ansible-playbook --inventory "localhost," /etc/ansible/generic.yml -e "role=gearman-ansible"
+      ansible-playbook --inventory "/etc/ansible/inventory.yml" /etc/ansible/generic.yml --extra-vars "role=gearman-common"
+      ansible-playbook -i "/etc/ansible/inventory/inventory.yml" -e "role=gearman-server" -l "gearman-server" /etc/ansible/generic.yml
+      ansible-playbook -i "/etc/ansible/inventory/inventory.yml" -e "role=gearman-etcd" -l "gearman-etcd" /etc/ansible/generic.yml
+      ansible-playbook -i "/etc/ansible/inventory/inventory.yml" -e "role=gearman-ansible" -l "gearman-ansible" /etc/ansible/generic.yml
+      ansible-playbook -i "/etc/ansible/inventory/inventory.yml" -e "role=gearman-worker" -l "gearman-worker" /etc/ansible/generic.yml
     SHELL
   end
 

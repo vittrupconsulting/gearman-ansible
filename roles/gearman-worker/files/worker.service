@@ -6,7 +6,7 @@ After=network.target
 Type=simple
 User=ansible
 Group=ansible
-ExecStart=python3 /opt/gearman.py
+ExecStart=python3 /opt/gearman-inventory.py
 Restart=always
 
 [Install]
