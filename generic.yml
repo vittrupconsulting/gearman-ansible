@@ -1,0 +1,12 @@
+---
+- hosts: all
+  remote_user: ansible
+  become: true
+  tasks:
+
+    - debug:
+        msg: "{{ ansible_hostname }} ==> {{ ansible_distribution }}/{{ ansible_distribution_major_version }}"
+
+    - name: "Include {{ role }} role"
+      include_role:
+        name: "{{ role }}"
