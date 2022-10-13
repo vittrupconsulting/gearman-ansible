@@ -46,6 +46,6 @@ frontend gearman-frontend
 
 backend gearman-backend
 	mode tcp
-{% for server in ansible_local['servers'] %}
+{% for server in groups['gearman-server'] %}
 	server {{ server }} {{ server }}:4730 check
 {% endfor %}

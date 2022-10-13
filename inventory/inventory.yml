@@ -7,6 +7,7 @@ all:
     inventory156:
     ansible157:
     ansible158:
+    proxy160:
   children:
     gearman-server:
       hosts:
@@ -28,3 +29,6 @@ all:
         inventory156:
         ansible157:
         ansible158:
+    gearman-proxy:
+      hosts:
+        proxy160:
