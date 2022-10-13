@@ -2,7 +2,6 @@ import gear
 from etcd3 import Client
 import subprocess
 from systemd import journal
-import json
 
 worker = gear.Worker("{{ ansible_hostname }}")
 for server in {{ groups['gearman-server'] }}:
