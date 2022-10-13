@@ -22,40 +22,36 @@ Vagrant.configure("2") do |config|
     config.vm.define "server#{i}", autostart: true do |server|
       server.vm.hostname = "server#{i}"
       server.vm.network "private_network", ip: "192.168.0.#{i}", virtualbox__intnet: true
-   end
- end
+    end
+  end
 
   (154..156).each do |i|
     config.vm.define "inventory#{i}", autostart: true do |inventory|
       inventory.vm.hostname = "inventory#{i}"
       inventory.vm.network "private_network", ip: "192.168.0.#{i}", virtualbox__intnet: true
-   end
- end
+    end
+  end
 
   (157..158).each do |i|
     config.vm.define "ansible#{i}", autostart: true do |ansible|
       ansible.vm.hostname = "ansible#{i}"
       ansible.vm.network "private_network", ip: "192.168.0.#{i}", virtualbox__intnet: true
-   end
- end
+    end
+  end
 
   (160..160).each do |i|
     config.vm.define "proxy#{i}", autostart: true do |proxy|
       proxy.vm.hostname = "proxy#{i}"
       proxy.vm.network "private_network", ip: "192.168.0.#{i}", virtualbox__intnet: true
       proxy.vm.network "forwarded_port", guest: "80", host: "80"
-   end
- end
+    end
+  end
 
-  config.vm.define "metrics161", autostart: false do |proxy|
-    proxy.vm.hostname = "metrics161"
-    proxy.vm.network "private_network", ip: "192.168.0.161", virtualbox__intnet: true
-    proxy.vm.network "forwarded_port", guest: "22", host: "49161"
-    proxy.vm.provision "shell", inline: <<-SHELL
-      echo '["192.168.0.152", "192.168.0.153"]' | tee /etc/ansible/facts.d/servers.fact
-      cat /tmp/environment.ini | sudo tee -a /etc/hosts
-      ansible-playbook --inventory "localhost," /etc/ansible/generic.yml -e "role=gearman-metrics"  
-    SHELL
+  (161..161).each do |i|
+  config.vm.define "metrics#{i}", autostart: true do |metrics|
+      metrics.vm.hostname = "metrics#{i}"
+      metrics.vm.network "private_network", ip: "192.168.0.#{i}", virtualbox__intnet: true
+    end
   end
 
   config.vm.define "grafana170", autostart: false do |client|
@@ -128,6 +124,7 @@ Vagrant.configure("2") do |config|
       ansible-playbook -i "/etc/ansible/inventory/inventory.yml" -e "role=gearman-ansible" -l "gearman-ansible" /etc/ansible/generic.yml
       ansible-playbook -i "/etc/ansible/inventory/inventory.yml" -e "role=gearman-worker" -l "gearman-worker" /etc/ansible/generic.yml
       ansible-playbook -i "/etc/ansible/inventory/inventory.yml" -e "role=gearman-proxy" -l "gearman-proxy" /etc/ansible/generic.yml
+      ansible-playbook -i "/etc/ansible/inventory/inventory.yml" -e "role=gearman-metrics" -l "gearman-metrics" /etc/ansible/generic.yml
     SHELL
   end
 

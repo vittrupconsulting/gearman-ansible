@@ -8,6 +8,7 @@ all:
     ansible157:
     ansible158:
     proxy160:
+    metrics161:
   children:
     gearman-server:
       hosts:
@@ -32,3 +33,6 @@ all:
     gearman-proxy:
       hosts:
         proxy160:
+    gearman-metrics:
+      hosts:
+        metrics161:
