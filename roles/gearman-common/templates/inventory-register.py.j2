@@ -10,10 +10,9 @@ for server in {{ groups['gearman-server'] }}:
 
 try:
     client.waitForServer(60)
-    job = gear.Job("register", b"{{ ansible_hostname }} aaa,bbb,ccc,ddd")
+    job = gear.Job("register", b"{{ ansible_hostname }} {% for role in ansible_local['roles'] %}{{ role }}{% if not loop.last %},{% endif %}{% endfor %}")
     client.submitJob(job)
 except TimeoutError:
     print("All gearman servers offline.")
 else:
     print("Found an online gearman server.")
-

@@ -10,3 +10,7 @@
     - name: "Include {{ role }} role"
       include_role:
         name: "{{ role }}"
+
+    - ansible.builtin.copy:
+        content: "{{ ansible_local['roles'] | default([]) | union([role]) | to_nice_json }}"
+        dest: "/etc/ansible/facts.d/roles.fact"
