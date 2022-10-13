@@ -3,11 +3,17 @@
 - ansible.builtin.cron:
     name: "Reboot marker"
     special_time: "reboot"
-    job: "/usr/local/sbin/gearman.py `hostname -I | awk '{ print $NF }'`"
+    job: "/usr/local/sbin/inventory-register.py"
     user: "ansible"
 
 - ansible.builtin.cron:
     name: "Hourly marker"
     special_time: "hourly"
-    job: "/usr/local/sbin/gearman.py `hostname -I | awk '{ print $NF }'`"
+    job: "/usr/local/sbin/inventory-register.py"
+    user: "ansible"
+
+- ansible.builtin.cron:
+    name: "Development marker"
+    minute: "*/5"
+    job: "/usr/local/sbin/inventory-register.py"
     user: "ansible"

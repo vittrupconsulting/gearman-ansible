@@ -2,11 +2,11 @@
 
 - ansible.builtin.copy:
     src: "worker.service"
-    dest: "/etc/systemd/system/gearman-worker.service"
-  notify: "Restart gearman-worker"
+    dest: "/etc/systemd/system/gearman-inventory.service"
+  notify: "Restart gearman-inventory"
 
 - ansible.builtin.systemd:
-    name: "gearman-worker"
+    name: "gearman-inventory"
     enabled: "yes"
     state: "started"
     daemon_reload: "yes"

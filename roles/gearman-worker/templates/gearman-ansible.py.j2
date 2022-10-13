@@ -1,0 +1,27 @@
+import gear
+from etcd3 import Client
+import subprocess
+from systemd import journal
+import json
+
+worker = gear.Worker("{{ ansible_hostname }}")
+for server in {{ groups['gearman-server'] }}:
+    journal.send(f"Registering with gearman server {server}")
+    worker.addServer(f"{server}")
+worker.registerFunction("register")
+
+client = Client('127.0.0.1', 2379)
+
+while True:
+    job = worker.getJob()
+    journal.send(f"Gearman client {job.arguments.decode()}")
+
+    client.put(f"{job.arguments.decode()}", f"{job.arguments.decode()}")
+#    subprocess.run(f"ansible-playbook --inventory '{job.arguments.decode()},' /etc/ansible/common.yml", shell=True)
+    job.sendWorkComplete()
+
+#    name = f"{job.arguments.decode().split()[0]}"
+#    get source from job?
+#    groups = f"{job.arguments.decode().split()[1]}"
+#    journal.send(f"Storing {name}==>{groups}")
+#    client.put(name, groups)

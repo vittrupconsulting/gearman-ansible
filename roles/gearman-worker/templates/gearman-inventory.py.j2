@@ -4,17 +4,20 @@ import subprocess
 from systemd import journal
 import json
 
-worker = gear.Worker(f"sample")
+worker = gear.Worker("{{ ansible_hostname }}")
 for server in {{ groups['gearman-server'] }}:
-    journal.send(f"Gearman server {server}")
+    journal.send(f"Registering function 'register' with gearman server {server}")
     worker.addServer(f"{server}")
-worker.registerFunction("common")
+worker.registerFunction("register")
 
 client = Client('127.0.0.1', 2379)
 
 while True:
     job = worker.getJob()
-    journal.send(f"Gearman client {job.arguments.decode()}")
-    client.put(f"{job.arguments.decode()}", f"{job.arguments.decode()}")
-    subprocess.run(f"ansible-playbook --inventory '{job.arguments.decode()},' /etc/ansible/common.yml", shell=True)
+    function = job.name
+    source = job.arguments.decode().split()[0]
+    groups = job.arguments.decode().split()[1]
+    journal.send(f"{function}==>{source}==>{groups}")
+    client.put(source, groups)
     job.sendWorkComplete()
+

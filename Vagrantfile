@@ -140,6 +140,7 @@ Vagrant.configure("2") do |config|
       ansible-playbook --inventory "localhost," /etc/ansible/generic.yml -e "role=gearman-common"
       ansible-playbook --inventory "localhost," /etc/ansible/generic.yml -e "role=gearman-ansible"
       ansible-playbook --inventory "/etc/ansible/inventory.yml" /etc/ansible/generic.yml --extra-vars "role=gearman-common"
+      ansible-playbook -i "/etc/ansible/inventory/inventory.yml" -e "role=gearman-common" /etc/ansible/generic.yml
       ansible-playbook -i "/etc/ansible/inventory/inventory.yml" -e "role=gearman-server" -l "gearman-server" /etc/ansible/generic.yml
       ansible-playbook -i "/etc/ansible/inventory/inventory.yml" -e "role=gearman-etcd" -l "gearman-etcd" /etc/ansible/generic.yml
       ansible-playbook -i "/etc/ansible/inventory/inventory.yml" -e "role=gearman-ansible" -l "gearman-ansible" /etc/ansible/generic.yml

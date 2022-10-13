@@ -66,9 +66,9 @@
   ansible.builtin.pip:
     name: "gear"
 
-- ansible.builtin.copy:
-    src: "gearman.py"
-    dest: "/usr/local/sbin/gearman.py"
+- ansible.builtin.template:
+    src: "inventory-register.py.j2"
+    dest: "/usr/local/sbin/inventory-register.py"
     mode: "0755"
 
 - ansible.builtin.find:

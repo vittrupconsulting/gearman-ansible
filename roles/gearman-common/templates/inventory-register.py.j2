@@ -1,0 +1,19 @@
+#!/usr/bin/python3
+
+import gear
+from gear import TimeoutError
+
+client = gear.Client()
+for server in {{ groups['gearman-server'] }}:
+    print(f"Registering with gearman server {server}")
+    client.addServer(f"{server}", "4730")
+
+try:
+    client.waitForServer(60)
+    job = gear.Job("register", b"{{ ansible_hostname }} aaa,bbb,ccc,ddd")
+    client.submitJob(job)
+except TimeoutError:
+    print("All gearman servers offline.")
+else:
+    print("Found an online gearman server.")
+

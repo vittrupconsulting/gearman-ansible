@@ -3,4 +3,4 @@
 - ansible.builtin.template:
     src: "gearman-inventory.py.j2"
     dest: "/opt/gearman-inventory.py"
-  notify: "Restart gearman-worker"
+  notify: "Restart gearman-inventory"

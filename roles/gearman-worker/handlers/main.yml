@@ -1,6 +1,6 @@
 ---
 
-  - name: "Restart gearman-worker"
+  - name: "Restart gearman-inventory"
     systemd:
-      name: "gearman-worker"
+      name: "gearman-inventory"
       state: "restarted"
