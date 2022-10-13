@@ -8,7 +8,7 @@
 - community.grafana.grafana_datasource:
     name: "gearman"
     ds_type: "prometheus"
-    ds_url: "http://192.168.0.161:9090"
+    ds_url: "http://{{ groups['gearman-metrics'] | first }}:9090"
     tls_skip_verify: true
     grafana_url: "http://192.168.0.170:3000"
     url_username: "admin"

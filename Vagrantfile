@@ -62,42 +62,6 @@ Vagrant.configure("2") do |config|
     end
   end
 
-  config.vm.define "client171", autostart: false do |client|
-    client.vm.box = "almalinux.box"
-    client.vm.hostname = "client171"
-    client.vm.network "private_network", ip: "192.168.0.171", virtualbox__intnet: true
-    client.vm.network "forwarded_port", guest: "22", host: "49171"
-    client.vm.provision "shell", inline: <<-SHELL
-      sudo cp /etc/ansible/roles/gearman-common/files/gearman.py /usr/local/sbin/gearman.py
-      sudo chmod 755 /usr/local/sbin/gearman.py
-      echo '["gearman-common"]' | sudo tee /etc/ansible/facts.d/roles.fact
-      echo '["192.168.0.160"]' | tee /etc/ansible/facts.d/servers.fact
-      /usr/local/sbin/gearman.py `hostname -I | awk '{ print $NF }'`
-    SHELL
-  end
-
-  config.vm.define "client172", autostart: false do |client|
-    client.vm.box = "centos.box"
-    client.vm.hostname = "client172"
-    client.vm.network "private_network", ip: "192.168.0.172", virtualbox__intnet: true
-    client.vm.network "forwarded_port", guest: "22", host: "49172"
-    client.vm.provision "shell", inline: <<-SHELL
-      sudo cp /etc/ansible/roles/gearman-common/files/gearman.py /usr/local/sbin/gearman.py
-      sudo chmod 755 /usr/local/sbin/gearman.py
-      echo '["gearman-common"]' | sudo tee /etc/ansible/facts.d/roles.fact
-      echo '["192.168.0.160"]' | tee /etc/ansible/facts.d/servers.fact
-      /usr/local/sbin/gearman.py `hostname -I | awk '{ print $NF }'`
-    SHELL
-  end
-
-#   config.vm.define "galaxy", autostart: false do |init|
-#     init.vm.provision "shell", inline: <<-SHELL
-#       mkdir -p /vagrant/roles
-#       cd /vagrant/roles
-#       ansible-galaxy init gearman-metrics
-#     SHELL
-#   end
-
   config.vm.define "ansible200", autostart: true do |server|
     server.vm.box = "ansible.box"
     server.vm.hostname = "ansible200"
@@ -109,9 +73,6 @@ Vagrant.configure("2") do |config|
     server.vm.provision "file", source: "ansible.cfg", destination: "/etc/ansible/ansible.cfg"
     server.vm.provision "file", source: "generic.yml", destination: "/etc/ansible/generic.yml"
     server.vm.provision "shell", inline: <<-SHELL
-      ansible-playbook --inventory "localhost," /etc/ansible/generic.yml -e "role=gearman-common"
-      ansible-playbook --inventory "localhost," /etc/ansible/generic.yml -e "role=gearman-ansible"
-      ansible-playbook -i "/etc/ansible/inventory/inventory.yml" /etc/ansible/generic.yml --extra-vars "role=gearman-common"
       ansible-playbook -i "/etc/ansible/inventory/inventory.yml" -e "role=gearman-common" /etc/ansible/generic.yml
       ansible-playbook -i "/etc/ansible/inventory/inventory.yml" -e "role=gearman-server" -l "gearman-server" /etc/ansible/generic.yml
       ansible-playbook -i "/etc/ansible/inventory/inventory.yml" -e "role=gearman-etcd" -l "gearman-etcd" /etc/ansible/generic.yml
@@ -121,6 +82,14 @@ Vagrant.configure("2") do |config|
       ansible-playbook -i "/etc/ansible/inventory/inventory.yml" -e "role=gearman-metrics" -l "gearman-metrics" /etc/ansible/generic.yml
       ansible-playbook -i "/etc/ansible/inventory/inventory.yml" -e "role=grafana-server" -l "grafana-server" /etc/ansible/generic.yml
       ansible-playbook -i "/etc/ansible/inventory/inventory.yml" -e "role=grafana-config" -l "grafana-config" /etc/ansible/generic.yml
+    SHELL
+  end
+
+  config.vm.define "galaxy", autostart: false do |init|
+    init.vm.provision "shell", inline: <<-SHELL
+      mkdir -p /vagrant/roles
+      cd /vagrant/roles
+      ansible-galaxy init gearman-metrics
     SHELL
   end
 
