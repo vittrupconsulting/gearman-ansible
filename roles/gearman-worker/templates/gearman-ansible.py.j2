@@ -14,5 +14,5 @@ while True:
     source = job.arguments.decode().split()[0]
     role = job.arguments.decode().split()[1]
     journal.send(f"{function}==>{source}==>{role}")
-    subprocess.run(f"ansible-playbook --inventory '/etc/ansible/inventory/inventory.yml' -e "role={role}" -l "{source}" /etc/ansible/generic.yml", shell=True)
+    subprocess.run(f"ansible-playbook --inventory '/etc/ansible/inventory/inventory.yml' -e 'role={role}' -l '{source}' /etc/ansible/generic.yml", shell=True)
     job.sendWorkComplete()

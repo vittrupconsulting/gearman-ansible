@@ -4,3 +4,8 @@
     systemd:
       name: "gearman-inventory"
       state: "restarted"
+
+  - name: "Restart gearman-ansible"
+    systemd:
+      name: "gearman-ansible"
+      state: "restarted"

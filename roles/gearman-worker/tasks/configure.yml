@@ -4,3 +4,10 @@
     src: "gearman-inventory.py.j2"
     dest: "/opt/gearman-inventory.py"
   notify: "Restart gearman-inventory"
+  when: gearman_job == "inventory"
+
+- ansible.builtin.template:
+    src: "gearman-ansible.py.j2"
+    dest: "/opt/gearman-ansible.py"
+  notify: "Restart gearman-ansible"
+  when: gearman_job == "ansible"

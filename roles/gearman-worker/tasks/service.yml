@@ -1,12 +1,27 @@
 ---
 
-- ansible.builtin.copy:
-    src: "worker.service"
+- ansible.builtin.template:
+    src: "gearman-inventory.service.j2"
     dest: "/etc/systemd/system/gearman-inventory.service"
   notify: "Restart gearman-inventory"
+  when: gearman_job == "inventory"
+
+- ansible.builtin.template:
+    src: "gearman-ansible.service.j2"
+    dest: "/etc/systemd/system/gearman-ansible.service"
+  notify: "Restart gearman-ansible"
+  when: gearman_job == "ansible"
 
 - ansible.builtin.systemd:
     name: "gearman-inventory"
     enabled: "yes"
     state: "started"
     daemon_reload: "yes"
+  when: gearman_job == "inventory"
+
+- ansible.builtin.systemd:
+    name: "gearman-ansible"
+    enabled: "yes"
+    state: "started"
+    daemon_reload: "yes"
+  when: gearman_job == "ansible"

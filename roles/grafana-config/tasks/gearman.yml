@@ -1,7 +1,7 @@
 ---
 
 - ansible.builtin.wait_for:
-    host: "192.168.0.170"
+    host: "{{ groups['grafana-server'] | first }}"
     port: "3000"
     sleep: "5"
 
@@ -10,7 +10,7 @@
     ds_type: "prometheus"
     ds_url: "http://{{ groups['gearman-metrics'] | first }}:9090"
     tls_skip_verify: true
-    grafana_url: "http://192.168.0.170:3000"
+    grafana_url: "http://{{ groups['grafana-server'] | first }}:3000"
     url_username: "admin"
     url_password: "admin"
   ignore_errors: yes
@@ -20,7 +20,7 @@
     dest: "/opt/dashboards/gearman.json"
 
 - community.grafana.grafana_dashboard:
-    grafana_url: "http://192.168.0.170:3000"
+    grafana_url: "http://{{ groups['grafana-server'] | first }}:3000"
     url_username: "admin"
     url_password: "admin"
     path: "/opt/dashboards/gearman.json"

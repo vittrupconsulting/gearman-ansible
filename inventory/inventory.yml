@@ -20,14 +20,14 @@ all:
         ansible157:
         ansible158:
       vars:
-        job: ansible
+        gearman_job: ansible
     gearman-etcd:
       hosts:
         inventory154:
         inventory155:
         inventory156:
       vars:
-        job: inventory
+        gearman_job: inventory
     gearman-worker:
       hosts:
         inventory154:
