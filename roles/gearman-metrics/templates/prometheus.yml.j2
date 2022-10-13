@@ -47,12 +47,12 @@ scrape_configs:
     static_configs:
       - targets:
 {% for server in groups['gearman-server'] %}
-	- '{{ server }}:9418'
+        - '{{ server }}:9418'
 {% endfor %}
 
   - job_name: gearman-etcd
     static_configs:
       - targets:
 {% for server in groups['gearman-etcd'] %}
-	- '{{ server }}:2379'
+        - '{{ server }}:2379'
 {% endfor %}

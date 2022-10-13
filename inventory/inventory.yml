@@ -9,6 +9,7 @@ all:
     ansible158:
     proxy160:
     metrics161:
+    grafana170:
   children:
     gearman-server:
       hosts:
@@ -36,3 +37,9 @@ all:
     gearman-metrics:
       hosts:
         metrics161:
+    grafana-server:
+      hosts:
+        grafana170:
+    grafana-config:
+      hosts:
+        grafana170:

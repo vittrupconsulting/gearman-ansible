@@ -54,18 +54,12 @@ Vagrant.configure("2") do |config|
     end
   end
 
-  config.vm.define "grafana170", autostart: false do |client|
-    client.vm.box = "gearman.box"
-    client.vm.hostname = "grafana170"
-    client.vm.network "private_network", ip: "192.168.0.170", virtualbox__intnet: true
-    client.vm.network "forwarded_port", guest: "22", host: "49170"
-    client.vm.network "forwarded_port", guest: "3000", host: "3000"
-    client.vm.provision "shell", inline: <<-SHELL
-      sudo cp /etc/ansible/roles/gearman-common/files/gearman.py /usr/local/sbin/gearman.py
-      sudo chmod 755 /usr/local/sbin/gearman.py
-      echo '["192.168.0.160"]' | tee /etc/ansible/facts.d/servers.fact
-      /usr/local/sbin/gearman.py `hostname -I | awk '{ print $NF }'`
-    SHELL
+  (170..170).each do |i|
+    config.vm.define "grafana#{i}", autostart: true do |grafana|
+      grafana.vm.hostname = "grafana#{i}"
+      grafana.vm.network "private_network", ip: "192.168.0.#{i}", virtualbox__intnet: true
+      grafana.vm.network "forwarded_port", guest: "3000", host: "3000"
+    end
   end
 
   config.vm.define "client171", autostart: false do |client|
@@ -125,6 +119,8 @@ Vagrant.configure("2") do |config|
       ansible-playbook -i "/etc/ansible/inventory/inventory.yml" -e "role=gearman-worker" -l "gearman-worker" /etc/ansible/generic.yml
       ansible-playbook -i "/etc/ansible/inventory/inventory.yml" -e "role=gearman-proxy" -l "gearman-proxy" /etc/ansible/generic.yml
       ansible-playbook -i "/etc/ansible/inventory/inventory.yml" -e "role=gearman-metrics" -l "gearman-metrics" /etc/ansible/generic.yml
+      ansible-playbook -i "/etc/ansible/inventory/inventory.yml" -e "role=grafana-server" -l "grafana-server" /etc/ansible/generic.yml
+      ansible-playbook -i "/etc/ansible/inventory/inventory.yml" -e "role=grafana-config" -l "grafana-config" /etc/ansible/generic.yml
     SHELL
   end
 
