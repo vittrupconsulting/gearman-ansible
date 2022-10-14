@@ -62,9 +62,8 @@ Vagrant.configure("2") do |config|
     end
   end
 
-  config.vm.define "ansible200", autostart: true do |server|
-    server.vm.box = "ansible.box"
-    server.vm.hostname = "ansible200"
+  config.vm.define "jumphost", autostart: true do |server|
+    server.vm.hostname = "jumphost"
     server.vm.network "private_network", ip: "192.168.0.200", virtualbox__intnet: true
     server.vm.network "forwarded_port", guest: "22", host: "49152"
     server.vm.synced_folder "roles", "/etc/ansible/roles"
@@ -73,15 +72,18 @@ Vagrant.configure("2") do |config|
     server.vm.provision "file", source: "ansible.cfg", destination: "/etc/ansible/ansible.cfg"
     server.vm.provision "file", source: "generic.yml", destination: "/etc/ansible/generic.yml"
     server.vm.provision "shell", inline: <<-SHELL
-      ansible-playbook -i "/etc/ansible/inventory/inventory.yml" -e "role=gearman-common" /etc/ansible/generic.yml
-#       ansible-playbook -i "/etc/ansible/inventory/inventory.yml" -e "role=gearman-server" -l "gearman-server" /etc/ansible/generic.yml
-#       ansible-playbook -i "/etc/ansible/inventory/inventory.yml" -e "role=gearman-etcd" -l "gearman-etcd" /etc/ansible/generic.yml
-#       ansible-playbook -i "/etc/ansible/inventory/inventory.yml" -e "role=gearman-ansible" -l "gearman-ansible" /etc/ansible/generic.yml
-#       ansible-playbook -i "/etc/ansible/inventory/inventory.yml" -e "role=gearman-worker" -l "gearman-worker" /etc/ansible/generic.yml
-#       ansible-playbook -i "/etc/ansible/inventory/inventory.yml" -e "role=gearman-proxy" -l "gearman-proxy" /etc/ansible/generic.yml
-#       ansible-playbook -i "/etc/ansible/inventory/inventory.yml" -e "role=gearman-metrics" -l "gearman-metrics" /etc/ansible/generic.yml
-#       ansible-playbook -i "/etc/ansible/inventory/inventory.yml" -e "role=grafana-server" -l "grafana-server" /etc/ansible/generic.yml
-#       ansible-playbook -i "/etc/ansible/inventory/inventory.yml" -e "role=grafana-config" -l "grafana-config" /etc/ansible/generic.yml
+      pip install ansible
+      echo '#!/bin/bash' | tee /home/ansible/init.sh
+      echo 'ansible-playbook -i "/etc/ansible/inventory/inventory.yml" -e "role=gearman-common" /etc/ansible/generic.yml' | tee -a /home/ansible/init.sh
+      echo 'ansible-playbook -i "/etc/ansible/inventory/inventory.yml" -e "role=gearman-server" -l "gearman-server" /etc/ansible/generic.yml' | tee -a /home/ansible/init.sh
+      echo 'ansible-playbook -i "/etc/ansible/inventory/inventory.yml" -e "role=gearman-etcd" -l "gearman-etcd" /etc/ansible/generic.yml' | tee -a /home/ansible/init.sh
+      echo 'ansible-playbook -i "/etc/ansible/inventory/inventory.yml" -e "role=gearman-ansible" -l "gearman-ansible" /etc/ansible/generic.yml' | tee -a /home/ansible/init.sh
+      echo 'ansible-playbook -i "/etc/ansible/inventory/inventory.yml" -e "role=gearman-worker" -l "gearman-worker" /etc/ansible/generic.yml' | tee -a /home/ansible/init.sh
+      echo 'ansible-playbook -i "/etc/ansible/inventory/inventory.yml" -e "role=gearman-proxy" -l "gearman-proxy" /etc/ansible/generic.yml' | tee -a /home/ansible/init.sh
+      echo 'ansible-playbook -i "/etc/ansible/inventory/inventory.yml" -e "role=gearman-metrics" -l "gearman-metrics" /etc/ansible/generic.yml' | tee -a /home/ansible/init.sh
+      echo 'ansible-playbook -i "/etc/ansible/inventory/inventory.yml" -e "role=grafana-server" -l "grafana-server" /etc/ansible/generic.yml' | tee -a /home/ansible/init.sh
+      echo 'ansible-playbook -i "/etc/ansible/inventory/inventory.yml" -e "role=grafana-config" -l "grafana-config" /etc/ansible/generic.yml' | tee -a /home/ansible/init.sh
+      chmod +x /home/ansible/init.sh
     SHELL
   end
 

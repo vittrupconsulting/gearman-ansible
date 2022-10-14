@@ -12,8 +12,10 @@
 - ansible.builtin.apt:
     name: "rsync"
 
-- ansible.builtin.apt:
+- ansible.builtin.pip:
     name: "ansible"
 
+- ansible.builtin.pip:
+    name: "etcd"
 
 

@@ -7,7 +7,7 @@ all:
     inventory156:
     ansible157:
     ansible158:
-    proxy160:
+#    proxy160:
     metrics161:
     grafana170:
   children:
@@ -35,9 +35,9 @@ all:
         inventory156:
         ansible157:
         ansible158:
-    gearman-proxy:
-      hosts:
-        proxy160:
+#    gearman-proxy:
+#      hosts:
+#        proxy160:
     gearman-metrics:
       hosts:
         metrics161:

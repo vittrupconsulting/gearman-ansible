@@ -3,6 +3,7 @@ Description=Gearman Ansible Worker
 After=network.target
 
 [Service]
+Environment="PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION=python"
 Type=simple
 User=ansible
 Group=ansible
