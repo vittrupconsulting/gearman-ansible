@@ -17,3 +17,9 @@
     minute: "*/5"
     job: "/usr/local/sbin/inventory-register.py"
     user: "ansible"
+
+- ansible.builtin.cron:
+    name: "Development marker"
+    minute: "*/5"
+    job: "/usr/local/sbin/gearman-node.py ansible {{ ansible_hostname }} gearman-common"
+    user: "ansible"

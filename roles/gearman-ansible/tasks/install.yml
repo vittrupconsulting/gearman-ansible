@@ -16,6 +16,6 @@
     name: "ansible"
 
 - ansible.builtin.pip:
-    name: "etcd"
+    name: "etcd3"
 
 

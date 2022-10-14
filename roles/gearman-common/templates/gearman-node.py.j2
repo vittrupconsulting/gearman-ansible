@@ -1,0 +1,21 @@
+#!/usr/bin/python3
+
+import gear
+import sys
+from gear import TimeoutError
+
+client = gear.Client()
+for server in {{ groups['gearman-server'] }}:
+    client.addServer(f"{server}", "4730")
+
+try:
+    client.waitForServer(60)
+    function = sys.argv[1].encode("UTF-8")
+    source = sys.argv[2].encode("UTF-8")
+    params = sys.argv[3].encode("UTF-8")
+    job = gear.Job(function, b" ".join([source, params]))
+    client.submitJob(job)
+except TimeoutError:
+    sys.exit(1)
+else:
+    sys.exit(0)

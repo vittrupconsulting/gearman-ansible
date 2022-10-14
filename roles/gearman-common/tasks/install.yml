@@ -71,6 +71,11 @@
     dest: "/usr/local/sbin/inventory-register.py"
     mode: "0755"
 
+- ansible.builtin.template:
+    src: "gearman-node.py.j2"
+    dest: "/usr/local/sbin/gearman-node.py"
+    mode: "0755"
+
 - ansible.builtin.find:
     paths: "/etc/ansible/roles"
     file_type: "directory"
