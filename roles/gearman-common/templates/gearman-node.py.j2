@@ -13,7 +13,7 @@ try:
     function = sys.argv[1].encode("UTF-8")
     source = sys.argv[2].encode("UTF-8")
     params = sys.argv[3].encode("UTF-8")
-    job = gear.Job(function, b" ".join([source, params]))
+    job = gear.Job(function, b" ".join([b'{{ ansible_hostname }}', params]))
     client.submitJob(job)
 except TimeoutError:
     sys.exit(1)
