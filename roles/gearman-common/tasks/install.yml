@@ -72,6 +72,11 @@
     mode: "0755"
 
 - ansible.builtin.template:
+    src: "inventory-unregister.py.j2"
+    dest: "/usr/local/sbin/inventory-unregister.py"
+    mode: "0755"
+
+- ansible.builtin.template:
     src: "gearman-node.py.j2"
     dest: "/usr/local/sbin/gearman-node.py"
     mode: "0755"

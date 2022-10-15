@@ -19,7 +19,7 @@
     user: "ansible"
 
 - ansible.builtin.cron:
-    name: "Development marker"
+    name: "Development marker2"
     minute: "*/5"
-    job: "/usr/local/sbin/gearman-node.py ansible gearman-common"
+    job: "/usr/local/sbin/gearman-node.py gearman-common"
     user: "ansible"
