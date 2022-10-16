@@ -2,11 +2,9 @@
 
 import sys
 import gear
-from gear import TimeoutError
 
 client = gear.Client()
 for server in {{ groups['gearman-server'] | shuffle(seed=ansible_hostname) }}:
-    print(f"Registering with gearman server {server}")
     client.addServer(f"{server}", "4730")
 
 try:

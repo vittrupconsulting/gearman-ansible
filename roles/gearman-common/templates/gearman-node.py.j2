@@ -1,8 +1,7 @@
 #!/usr/bin/python3
 
-import gear
 import sys
-from gear import TimeoutError
+import gear
 
 client = gear.Client()
 for server in {{ groups['gearman-server'] | shuffle(seed=ansible_hostname) }}:
