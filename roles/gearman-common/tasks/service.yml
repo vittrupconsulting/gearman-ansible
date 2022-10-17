@@ -20,6 +20,6 @@
 
 - ansible.builtin.cron:
     name: "Development marker2"
-    minute: "*/5"
+    minute: "*/7"
     job: "/usr/local/sbin/gearman-node.py"
     user: "ansible"
