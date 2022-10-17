@@ -24,8 +24,11 @@ all:
     gearman-etcd:
       hosts:
         inventory154:
+          address: 192.168.0.154
         inventory155:
+          address: 192.168.0.155
         inventory156:
+          address: 192.168.0.156
       vars:
         gearman_job: inventory
     gearman-worker:
