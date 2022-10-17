@@ -1,7 +1,6 @@
 ---
 
 etcd:
-  name: inventory154
   address: 192.168.0.154
   token: etcd_cluster_1
   state: new

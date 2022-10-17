@@ -8,7 +8,7 @@ User=ansible
 Group=ansible
 WorkingDirectory=/home/ansible
 ExecStart=/usr/bin/etcd \
-  --name {{ etcd.name }} \
+  --name {{ ansible_hostname }} \
   --initial-advertise-peer-urls http://{{ etcd.address }}:2380 \
   --listen-peer-urls http://{{ etcd.address }}:2380 \
   --listen-client-urls http://{{ etcd.address }}:2379,http://127.0.0.1:2379 \
