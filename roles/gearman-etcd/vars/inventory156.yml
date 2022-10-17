@@ -1,7 +1,0 @@
----
-
-etcd:
-  address: 192.168.0.156
-  token: etcd_cluster_1
-  state: new
-  cluster: inventory154=http://192.168.0.154:2380,inventory155=http://192.168.0.155:2380,inventory156=http://192.168.0.156:2380
