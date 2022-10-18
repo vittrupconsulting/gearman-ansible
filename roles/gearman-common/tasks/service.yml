@@ -13,13 +13,13 @@
     user: "ansible"
 
 - ansible.builtin.cron:
-    name: "Development marker"
+    name: "Inventory update"
     minute: "*/5"
     job: "/usr/local/sbin/inventory-register.py"
     user: "ansible"
 
 - ansible.builtin.cron:
-    name: "Development marker2"
-    minute: "*/7"
+    name: "Ansible roles"
+    minute: "*/5"
     job: "/usr/local/sbin/gearman-node.py"
     user: "ansible"
