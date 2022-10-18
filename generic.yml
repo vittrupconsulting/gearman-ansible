@@ -12,7 +12,7 @@
       include_role:
         name: "gearman-common"
 
-    - name: "Include '{{ item }}' role"
+    - name: "Include misc roles"
       include_role:
         name: "{{ item }}"
-      with_items: "{{ ansible_local['roles'] }}"
+      with_items: "{{ ansible_local['roles'] | default([]) }}"
