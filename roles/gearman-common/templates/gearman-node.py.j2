@@ -9,7 +9,7 @@ for server in {{ groups['gearman-server'] | shuffle(seed=ansible_hostname) }}:
 
 try:
     client.waitForServer(60)
-    job = gear.Job("ansible", b"--source={{ ansible_hostname }} --role=gearman-common")
+    job = gear.Job("ansible", b"--source={{ ansible_hostname }}")
     client.submitJob(job)
 except TimeoutError:
     sys.exit(1)

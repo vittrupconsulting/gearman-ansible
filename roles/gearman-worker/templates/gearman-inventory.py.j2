@@ -18,9 +18,6 @@ while True:
         key, value = details.split("=")
         arguments[key] = value
     journal.send(f"{arguments}")
-    if arguments["action"] == "register":
-        client.put(arguments["source"], arguments["roles"])
-    # if arguments["action"] == "unregister":
-    #     client.delete(arguments["source"])
+    client.put(arguments["source"], arguments["roles"])
     job.sendWorkComplete()
 

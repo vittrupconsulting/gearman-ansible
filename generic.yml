@@ -4,13 +4,25 @@
   become: true
   tasks:
 
-    - debug:
-        msg: "{{ ansible_hostname }} ==> {{ ansible_distribution }}/{{ ansible_distribution_major_version }}"
+    - ansible.builtin.copy:
+        content: "{{ ansible_local['roles'] | default([]) | to_nice_json }}"
+        dest: "/etc/ansible/facts.d/roles.fact"
 
-    - name: "Include {{ role }} role"
+- hosts: all
+  remote_user: ansible
+  become: true
+  tasks:
+
+    - name: "Include 'gearman-common' role"
+      include_role:
+        name: "gearman-common"
+
+- hosts: all
+  remote_user: ansible
+  become: true
+  tasks:
+
+    - name: "Include '{{ role }}' role"
       include_role:
         name: "{{ role }}"
-
-    - ansible.builtin.copy:
-        content: "{{ ansible_local['roles'] | default([]) | union([role]) | to_nice_json }}"
-        dest: "/etc/ansible/facts.d/roles.fact"
+      with_items: "{{ ansible_local['roles'] }}"
