@@ -2,97 +2,137 @@
 # vi: set ft=ruby :
 
 Vagrant.configure("2") do |config|
-  config.vm.box = "gearman.box"
+  config.vm.box = "generic/debian11"
+
+  config.vm.provider "vmware_desktop" do |v|
+    v.vmx["memsize"] = "1024"
+    v.vmx["numvcpus"] = "1"
+  end
 
   config.vm.provision "shell", inline: <<-SHELL
-    echo "192.168.0.152 server152" | sudo tee -a /etc/hosts
-    echo "192.168.0.153 server153" | sudo tee -a /etc/hosts
-    echo "192.168.0.154 inventory154" | sudo tee -a /etc/hosts
-    echo "192.168.0.155 inventory155" | sudo tee -a /etc/hosts
-    echo "192.168.0.156 inventory156" | sudo tee -a /etc/hosts
-    echo "192.168.0.157 ansible157" | sudo tee -a /etc/hosts
-    echo "192.168.0.158 ansible158" | sudo tee -a /etc/hosts
-    echo "192.168.0.160 proxy160" | sudo tee -a /etc/hosts
-    echo "192.168.0.161 metrics161" | sudo tee -a /etc/hosts
-    echo "192.168.0.170 grafana170" | sudo tee -a /etc/hosts
-    echo "192.168.0.200 ansible200" | sudo tee -a /etc/hosts
+    apt-get update
+    sudo apt-get install python3-pip nmap curl -y
+    sudo pip install gear
+    sudo useradd ansible --system --create-home --shell /bin/bash
+    echo 'ansible ALL=(ALL) NOPASSWD:ALL' | sudo tee /etc/sudoers.d/ansible
+    sudo su root --login --command "/usr/bin/mkdir /etc/ansible"
+    sudo su root --login --command "/usr/bin/mkdir /etc/ansible/facts.d"
+    sudo su root --login --command "/usr/bin/chown -R vagrant:vagrant /etc/ansible"
+    sudo su ansible --login --command "/usr/bin/mkdir /home/ansible/.ssh"
+    sudo su ansible --login --command "/usr/bin/echo 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDO/b4LqHoJPSWLovBmo8jaj9RWNmtdSyoUJVd/0lnGQpTOgKhM6GA4K+sNIKSjZSRqVmp0qvYxNhMSGnnDzagsZY9ydfF0R5/2SAFI7ezn+z75LbyAx0vpk7e4KIxPatx7/YAABQMOa9dT/qPhSXJ9/YO4QYPFUA3AyMQLJwb5Am6jlqxYBpRe+zt8HUlat2HD628YBNKWyqSsL13kKt2QzaAHT75ZqPEHlQMA3Q/kjmAW4McqtQ6BhVwhGaneslbsj8A/fQGzxRQtW81MC7K83x7RSwV40NXcJeUEYcJyhD029dg74wA875Vv9S7Y4MF+OKO2w4bRm+1uyTIXSAhIsVWbB3uyoFz2EjfMEsSK6uqMGbbGyC7pTXz1qkX0tPWkkLvUTbjIs2FDCE+eWOI/neQ32jdMBsZujzJ8i4VdQeGUUfJATuRB6hjm1XEVx0wzRfNAGba2OxCjj9dx5URgVje55+POxDPPfpCaAL98/xCZmuP/SgYk44YIEqFXtXc=' | tee /home/ansible/.ssh/authorized_keys"
+    sudo apt-get clean
+    history -c
   SHELL
 
-  (152..153).each do |i|
-    config.vm.define "server#{i}", autostart: true do |server|
-      server.vm.hostname = "server#{i}"
-      server.vm.network "private_network", ip: "192.168.0.#{i}", virtualbox__intnet: true
-    end
-  end
+  config.vm.provision "shell", inline: <<-SHELL
+    echo "192.168.147.52 server52" | sudo tee -a /etc/hosts
+    echo "192.168.147.53 server53" | sudo tee -a /etc/hosts
+    echo "192.168.147.54 inventory54" | sudo tee -a /etc/hosts
+    echo "192.168.147.55 inventory55" | sudo tee -a /etc/hosts
+    echo "192.168.147.56 inventory56" | sudo tee -a /etc/hosts
+    echo "192.168.147.57 ansible57" | sudo tee -a /etc/hosts
+    echo "192.168.147.58 ansible58" | sudo tee -a /etc/hosts
+    echo "192.168.147.60 proxy60" | sudo tee -a /etc/hosts
+    echo "192.168.147.61 metrics61" | sudo tee -a /etc/hosts
+    echo "192.168.147.70 grafana70" | sudo tee -a /etc/hosts
+    echo "192.168.147.80 ansible80" | sudo tee -a /etc/hosts
+  SHELL
 
-  (154..156).each do |i|
-    config.vm.define "inventory#{i}", autostart: true do |inventory|
-      inventory.vm.hostname = "inventory#{i}"
-      inventory.vm.network "private_network", ip: "192.168.0.#{i}", virtualbox__intnet: true
+    config.vm.define "server52", autostart: true do |server|
+      server.vm.hostname = "server52"
+      server.vm.base_address = "192.168.147.52"
+      server.vm.base_mac = "00:50:56:33:C5:20"
     end
-  end
 
-  (157..158).each do |i|
-    config.vm.define "ansible#{i}", autostart: true do |ansible|
-      ansible.vm.hostname = "ansible#{i}"
-      ansible.vm.network "private_network", ip: "192.168.0.#{i}", virtualbox__intnet: true
+    config.vm.define "server53", autostart: true do |server|
+      server.vm.hostname = "server53"
+      server.vm.base_address = "192.168.147.53"
+      server.vm.base_mac = "00:50:56:26:59:69"
     end
-  end
 
-  (160..160).each do |i|
-    config.vm.define "proxy#{i}", autostart: true do |proxy|
-      proxy.vm.hostname = "proxy#{i}"
-      proxy.vm.network "private_network", ip: "192.168.0.#{i}", virtualbox__intnet: true
+    config.vm.define "inventory54", autostart: true do |inventory|
+      inventory.vm.hostname = "inventory54"
+      inventory.vm.base_address = "192.168.147.54"
+      inventory.vm.base_mac = "00:50:56:2D:BF:4B"
+    end
+
+    config.vm.define "inventory55", autostart: true do |inventory|
+      inventory.vm.hostname = "inventory55"
+      inventory.vm.base_address = "192.168.147.55"
+      inventory.vm.base_mac = "00:50:56:25:6B:47"
+    end
+
+    config.vm.define "inventory56", autostart: true do |inventory|
+      inventory.vm.hostname = "inventory56"
+      inventory.vm.base_address = "192.168.147.56"
+      inventory.vm.base_mac = "00:50:56:31:F2:39"
+    end
+
+    config.vm.define "ansible57", autostart: true do |ansible|
+      ansible.vm.hostname = "ansible57"
+      ansible.vm.base_address = "192.168.147.57"
+      ansible.vm.base_mac = "00:50:56:22:A6:4D"
+    end
+
+    config.vm.define "ansible58", autostart: true do |ansible|
+      ansible.vm.hostname = "ansible58"
+      ansible.vm.base_address = "192.168.147.58"
+      ansible.vm.base_mac = "00:50:56:2D:FF:49"
+    end
+
+    config.vm.define "proxy60", autostart: true do |proxy|
+      proxy.vm.hostname = "proxy60"
+      proxy.vm.base_address = "192.168.147.60"
       proxy.vm.network "forwarded_port", guest: "80", host: "80"
+      proxy.vm.base_mac = "00:50:56:3B:2A:37"
     end
-  end
 
-  (161..161).each do |i|
-  config.vm.define "metrics#{i}", autostart: true do |metrics|
-      metrics.vm.hostname = "metrics#{i}"
-      metrics.vm.network "private_network", ip: "192.168.0.#{i}", virtualbox__intnet: true
+    config.vm.define "metrics61", autostart: true do |metrics|
+      metrics.vm.hostname = "metrics61"
+      metrics.vm.base_address = "192.168.147.61"
+      metrics.vm.base_mac = "00:50:56:33:E6:D0"
     end
-  end
 
-  (170..170).each do |i|
-    config.vm.define "grafana#{i}", autostart: true do |grafana|
-      grafana.vm.hostname = "grafana#{i}"
-      grafana.vm.network "private_network", ip: "192.168.0.#{i}", virtualbox__intnet: true
+    config.vm.define "grafana70", autostart: true do |grafana|
+      grafana.vm.hostname = "grafana70"
+      grafana.vm.base_address = "192.168.147.70"
       grafana.vm.network "forwarded_port", guest: "3000", host: "3000"
+      grafana.vm.base_mac = "00:50:56:39:02:0C"
     end
-  end
 
-  config.vm.define "jumphost", autostart: true do |server|
-    server.vm.hostname = "jumphost"
-    server.vm.network "private_network", ip: "192.168.0.200", virtualbox__intnet: true
-    server.vm.network "forwarded_port", guest: "22", host: "49152"
-    server.vm.synced_folder "roles", "/etc/ansible/roles"
-    server.vm.provision "bootstrap.yml", "/etc/ansible/bootstrap.yml"
-    server.vm.provision "file", source: "ansible_rsa", destination: "/etc/ansible/ansible_rsa"
-    server.vm.provision "file", source: "ansible.cfg", destination: "/etc/ansible/ansible.cfg"
-    server.vm.provision "file", source: "generic.yml", destination: "/etc/ansible/generic.yml"
-    server.vm.provision "shell", inline: <<-SHELL
-      pip install ansible
-      echo '#!/bin/bash' | tee /home/ansible/init.sh
-      echo 'ansible-playbook -i "/etc/ansible/bootstrap.yml" -e "role=gearman-common" /etc/ansible/generic.yml' | tee -a /home/ansible/init.sh
-      echo 'ansible-playbook -i "/etc/ansible/bootstrap.yml" -e "role=gearman-server" -l "gearman-server" /etc/ansible/generic.yml' | tee -a /home/ansible/init.sh
-      echo 'ansible-playbook -i "/etc/ansible/bootstrap.yml" -e "role=gearman-etcd" -l "gearman-etcd" /etc/ansible/generic.yml' | tee -a /home/ansible/init.sh
-      echo 'ansible-playbook -i "/etc/ansible/bootstrap.yml" -e "role=gearman-ansible" -l "gearman-ansible" /etc/ansible/generic.yml' | tee -a /home/ansible/init.sh
-      echo 'ansible-playbook -i "/etc/ansible/bootstrap.yml" -e "role=gearman-worker" -l "gearman-worker" /etc/ansible/generic.yml' | tee -a /home/ansible/init.sh
-      echo 'ansible-playbook -i "/etc/ansible/bootstrap.yml" -e "role=gearman-proxy" -l "gearman-proxy" /etc/ansible/generic.yml' | tee -a /home/ansible/init.sh
-      echo 'ansible-playbook -i "/etc/ansible/bootstrap.yml" -e "role=gearman-metrics" -l "gearman-metrics" /etc/ansible/generic.yml' | tee -a /home/ansible/init.sh
-      echo 'ansible-playbook -i "/etc/ansible/bootstrap.yml" -e "role=grafana-server" -l "grafana-server" /etc/ansible/generic.yml' | tee -a /home/ansible/init.sh
-      echo 'ansible-playbook -i "/etc/ansible/bootstrap.yml" -e "role=grafana-config" -l "grafana-config" /etc/ansible/generic.yml' | tee -a /home/ansible/init.sh
-      chmod +x /home/ansible/init.sh
-    SHELL
-  end
-
-  config.vm.define "galaxy", autostart: false do |init|
-    init.vm.provision "shell", inline: <<-SHELL
-      mkdir -p /vagrant/roles
-      cd /vagrant/roles
-      ansible-galaxy init gearman-metrics
-    SHELL
-  end
+    config.vm.define "jumphost", autostart: true do |server|
+      server.vm.hostname = "jumphost"
+      server.vm.base_address = "192.168.147.80"
+      server.vm.base_mac = "00:50:56:2B:E7:26"
+      server.vm.network "forwarded_port", guest: "22", host: "49152"
+      server.vm.synced_folder ".", "/vagrant"
+      server.vm.provision "shell", inline: <<-SHELL
+        cp /vagrant/ansible_rsa /etc/ansible/ansible_rsa
+        cp /vagrant/ansible.cfg /etc/ansible/ansible.cfg
+        cp /vagrant/generic.yml /etc/ansible/generic.yml
+        cp /vagrant/bootstrap.yml /etc/ansible/bootstrap.yml
+        sudo cp -r /vagrant/roles /etc/ansible/roles
+        pip install ansible
+        echo '#!/bin/bash' | tee /home/ansible/init.sh
+        echo 'ansible-playbook -i "/etc/ansible/bootstrap.yml" -e "role=gearman-common" /etc/ansible/generic.yml' | tee -a /home/ansible/init.sh
+        echo 'ansible-playbook -i "/etc/ansible/bootstrap.yml" -e "role=gearman-server" -l "gearman-server" /etc/ansible/generic.yml' | tee -a /home/ansible/init.sh
+        echo 'ansible-playbook -i "/etc/ansible/bootstrap.yml" -e "role=gearman-etcd" -l "gearman-etcd" /etc/ansible/generic.yml' | tee -a /home/ansible/init.sh
+        echo 'ansible-playbook -i "/etc/ansible/bootstrap.yml" -e "role=gearman-ansible" -l "gearman-ansible" /etc/ansible/generic.yml' | tee -a /home/ansible/init.sh
+        echo 'ansible-playbook -i "/etc/ansible/bootstrap.yml" -e "role=gearman-worker" -l "gearman-worker" /etc/ansible/generic.yml' | tee -a /home/ansible/init.sh
+        echo 'ansible-playbook -i "/etc/ansible/bootstrap.yml" -e "role=gearman-proxy" -l "gearman-proxy" /etc/ansible/generic.yml' | tee -a /home/ansible/init.sh
+        echo 'ansible-playbook -i "/etc/ansible/bootstrap.yml" -e "role=gearman-metrics" -l "gearman-metrics" /etc/ansible/generic.yml' | tee -a /home/ansible/init.sh
+        echo 'ansible-playbook -i "/etc/ansible/bootstrap.yml" -e "role=grafana-server" -l "grafana-server" /etc/ansible/generic.yml' | tee -a /home/ansible/init.sh
+        echo 'ansible-playbook -i "/etc/ansible/bootstrap.yml" -e "role=grafana-config" -l "grafana-config" /etc/ansible/generic.yml' | tee -a /home/ansible/init.sh
+        chmod +x /home/ansible/init.sh
+      SHELL
+    end
+#
+#   config.vm.define "galaxy", autostart: false do |init|
+#     init.vm.provision "shell", inline: <<-SHELL
+#       mkdir -p /vagrant/roles
+#       cd /vagrant/roles
+#       ansible-galaxy init gearman-metrics
+#     SHELL
+#   end
 
 end
