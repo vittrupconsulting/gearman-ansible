@@ -8,19 +8,9 @@
         content: "{{ ansible_local['roles'] | default([]) | to_nice_json }}"
         dest: "/etc/ansible/facts.d/roles.fact"
 
-- hosts: all
-  remote_user: ansible
-  become: true
-  tasks:
-
     - name: "Include 'gearman-common' role"
       include_role:
         name: "gearman-common"
-
-- hosts: all
-  remote_user: ansible
-  become: true
-  tasks:
 
     - name: "Include '{{ item }}' role"
       include_role:
