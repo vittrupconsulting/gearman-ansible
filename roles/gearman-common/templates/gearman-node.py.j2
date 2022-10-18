@@ -5,7 +5,7 @@ import gear
 
 client = gear.Client()
 for server in {{ groups['gearman-server'] | shuffle(seed=ansible_hostname) }}:
-    client.addServer(f"{server}", "4730")
+    client.addServer(f"{server}", 4730)
 
 try:
     client.waitForServer(60)
