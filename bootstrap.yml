@@ -1,25 +1,15 @@
 all:
   hosts:
     server52:
-      address: 192.168.147.52
     server53:
-      address: 192.168.147.53
     inventory54:
-      address: 192.168.147.54
     inventory55:
-      address: 192.168.147.55
     inventory56:
-      address: 192.168.147.56
     ansible57:
-      address: 192.168.147.57
     ansible58:
-      address: 192.168.147.58
     proxy60:
-      address: 192.168.147.60
     metrics61:
-      address: 192.168.147.61
     grafana70:
-      address: 192.168.147.70
   children:
     gearman-server:
       hosts:
