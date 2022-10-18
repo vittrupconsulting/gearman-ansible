@@ -18,6 +18,5 @@ while True:
     journal.send(f"{arguments}")
 
     source = arguments["source"]
-    role = arguments["role"]
     subprocess.run(f"ansible-playbook --inventory '/etc/ansible/inventory.py' --limit '{source}' /etc/ansible/generic.yml", shell=True)
     job.sendWorkComplete()
