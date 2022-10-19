@@ -5,9 +5,7 @@ import json
 
 etcd = etcd3.client(host='192.168.147.54', port=2379)
 
-inventory = {}
-inventory["_meta"] = {}
-#inventory["_meta"]["hostvars"] = {}
+inventory = {"_meta": {}}
 
 for (_, m) in etcd.get_all():
     for role in etcd.get(m.key)[0].decode().split(','):
