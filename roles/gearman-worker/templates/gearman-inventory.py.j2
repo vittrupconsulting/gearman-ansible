@@ -14,7 +14,7 @@ while True:
     job = worker.getJob()
     function = job.name
     arguments = {}
-    for details in job.arguments.decode().replace("--","").split():
+    for details in job.arguments.decode().split():
         key, value = details.split("=")
         arguments[key] = value
     journal.send(f"{arguments}")

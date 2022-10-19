@@ -9,7 +9,7 @@ for server in {{ groups['gearman-server'] | shuffle(seed=ansible_hostname) }}:
 
 try:
     client.waitForServer(60)
-    job = gear.Job("inventory", b"--source={{ ansible_hostname }} --roles={% for role in ansible_local['roles'] | default([]) %}{{ role }}{% if not loop.last %},{% endif %}{% endfor %}")
+    job = gear.Job("inventory", b"source={{ ansible_hostname }} roles={% for role in ansible_local['roles'] | default([]) %}{{ role }}{% if not loop.last %},{% endif %}{% endfor %}")
     client.submitJob(job)
 except TimeoutError:
     sys.exit(1)
