@@ -14,12 +14,12 @@
 
 - ansible.builtin.cron:
     name: "Inventory update"
-    minute: "*/{{ [5,6,7,8,9,10,11,12] | random(seed=ansible_hostname) }}"
+    minute: "*/5 | random(seed=ansible_hostname) }}"
     job: "/usr/local/sbin/inventory-register.py"
     user: "ansible"
 
 - ansible.builtin.cron:
     name: "Ansible roles"
-    minute: "*/{{ [5,6,7,8,9,10,11,12] | random(seed=ansible_hostname) }}"
+    minute: "*/{{ [6,7,8,9,10,11,12] | random(seed=ansible_hostname) }}"
     job: "/usr/local/sbin/gearman-node.py"
     user: "ansible"
