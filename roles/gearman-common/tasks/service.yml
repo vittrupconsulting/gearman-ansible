@@ -14,7 +14,7 @@
 
 - ansible.builtin.cron:
     name: "Inventory update"
-    minute: "*/5 | random(seed=ansible_hostname) }}"
+    minute: "*/5"
     job: "/usr/local/sbin/inventory-register.py"
     user: "ansible"
 
