@@ -1,15 +1,15 @@
 ---
 
-- ansible.builtin.apt:
+- ansible.builtin.package:
     name: "redis"
 
 - ansible.builtin.pip:
     name: "redis"
 
-- ansible.builtin.apt:
+- ansible.builtin.package:
     name: "git"
 
-- ansible.builtin.apt:
+- ansible.builtin.package:
     name: "rsync"
 
 - ansible.builtin.pip:
