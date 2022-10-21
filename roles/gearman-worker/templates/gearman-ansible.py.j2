@@ -1,8 +1,9 @@
 import gear
+import socket
 import subprocess
 from systemd import journal
 
-worker = gear.Worker("{{ ansible_hostname }}")
+worker = gear.Worker(socket.gethostname())
 for server in {{ groups['gearman-server'] }}:
     journal.send(f"Registering function 'ansible' with gearman server {server}")
     worker.addServer(f"{server}")

@@ -1,8 +1,9 @@
 import gear
+import socket
 from etcd3 import Client
 from systemd import journal
 
-worker = gear.Worker("{{ ansible_hostname }}")
+worker = gear.Worker(socket.gethostname())
 for server in {{ groups['gearman-server'] }}:
     journal.send(f"Registering function 'inventory' with gearman server {server}")
     worker.addServer(f"{server}")
