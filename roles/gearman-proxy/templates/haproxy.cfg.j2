@@ -49,3 +49,14 @@ backend gearman-backend
 {% for server in groups['gearman-server'] %}
 	server {{ server }} {{ server }}:4730 check
 {% endfor %}
+
+frontend inventory-frontend
+	mode tcp
+	bind :2379
+	default_backend inventory-cluster
+
+backend inventory-cluster
+	mode tcp
+{% for server in groups['gearman-etcd'] %}
+	server {{ server }} {{ server }}:2379 check
+{% endfor %}
