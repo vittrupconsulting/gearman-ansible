@@ -1,5 +1,6 @@
 import gear
 import socket
+import json
 from etcd3 import Client
 from systemd import journal
 
@@ -13,12 +14,9 @@ client = Client('127.0.0.1', 2379)
 
 while True:
     job = worker.getJob()
-    function = job.name
-    arguments = {}
-    for details in job.arguments.decode().split():
-        key, value = details.split("=")
-        arguments[key] = value
-    journal.send(f"{arguments}")
-    client.put(arguments["source"], arguments["roles"])
+    payload = json.loads(job.arguments.decode())
+    journal.send(json.dumps(payload))
+    source = payload['source']
+    roles = payload['roles']
+    client.put(f"{source}", f"{roles}")
     job.sendWorkComplete()
-

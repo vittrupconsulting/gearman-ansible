@@ -1,6 +1,7 @@
 import gear
 import socket
 import subprocess
+import json
 from systemd import journal
 
 worker = gear.Worker(socket.gethostname())
@@ -11,12 +12,8 @@ worker.registerFunction("ansible")
 
 while True:
     job = worker.getJob()
-    function = job.name
-    arguments = {}
-    for details in job.arguments.decode().split():
-        key, value = details.split("=")
-        arguments[key] = value
-    journal.send(f"{arguments}")
-    source = arguments["source"]
+    payload = json.loads(job.arguments.decode())
+    journal.send(json.dumps(payload))
+    source = payload['source']
     subprocess.run(f"ansible-playbook --inventory '/etc/ansible/inventory.py' --limit '{source}' /etc/ansible/generic.yml", shell=True)
     job.sendWorkComplete()

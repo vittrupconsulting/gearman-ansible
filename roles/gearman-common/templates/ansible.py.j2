@@ -2,6 +2,7 @@
 
 import sys
 import gear
+import json
 import socket
 
 client = gear.Client()
@@ -10,7 +11,9 @@ for server in {{ groups['gearman-server'] | shuffle(seed=ansible_hostname) }}:
 
 try:
     client.waitForServer(60)
-    job = gear.Job("ansible", bytes(f"source={socket.gethostname()}", 'utf-8'))
+    payload = {}
+    payload["source"] = socket.gethostname()
+    job = gear.Job("ansible", bytes(json.dumps(payload), 'utf-8'))
     client.submitJob(job)
 except TimeoutError:
     sys.exit(1)
