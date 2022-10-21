@@ -4,6 +4,11 @@
     path: "/opt/dashboards/"
     state: "directory"
 
+- ansible.builtin.wait_for:
+    host: "{{ groups['grafana-server'] | first }}"
+    port: "3000"
+    sleep: "5"
+
 - ansible.builtin.include_tasks:
     file: gearman.yml
   when: grafana_config_gearman

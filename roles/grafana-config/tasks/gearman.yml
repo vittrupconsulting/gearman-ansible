@@ -1,10 +1,5 @@
 ---
 
-- ansible.builtin.wait_for:
-    host: "{{ groups['grafana-server'] | first }}"
-    port: "3000"
-    sleep: "5"
-
 - community.grafana.grafana_datasource:
     name: "gearman"
     ds_type: "prometheus"
