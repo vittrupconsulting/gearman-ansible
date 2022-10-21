@@ -10,11 +10,6 @@
     name: "python3"
   when: ansible_distribution == "Debian"
 
-- name: "Debian python3-pip installer"
-  ansible.builtin.apt:
-    name: "python3-pip"
-  when: ansible_distribution == "Debian"
-
 - name: "Debian prometheus-node-exporter installer"
   ansible.builtin.apt:
     name: "prometheus-node-exporter"
@@ -30,44 +25,14 @@
     name: "python3"
   when: ansible_distribution == "Ubuntu"
 
-- name: "Ubuntu python3-pip installer"
-  ansible.builtin.apt:
-    name: "python3-pip"
-  when: ansible_distribution == "Ubuntu"
-
 - name: "Ubuntu prometheus-node-exporter installer"
   ansible.builtin.apt:
     name: "prometheus-node-exporter"
   when: ansible_distribution == "Ubuntu"
 
-- name: "AlmaLinux python package installer"
-  ansible.builtin.dnf:
+- name: "Python package installer"
+  ansible.builtin.package:
     name: "python3-pip"
-  when: ansible_distribution == "AlmaLinux"
-
-- name: "Rocky epel package"
-  ansible.builtin.dnf:
-    name: "epel-release"
-  when: ansible_distribution == "Rocky"
-
-- name: "Rocky gearmand package"
-  ansible.builtin.dnf:
-    name: "gearmand"
-  when: ansible_distribution == "Rocky"
-
-- name: "CentOS7 python package installer"
-  ansible.builtin.yum:
-    name: "python3-pip"
-  when:
-    - ansible_distribution == "CentOS"
-    - ansible_distribution_major_version == "7"
-
-- name: "CentOS9 python package installer"
-  ansible.builtin.dnf:
-    name: "python3-pip"
-  when:
-    - ansible_distribution == "CentOS"
-    - ansible_distribution_major_version == "9"
 
 - name: "Asynchronous Event-Driven Gearman Interface"
   ansible.builtin.pip:
