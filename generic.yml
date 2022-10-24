@@ -8,6 +8,10 @@
         content: "{{ ansible_local['roles'] | default([]) | to_nice_json }}"
         dest: "/etc/ansible/facts.d/roles.fact"
 
+    - ansible.builtin.copy:
+        content: "{{ groups['gearman-server'] | to_nice_json }}"
+        dest: "/etc/ansible/facts.d/gearman.fact"
+
     - name: "Include 'gearman-common' role"
       include_role:
         name: "gearman-common"
