@@ -3,7 +3,7 @@
 import etcd3
 import json
 
-etcd = etcd3.client(host='192.168.147.54', port=2379)
+etcd = etcd3.client(host='192.168.147.60', port=2379)
 
 inventory = {"_meta": {}}
 
