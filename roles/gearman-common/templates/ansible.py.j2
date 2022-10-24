@@ -4,9 +4,16 @@ import sys
 import gear
 import json
 import socket
+import random
+
+f = open('/etc/ansible/facts.d/gearman.fact')
+servers = json.load(f)
+f.close()
+
+random.shuffle(servers)
 
 client = gear.Client()
-for server in {{ groups['gearman-server'] | shuffle(seed=ansible_hostname) }}:
+for server in servers:
     client.addServer(f"{server}", 4730)
 
 try:
