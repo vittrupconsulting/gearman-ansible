@@ -41,6 +41,7 @@ Vagrant.configure("2") do |config|
       sudo pip install gear
       echo '["gearman-server"]' | jq . | sudo tee /etc/ansible/facts.d/roles.fact
 	  echo '{"address": "192.168.147.52"}' | jq . | sudo tee /etc/ansible/facts.d/settings.fact
+	  echo '["server52","server53"]' | jq . | sudo tee /etc/ansible/facts.d/gearman.fact
     SHELL
   end
 
@@ -54,6 +55,7 @@ Vagrant.configure("2") do |config|
       sudo pip install gear
       echo '["gearman-server"]' | sudo tee /etc/ansible/facts.d/roles.fact
 	  echo '{"address": "192.168.147.53"}' | jq . | sudo tee /etc/ansible/facts.d/settings.fact
+	  echo '["server52","server53"]' | jq . | sudo tee /etc/ansible/facts.d/gearman.fact
     SHELL
   end
 
@@ -67,6 +69,7 @@ Vagrant.configure("2") do |config|
       sudo pip install gear
       echo '["gearman-etcd","gearman-worker"]' | jq . | sudo tee /etc/ansible/facts.d/roles.fact
 	  echo '{"address": "192.168.147.54"}' | jq . | sudo tee /etc/ansible/facts.d/settings.fact
+	  echo '["server52","server53"]' | jq . | sudo tee /etc/ansible/facts.d/gearman.fact
     SHELL
   end
 
@@ -80,6 +83,7 @@ Vagrant.configure("2") do |config|
       sudo pip install gear
       echo '["gearman-etcd","gearman-worker"]' | jq . | sudo tee /etc/ansible/facts.d/roles.fact
 	  echo '{"address": "192.168.147.55"}' | jq . | sudo tee /etc/ansible/facts.d/settings.fact
+	  echo '["server52","server53"]' | jq . | sudo tee /etc/ansible/facts.d/gearman.fact
     SHELL
   end
 
@@ -93,6 +97,7 @@ Vagrant.configure("2") do |config|
       sudo pip install gear
       echo '["gearman-etcd","gearman-worker"]' | jq . | sudo tee /etc/ansible/facts.d/roles.fact
 	  echo '{"address": "192.168.147.56"}' | jq . | sudo tee /etc/ansible/facts.d/settings.fact
+	  echo '["server52","server53"]' | jq . | sudo tee /etc/ansible/facts.d/gearman.fact
     SHELL
   end
 
@@ -106,6 +111,7 @@ Vagrant.configure("2") do |config|
       sudo pip install gear
       echo '["gearman-ansible","gearman-worker"]' | jq . | sudo tee /etc/ansible/facts.d/roles.fact
 	  echo '{"address": "192.168.147.57"}' | jq . | sudo tee /etc/ansible/facts.d/settings.fact
+	  echo '["server52","server53"]' | jq . | sudo tee /etc/ansible/facts.d/gearman.fact
     SHELL
   end
 
@@ -119,6 +125,7 @@ Vagrant.configure("2") do |config|
       sudo pip install gear
       echo '["gearman-ansible","gearman-worker"]' | jq . | sudo tee /etc/ansible/facts.d/roles.fact
 	  echo '{"address": "192.168.147.58"}' | jq . | sudo tee /etc/ansible/facts.d/settings.fact
+	  echo '["server52","server53"]' | jq . | sudo tee /etc/ansible/facts.d/gearman.fact
     SHELL
   end
 
@@ -133,6 +140,7 @@ Vagrant.configure("2") do |config|
       sudo pip install gear
       echo '["gearman-proxy"]' | jq . | sudo tee /etc/ansible/facts.d/roles.fact
 	  echo '{"address": "192.168.147.60"}' | jq . | sudo tee /etc/ansible/facts.d/settings.fact
+	  echo '["server52","server53"]' | jq . | sudo tee /etc/ansible/facts.d/gearman.fact
     SHELL
   end
 
@@ -146,6 +154,7 @@ Vagrant.configure("2") do |config|
       sudo pip install gear
       echo '["gearman-metrics"]' | jq . | sudo tee /etc/ansible/facts.d/roles.fact
 	  echo '{"address": "192.168.147.61"}' | jq . | sudo tee /etc/ansible/facts.d/settings.fact
+	  echo '["server52","server53"]' | jq . | sudo tee /etc/ansible/facts.d/gearman.fact
     SHELL
   end
 
@@ -160,6 +169,7 @@ Vagrant.configure("2") do |config|
       sudo pip install gear
       echo '["grafana-server","grafana-config"]' | jq . | sudo tee /etc/ansible/facts.d/roles.fact
 	  echo '{"address": "192.168.147.70"}' | jq . | sudo tee /etc/ansible/facts.d/settings.fact
+	  echo '["server52","server53"]' | jq . | sudo tee /etc/ansible/facts.d/gearman.fact
     SHELL
   end
 
