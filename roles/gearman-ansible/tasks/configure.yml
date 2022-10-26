@@ -3,6 +3,7 @@
 - ansible.builtin.git:
     repo: 'https://github.com/vittrupconsulting/gearman-ansible.git'
     dest: "/etc/.ansible"
+    version: "{{ gearman.ansible.branch | default('HEAD') }}"
 
 - ansible.posix.synchronize:
     src: "/etc/.ansible/"

@@ -1,5 +1,2 @@
 ---
-
-gearman:
-  servers:
-    - "127.0.0.1"
+# defaults file for gearman-proxy
