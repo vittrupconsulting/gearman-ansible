@@ -1,0 +1,15 @@
+---
+
+  - ansible.builtin.template:
+      src: "nexus.service.j2"
+      dest: "/etc/systemd/system/nexus.service"
+      owner: "root"
+      group: "root"
+      mode: "0644"
+    notify: "Restart nexus"
+
+  - ansible.builtin.systemd:
+      name: "nexus"
+      enabled: "yes"
+      state: "started"
+      daemon_reload: "yes"

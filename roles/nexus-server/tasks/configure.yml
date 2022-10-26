@@ -1,0 +1,29 @@
+---
+
+  - ansible.builtin.lineinfile:
+      path: "{{ nexus_install_dir}}/nexus-{{ nexus_version }}/bin/nexus.rc"
+      line: "run_as_user={{ nexus_user }}"
+      create: "yes"
+    notify: "Restart nexus"
+
+  - ansible.builtin.file:
+      path: "{{ nexus_install_dir}}/sonatype-work/nexus3/etc"
+      owner: "{{ nexus_user }}"
+      group: "{{ nexus_user }}"
+      state: "directory"
+
+  - ansible.builtin.lineinfile:
+      path: "{{ nexus_install_dir}}/sonatype-work/nexus3/etc/nexus.properties"
+      owner: "{{ nexus_user }}"
+      group: "{{ nexus_user }}"
+      line: "application-port={{ nexus_port }}"
+      create: "yes"
+    notify: "Restart nexus"
+
+  - ansible.builtin.lineinfile:
+      path: "{{ nexus_install_dir}}/sonatype-work/nexus3/etc/nexus.properties"
+      owner: "{{ nexus_user }}"
+      group: "{{ nexus_user }}"
+      line: "application-host={{ nexus_host }}"
+      create: "yes"
+    notify: "Restart nexus"

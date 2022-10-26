@@ -1,2 +1,10 @@
 ---
-# defaults file for nexus-server
+
+nexus_version: "3.42.0-01"
+nexus_package_name: "nexus-{{ nexus_version }}-unix.tar.gz"
+nexus_install_dir: "/opt"
+nexus_user: "nexus"
+nexus_group: "nexus"
+nexus_port: "8081"
+nexus_host: "0.0.0.0"
+java_package: "https://download.bell-sw.com/java/8u352+8/bellsoft-jre8u352+8-linux-amd64.deb"

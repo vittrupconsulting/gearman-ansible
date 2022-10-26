@@ -2,6 +2,11 @@
 - hosts: all
   remote_user: ansible
   become: true
+  module_defaults:
+
+    ansible.builtin.git:
+      version: "{{ gearman.git.branch | default('HEAD') }}"
+
   tasks:
 
     - ansible.builtin.copy:

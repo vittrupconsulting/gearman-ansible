@@ -28,7 +28,7 @@ Vagrant.configure("2") do |config|
     echo "192.168.147.60 proxy60" | sudo tee -a /etc/hosts
     echo "192.168.147.61 metrics61" | sudo tee -a /etc/hosts
     echo "192.168.147.70 grafana70" | sudo tee -a /etc/hosts
-    echo "192.168.147.80 ansible80" | sudo tee -a /etc/hosts
+    echo "192.168.147.80 nexus80" | sudo tee -a /etc/hosts
   SHELL
 
   config.vm.define "server52", autostart: true do |server|
@@ -173,9 +173,24 @@ Vagrant.configure("2") do |config|
     SHELL
   end
 
+  config.vm.define "nexus80", autostart: true do |grafana|
+    grafana.vm.hostname = "nexus80"
+    grafana.vm.base_address = "192.168.147.80"
+    grafana.vm.network "forwarded_port", guest: "8081", host: "8081"
+    grafana.vm.base_mac = "00:50:56:37:8D:8C"
+    grafana.vm.provision "shell", inline: <<-SHELL
+      apt-get update
+      sudo apt-get install python3-pip nmap curl jq -y
+      sudo pip install gear
+      echo '["nexus-server","nexus-config"]' | jq . | sudo tee /etc/ansible/facts.d/roles.fact
+	  echo '{"address": "192.168.147.80"}' | jq . | sudo tee /etc/ansible/facts.d/settings.fact
+	  echo '["server52","server53"]' | jq . | sudo tee /etc/ansible/facts.d/gearman.fact
+    SHELL
+  end
+
   config.vm.define "jumphost", autostart: true do |server|
     server.vm.hostname = "jumphost"
-    server.vm.base_address = "192.168.147.80"
+    server.vm.base_address = "192.168.147.90"
     server.vm.base_mac = "00:50:56:2B:E7:26"
     server.vm.network "forwarded_port", guest: "22", host: "49152"
     server.vm.synced_folder ".", "/vagrant"

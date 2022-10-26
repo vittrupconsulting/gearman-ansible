@@ -10,6 +10,7 @@ all:
     proxy60:
     metrics61:
     grafana70:
+    nexus80:
   children:
     gearman-server:
       hosts:
@@ -43,3 +44,9 @@ all:
     grafana-config:
       hosts:
         grafana70:
+    nexus-server:
+      hosts:
+        nexus80:
+    nexus-config:
+      hosts:
+        nexus80:

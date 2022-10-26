@@ -1,0 +1,28 @@
+---
+
+  - ansible.builtin.apt:
+      deb: "{{ java_package }}"
+
+  - ansible.builtin.group:
+      name: "{{ nexus_group }}"
+      system: yes
+
+  - ansible.builtin.user:
+      name: "{{ nexus_user }}"
+      group: "{{ nexus_group }}"
+      comment: "User account for running Sonatype Nexus"
+      system: yes
+
+  - ansible.builtin.unarchive:
+      src: "https://download.sonatype.com/nexus/3/nexus-{{ nexus_version }}-unix.tar.gz"
+      dest: "{{ nexus_install_dir }}"
+      creates: "/opt/nexus-{{ nexus_version }}"
+      owner: "{{ nexus_group }}"
+      group: "{{ nexus_user }}"
+      remote_src: yes
+
+  - ansible.builtin.file:
+      dest: "{{ nexus_install_dir }}/sonatype-work"
+      owner: "{{ nexus_user }}"
+      state: "directory"
+      recurse: yes
