@@ -10,6 +10,10 @@ f = open('/etc/ansible/facts.d/gearman.fact')
 servers = json.load(f)
 f.close()
 
+r = open('/etc/ansible/facts.d/roles.fact')
+roles = json.load(r)
+r.close()
+
 random.shuffle(servers)
 
 client = gear.Client()
@@ -20,7 +24,7 @@ try:
     client.waitForServer(60)
     payload = {}
     payload["source"] = socket.gethostname()
-    payload["roles"] = "{% for role in ansible_local['roles'] | default([]) | union(group_names) %}{{ role }}{% if not loop.last %},{% endif %}{% endfor %}"
+    payload["roles"] = roles
     job = gear.Job("inventory", bytes(json.dumps(payload), 'utf-8'))
     client.submitJob(job)
 except TimeoutError:
