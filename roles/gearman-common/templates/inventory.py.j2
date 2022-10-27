@@ -20,7 +20,7 @@ try:
     client.waitForServer(60)
     payload = {}
     payload["source"] = socket.gethostname()
-    payload["roles"] = "{% for role in ansible_local['roles'] | default([]) %}{{ role }}{% if not loop.last %},{% endif %}{% endfor %}"
+    payload["roles"] = "{% for role in ansible_local['roles'] | default([]) | union(group_names) %}{{ role }}{% if not loop.last %},{% endif %}{% endfor %}"
     job = gear.Job("inventory", bytes(json.dumps(payload), 'utf-8'))
     client.submitJob(job)
 except TimeoutError:
