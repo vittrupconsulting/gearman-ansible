@@ -39,9 +39,9 @@ Vagrant.configure("2") do |config|
       apt-get update
       sudo apt-get install python3-pip nmap curl jq -y
       sudo pip install gear
-      echo '["gearman-server"]' | jq . | sudo tee /etc/ansible/facts.d/roles.fact
+#      echo '["gearman-server"]' | jq . | sudo tee /etc/ansible/facts.d/roles.fact
 	  echo '{"address": "192.168.147.52"}' | jq . | sudo tee /etc/ansible/facts.d/settings.fact
-	  echo '["server52","server53"]' | jq . | sudo tee /etc/ansible/facts.d/gearman.fact
+#      echo '["server52","server53"]' | jq . | sudo tee /etc/ansible/facts.d/gearman.fact
     SHELL
   end
 
