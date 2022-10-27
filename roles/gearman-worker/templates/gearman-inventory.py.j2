@@ -16,7 +16,5 @@ while True:
     job = worker.getJob()
     payload = json.loads(job.arguments.decode())
     journal.send(json.dumps(payload))
-    source = payload['source']
-    roles = payload['roles']
-    client.put(f"{source}", f"{roles}")
+    client.put(payload['source'], json.dumps(payload['roles']))
     job.sendWorkComplete()
