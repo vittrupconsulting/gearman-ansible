@@ -5,7 +5,7 @@
   tasks:
 
     - ansible.builtin.copy:
-        content: "{{ ansible_local['roles'] | default([]) | union(group_names) | to_nice_json }}"
+        content: "{{ group_names | to_nice_json }}"
         dest: "/etc/ansible/facts.d/roles.fact"
 
     - ansible.builtin.copy:
@@ -19,4 +19,4 @@
     - name: "Include misc roles"
       include_role:
         name: "{{ item }}"
-      with_items: "{{ ansible_local['roles'] | default([]) | union(group_names) }}"
+      with_items: "{{ group_names }}"
