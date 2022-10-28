@@ -1,5 +1,9 @@
 ---
 
+- ansible.builtin.file:
+    path: "/opt/dashboards/"
+    state: "directory"
+
 - community.grafana.grafana_datasource:
     name: "etcd"
     ds_type: "prometheus"

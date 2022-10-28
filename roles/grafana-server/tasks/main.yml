@@ -8,3 +8,16 @@
 
 - ansible.builtin.include_tasks:
     file: service.yml
+
+- ansible.builtin.wait_for:
+    host: "{{ groups['grafana-server'] | first }}"
+    port: "3000"
+    sleep: "5"
+
+- ansible.builtin.import_role:
+    name: grafana-config
+    tasks_from: gearman
+
+- ansible.builtin.import_role:
+    name: grafana-config
+    tasks_from: etcd
