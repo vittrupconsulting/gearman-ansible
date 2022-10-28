@@ -41,12 +41,10 @@
 - ansible.builtin.copy:
     src: "inventory.py"
     dest: "/usr/local/sbin/inventory.py"
-    mode: "0755"
 
 - ansible.builtin.copy:
     src: "ansible.py"
     dest: "/usr/local/sbin/ansible.py"
-    mode: "0755"
 
 - ansible.builtin.find:
     paths: "/etc/ansible/roles"

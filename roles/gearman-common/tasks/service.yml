@@ -3,23 +3,23 @@
 - ansible.builtin.cron:
     name: "Reboot marker"
     special_time: "reboot"
-    job: "/usr/local/sbin/inventory.py"
+    job: "python3/usr/local/sbin/inventory.py"
     user: "ansible"
 
 - ansible.builtin.cron:
     name: "Hourly marker"
     special_time: "hourly"
-    job: "/usr/local/sbin/inventory.py"
+    job: "python3 /usr/local/sbin/inventory.py"
     user: "ansible"
 
 - ansible.builtin.cron:
     name: "Inventory update"
     minute: "*/5"
-    job: "/usr/local/sbin/inventory.py"
+    job: "python3 /usr/local/sbin/inventory.py"
     user: "ansible"
 
 - ansible.builtin.cron:
     name: "Ansible roles"
     minute: "*/{{ [6,7,8,9,10,11,12] | random(seed=ansible_hostname) }}"
-    job: "/usr/local/sbin/ansible.py"
+    job: "python3 /usr/local/sbin/ansible.py"
     user: "ansible"
