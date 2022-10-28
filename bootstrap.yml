@@ -40,6 +40,3 @@ all:
     grafana-server:
       hosts:
         grafana70:
-    grafana-config:
-      hosts:
-        grafana70:
