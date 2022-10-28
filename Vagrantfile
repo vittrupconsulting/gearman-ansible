@@ -17,7 +17,20 @@ Vagrant.configure("2") do |config|
     sudo su root --login --command "/usr/bin/mkdir /etc/ansible/facts.d"
     sudo su ansible --login --command "/usr/bin/mkdir /home/ansible/.ssh"
     sudo su ansible --login --command "/usr/bin/echo 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDO/b4LqHoJPSWLovBmo8jaj9RWNmtdSyoUJVd/0lnGQpTOgKhM6GA4K+sNIKSjZSRqVmp0qvYxNhMSGnnDzagsZY9ydfF0R5/2SAFI7ezn+z75LbyAx0vpk7e4KIxPatx7/YAABQMOa9dT/qPhSXJ9/YO4QYPFUA3AyMQLJwb5Am6jlqxYBpRe+zt8HUlat2HD628YBNKWyqSsL13kKt2QzaAHT75ZqPEHlQMA3Q/kjmAW4McqtQ6BhVwhGaneslbsj8A/fQGzxRQtW81MC7K83x7RSwV40NXcJeUEYcJyhD029dg74wA875Vv9S7Y4MF+OKO2w4bRm+1uyTIXSAhIsVWbB3uyoFz2EjfMEsSK6uqMGbbGyC7pTXz1qkX0tPWkkLvUTbjIs2FDCE+eWOI/neQ32jdMBsZujzJ8i4VdQeGUUfJATuRB6hjm1XEVx0wzRfNAGba2OxCjj9dx5URgVje55+POxDPPfpCaAL98/xCZmuP/SgYk44YIEqFXtXc=' | tee /home/ansible/.ssh/authorized_keys"
-    cat  /vagrant/misc/hosts | sudo tee -a /etc/hosts
+  SHELL
+
+  config.vm.provision "shell", inline: <<-SHELL
+    echo "192.168.147.52 server52" | sudo tee -a /etc/hosts
+    echo "192.168.147.53 server53" | sudo tee -a /etc/hosts
+    echo "192.168.147.54 inventory54" | sudo tee -a /etc/hosts
+    echo "192.168.147.55 inventory55" | sudo tee -a /etc/hosts
+    echo "192.168.147.56 inventory56" | sudo tee -a /etc/hosts
+    echo "192.168.147.57 ansible57" | sudo tee -a /etc/hosts
+    echo "192.168.147.58 ansible58" | sudo tee -a /etc/hosts
+    echo "192.168.147.60 proxy60" | sudo tee -a /etc/hosts
+    echo "192.168.147.61 metrics61" | sudo tee -a /etc/hosts
+    echo "192.168.147.70 grafana70" | sudo tee -a /etc/hosts
+    echo "192.168.147.80 ansible80" | sudo tee -a /etc/hosts
   SHELL
 
   config.vm.define "server52", autostart: true do |server|
