@@ -38,13 +38,13 @@
   ansible.builtin.pip:
     name: "gear"
 
-- ansible.builtin.template:
-    src: "inventory.py.j2"
+- ansible.builtin.copy:
+    src: "inventory.py"
     dest: "/usr/local/sbin/inventory.py"
     mode: "0755"
 
-- ansible.builtin.template:
-    src: "ansible.py.j2"
+- ansible.builtin.copy:
+    src: "ansible.py"
     dest: "/usr/local/sbin/ansible.py"
     mode: "0755"
 
