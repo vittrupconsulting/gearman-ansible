@@ -4,8 +4,12 @@ import json
 from etcd3 import Client
 from systemd import journal
 
+f = open('/etc/ansible/facts.d/gearman.fact')
+servers = json.load(f)
+f.close()
+
 worker = gear.Worker(socket.gethostname())
-for server in {{ groups['gearman-server'] | shuffle(seed=ansible_hostname) }}:
+for server in servers:
     journal.send(f"Registering function 'inventory' with gearman server {server}")
     worker.addServer(f"{server}")
 worker.registerFunction("inventory")
