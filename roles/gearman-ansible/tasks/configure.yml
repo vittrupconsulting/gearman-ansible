@@ -29,3 +29,10 @@
     owner: "ansible"
     group: "ansible"
     remote_src: yes
+
+- ansible.builtin.copy:
+    src: "/etc/.ansible/roles/gearman-ansible/files/ansible.cfg"
+    dest: "/etc/ansible/ansible.cfg"
+    owner: "ansible"
+    group: "ansible"
+    remote_src: yes
