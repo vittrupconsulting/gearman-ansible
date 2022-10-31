@@ -11,6 +11,7 @@
     rsync_opts:
       - "--exclude=.git"
       - "--exclude=ansible_rsa"
+      - "--exclude=ansible_rsa.pub"
       - "--exclude=ansible.cfg"
       - "--exclude=bootstrap.yml"
       - "--exclude=Vagrantfile"
@@ -23,6 +24,13 @@
     src: "/etc/.ansible/ansible_rsa"
     dest: "/etc/ansible/ansible_rsa"
     mode: "0600"
+    owner: "ansible"
+    group: "ansible"
+    remote_src: yes
+
+- ansible.builtin.copy:
+    src: "/etc/.ansible/ansible_rsa.pub"
+    dest: "/etc/ansible/ansible_rsa.pub"
     owner: "ansible"
     group: "ansible"
     remote_src: yes
