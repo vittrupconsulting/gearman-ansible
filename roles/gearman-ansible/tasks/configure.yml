@@ -12,6 +12,10 @@
       - "--exclude=.git"
       - "--exclude=ansible_rsa"
       - "--exclude=ansible.cfg"
+      - "--exclude=bootstrap.yml"
+      - "--exclude=Vagrantfile"
+      - "--exclude=Vagrantfile.virtualbox"
+      - "--exclude=Vagrantfile.vmware"
       - "--chown=ansible:ansible"
   delegate_to: "{{ inventory_hostname }}"
 
