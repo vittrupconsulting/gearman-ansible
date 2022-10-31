@@ -6,17 +6,16 @@
     version: "{{ gearman.ansible.branch | default('HEAD') }}"
 
 - ansible.posix.synchronize:
-    src: "/etc/.ansible/"
-    dest: "/etc/ansible"
+    src: "/etc/.ansible/roles"
+    dest: "/etc/ansible/roles"
     rsync_opts:
-      - "--exclude=.git"
-      - "--exclude=ansible_rsa"
-      - "--exclude=ansible_rsa.pub"
-      - "--exclude=ansible.cfg"
-      - "--exclude=bootstrap.yml"
-      - "--exclude=Vagrantfile"
-      - "--exclude=Vagrantfile.virtualbox"
-      - "--exclude=Vagrantfile.vmware"
+      - "--chown=ansible:ansible"
+  delegate_to: "{{ inventory_hostname }}"
+
+- ansible.posix.synchronize:
+    src: "/etc/.ansible/group_vars"
+    dest: "/etc/ansible/group_vars"
+    rsync_opts:
       - "--chown=ansible:ansible"
   delegate_to: "{{ inventory_hostname }}"
 
