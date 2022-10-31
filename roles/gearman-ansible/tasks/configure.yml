@@ -11,6 +11,7 @@
     rsync_opts:
       - "--exclude=.git"
       - "--exclude=ansible_rsa"
+      - "--exclude=ansible.cfg"
       - "--chown=ansible:ansible"
   delegate_to: "{{ inventory_hostname }}"
 
