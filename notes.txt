@@ -1,0 +1,3 @@
+- gRPC allow clients to use curl for updating etcd inventory.
+- etcd lock can be used to mutually excluse which ansible servers are targeting each individual server.
+- cron job running ansible externally from a server does not exist.
