@@ -20,8 +20,7 @@ for server in servers:
 
 try:
     client.waitForServer(60)
-    payload = {"source": socket.gethostname(), "roles": roles}
-    job = gear.Job("inventory", bytes(json.dumps(payload), 'utf-8'))
+    job = gear.Job("inventory", bytes(json.dumps({"source": socket.gethostname(), "roles": roles}), 'utf-8'))
     client.submitJob(job)
 except TimeoutError:
     sys.exit(1)
