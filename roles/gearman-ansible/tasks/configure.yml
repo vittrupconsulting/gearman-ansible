@@ -48,3 +48,10 @@
     owner: "ansible"
     group: "ansible"
     remote_src: yes
+
+- ansible.builtin.copy:
+    src: "/etc/.ansible/generic.yml"
+    dest: "/etc/ansible/generic.yml"
+    owner: "ansible"
+    group: "ansible"
+    remote_src: yes
