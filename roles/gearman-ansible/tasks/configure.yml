@@ -6,7 +6,7 @@
     version: "{{ gearman.ansible.branch | default('HEAD') }}"
 
 - ansible.posix.synchronize:
-    src: "/etc/.ansible/roles"
+    src: "/etc/.ansible/roles/"
     dest: "/etc/ansible/roles"
     rsync_opts:
       - "--chown=ansible:ansible"
@@ -14,7 +14,7 @@
 
 - ansible.posix.synchronize:
     src: "/etc/.ansible/group_vars"
-    dest: "/etc/ansible/group_vars"
+    dest: "/etc/ansible/group_vars/"
     rsync_opts:
       - "--chown=ansible:ansible"
   delegate_to: "{{ inventory_hostname }}"
