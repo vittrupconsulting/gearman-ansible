@@ -13,8 +13,8 @@
   delegate_to: "{{ inventory_hostname }}"
 
 - ansible.posix.synchronize:
-    src: "/etc/.ansible/group_vars"
-    dest: "/etc/ansible/group_vars/"
+    src: "/etc/.ansible/group_vars/"
+    dest: "/etc/ansible/group_vars"
     rsync_opts:
       - "--chown=ansible:ansible"
   delegate_to: "{{ inventory_hostname }}"
