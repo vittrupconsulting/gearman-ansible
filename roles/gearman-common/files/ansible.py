@@ -16,8 +16,7 @@ for server in servers:
 
 try:
     client.waitForServer(60)
-    payload = {}
-    payload["source"] = socket.gethostname()
+    payload = {"source": socket.gethostname()}
     job = gear.Job("ansible", bytes(json.dumps(payload), 'utf-8'))
     client.submitJob(job)
 except TimeoutError:
