@@ -172,7 +172,7 @@ Vagrant.configure("2") do |config|
       pip install ansible
 
       echo '#!/bin/bash' | tee /home/ansible/init.sh
-      echo 'ansible-playbook -i "/etc/ansible/bootstrap.yml" /etc/ansible/generic-inventory.yml' | tee -a /home/ansible/init.sh
+      echo 'ansible-playbook -i "/etc/ansible/bootstrap-inventory.yml" /etc/ansible/bootstrap-playbook.yml' | tee -a /home/ansible/init.sh
       chmod +x /home/ansible/init.sh
     SHELL
   end
