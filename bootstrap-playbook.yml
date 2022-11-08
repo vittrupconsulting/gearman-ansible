@@ -4,18 +4,6 @@
   become: true
   tasks:
 
-#    - ansible.builtin.copy:
-#        content: "{{ group_names | to_nice_json }}"
-#        dest: "/etc/ansible/facts.d/roles.fact"
-#
-#    - ansible.builtin.copy:
-#        content: "{{ groups['gearman-server'] | to_nice_json }}"
-#        dest: "/etc/ansible/facts.d/gearman.fact"
-#
-#    - name: "Include 'gearman-common' role"
-#      include_role:
-#        name: "gearman-common"
-
     - name: "Include 'gearman-etcd' role"
       include_role:
         name: "gearman-etcd"
@@ -30,6 +18,7 @@
         value: "{{ group_names | to_json }}"
         host: "{{ groups['gearman-etcd'] | random }}"
         port: 2379
+        state: "present"
       delegate_to: localhost
       environment:
         PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION: python
