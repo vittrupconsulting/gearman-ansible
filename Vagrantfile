@@ -164,7 +164,7 @@ Vagrant.configure("2") do |config|
     server.vm.provision "shell", inline: <<-SHELL
       apt-get update
       sudo apt-get install python3-pip nmap curl jq -y
-      sudo pip install gear
+      sudo pip install gear etcd3
 
       sudo chown ansible:ansible /etc/ansible
       sudo su ansible --login --command "cp -r /vagrant/* /etc/ansible/"
