@@ -50,7 +50,7 @@
     remote_src: yes
 
 - ansible.builtin.copy:
-    src: "/etc/.ansible/generic.yml"
+    src: "/etc/.ansible/roles/gearman-ansible/files/generic.yml"
     dest: "/etc/ansible/generic.yml"
     owner: "ansible"
     group: "ansible"
