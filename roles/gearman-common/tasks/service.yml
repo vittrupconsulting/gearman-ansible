@@ -1,22 +1,22 @@
 ---
 
-- ansible.builtin.cron:
-    name: "Reboot marker"
-    special_time: "reboot"
-    job: "python3/usr/local/sbin/inventory.py"
-    user: "ansible"
-
+#- ansible.builtin.cron:
+#    name: "Reboot marker"
+#    special_time: "reboot"
+#    job: "python3/usr/local/sbin/inventory.py"
+#    user: "ansible"
+#
 - ansible.builtin.cron:
     name: "Hourly marker"
     special_time: "hourly"
     job: "python3 /usr/local/sbin/inventory.py"
     user: "ansible"
-
-- ansible.builtin.cron:
-    name: "Inventory update"
-    minute: "*/5"
-    job: "python3 /usr/local/sbin/inventory.py"
-    user: "ansible"
+#
+#- ansible.builtin.cron:
+#    name: "Inventory update"
+#    minute: "*/5"
+#    job: "python3 /usr/local/sbin/inventory.py"
+#    user: "ansible"
 
 - ansible.builtin.cron:
     name: "Ansible roles"
