@@ -3,3 +3,5 @@
 - cron job running ansible externally from a server does not exist.
 
 - create inventory management whiptail script on ansible masters allowing manipulation of assigned roles in etcd data cluster.
+- VRRP?
+-- https://serverfault.com/questions/1053994/keepalived-notifiy-master-notify-backup-does-not-start-stop-application
